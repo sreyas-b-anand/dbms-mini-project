@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
+//import { useAuthContext } from "../hooks/useAuthContext";
 
 const Navbar = () => {
+  //const {user} = useAuthContext()
   return (
     <>
       <nav className="bg-blue-950 text-primary flex h-screen items-start flex-col justify-between px-5 py-1 pb-3 gap-4 w-[200px]">
@@ -16,6 +18,7 @@ const Navbar = () => {
           </div>
         </section>
         <div className="flex w-full items-start justify-start text-error">
+          {/*<p>{user?.email}</p>*/}
           <a role="button" className="px-3 py-2 border-1 rounded-lg border-danger opacity-80 hover:opacity-100 hover:cursor-pointer text-danger">Logout</a>
         </div>
       </nav>

@@ -1,4 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Poppins&display=swap');
+:root{
+  font-family: poppins;
+}
 @import "tailwindcss";
+
 @theme {
   
   --color-primary: oklch(0.75 0.15 230);
@@ -8,5 +13,5 @@
   --color-text-secondary: oklch(0.7 0.05 220);
   --color-border: oklch(0.3 0.1 220);
   --color-danger: oklch(0.72 0.2 30);
-  --font-poppins: Poppins, sans-serif;
+  
 }
