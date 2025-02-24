@@ -6,21 +6,18 @@ const Layout = () => {
   return (
     <main className="w-screen min-h-screen font-poppins flex bg-gray-200 overflow-auto">
       {/* Sidebar (Navbar) */}
-      
-        <Navbar />
-      
+
+      <Navbar />
 
       {/* Main Content Area */}
       <div className="flex-1 min-w-0 h-screen flex flex-col ">
         {/* Tabbar at the Top */}
-        
-          <Tabbar />
-        
+
+        <Tabbar />
 
         {/* Page Content (Outlet) */}
-        
-          <Outlet />
-        
+
+        <Outlet />
       </div>
     </main>
   );
