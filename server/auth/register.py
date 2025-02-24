@@ -8,10 +8,18 @@ SECRET_KEY = "your_secret_key"
 def register_user(username, email, password, role="user"):  # Default role = "user"
     """Registers a new user and returns a JWT token"""
     try:
-        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
-
         conn = get_db_connection()
         cursor = conn.cursor()
+
+        # Check if email already exists
+        cursor.execute("SELECT id FROM users WHERE email = %s", (email,)) 
+        existing_user = cursor.fetchone()
+
+        if existing_user:
+            return {"success": False, "message": "Email already in use"}
+
+        # Hash the password
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
         # Insert user into database with role
         cursor.execute("""
@@ -22,6 +30,7 @@ def register_user(username, email, password, role="user"):  # Default role = "us
         conn.commit()
         user_id = cursor.lastrowid
 
+        # Generate JWT token
         token_payload = {
             "user_id": user_id,
             "email": email,
@@ -30,10 +39,17 @@ def register_user(username, email, password, role="user"):  # Default role = "us
         }
         token = jwt.encode(token_payload, SECRET_KEY, algorithm="HS256")
 
-        return {"message": "User registered successfully", "token": token, "email": email, "username": username, "role": role}
+        return {
+            "success": True,
+            "message": "User registered successfully",
+            "token": token,
+            "email": email,
+            "username": username,
+            "role": role
+        }
 
     except Exception as e:
-        return {"error": f"An error occurred: {str(e)}"}
+        return {"success": False, "message": f"An error occurred: {str(e)}"}
 
     finally:
         cursor.close()

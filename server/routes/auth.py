@@ -12,17 +12,18 @@ def login():
         password = data.get("password")
 
         if not email or not password:
-            return jsonify({"error": "Email and password are required"}), 400
+            return jsonify({"success": False, "message": "Email and password are required"}), 400
         
         result = login_user(email, password)
         
-        if "error" in result:
-            return jsonify(result), 401  # Unauthorized access
-        return jsonify(result), 200
+        if not result.get("success", False):
+            return jsonify(result), 401  # Unauthorized
+        
+        return jsonify(result), 200  # OK
 
     except Exception as e:
         print(f"Login Error: {e}")  # Debugging logs
-        return jsonify({"error": "An unexpected error occurred"}), 500
+        return jsonify({"success": False, "message": "An unexpected error occurred"}), 500
 
 
 @auth.route('/register', methods=["POST"])
@@ -34,19 +35,19 @@ def register():
         password = data.get("password")
 
         if not email or not username or not password:
-            return jsonify({"error": "All fields must be filled"}), 400
+            return jsonify({"success": False, "message": "All fields must be filled"}), 400
         
-        # Enforce password strength (optional)
+        # Enforce password strength
         if len(password) < 8:
-            return jsonify({"error": "Password must be at least 8 characters long"}), 400
+            return jsonify({"success": False, "message": "Password must be at least 8 characters long"}), 400
 
         result = register_user(username, email, password)
         
-        if "error" in result:
-            return jsonify(result), 400  # Bad request
+        if not result.get("success", False):
+            return jsonify(result), 403  # Forbidden (email already in use)
         
         return jsonify(result), 201  # Created
 
     except Exception as e:
         print(f"Register Error: {e}")  # Debugging logs
-        return jsonify({"error": "An unexpected error occurred"}), 500
+        return jsonify({"success": False, "message": "An unexpected error occurred"}), 500

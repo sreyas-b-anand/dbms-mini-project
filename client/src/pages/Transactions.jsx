@@ -1,9 +1,9 @@
-import Navbar from "../components/Navbar"
-
-const Transactions = () => {
+const History = () => {
   return (
-    <><Navbar/></>
-  )
-}
+    <>
+      <div>hstory</div>
+    </>
+  );
+};
 
-export default Transactions
+export default History;

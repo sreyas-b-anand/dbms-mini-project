@@ -1,10 +1,8 @@
 
-import Navbar from '../components/Navbar';
-
 const MyBids = () => {
   return (
     <>
-    <Navbar/>
+    <div>Bids</div>
     </>
   )
 }

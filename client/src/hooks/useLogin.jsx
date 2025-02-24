@@ -1,11 +1,15 @@
 import { useState } from "react";
 import { useAuthContext } from "./useAuthContext";
+
 export const useLogin = () => {
   const { dispatch } = useAuthContext();
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  //const [error, setError] = useState(null);
+
   const login = async (email, password) => {
     setIsLoading(true);
+    //setError(null); // Reset previous error
+
     try {
       const response = await fetch("http://127.0.0.1:4000/auth/login", {
         method: "POST",
@@ -13,26 +17,49 @@ export const useLogin = () => {
         body: JSON.stringify({ email, password }),
       });
 
+      // Try to parse JSON response
+      let json;
+      try {
+        json = await response.json();
+      } catch (error) {
+        console.log(error)
+        throw new Error("Invalid JSON response from server");
+      }
+
+      // Handle server-side errors (like 500, 404)
       if (!response.ok) {
-        setError("An error occured");
         setIsLoading(false);
-      }
-      const json = await response.json();
-      if (response.ok) {
-        // save the user to local storage
-        localStorage.setItem("user", JSON.stringify(json));
-        dispatch({ type: "LOGIN", payload: json });
-        setError(null);
-
-        // update loading state
-        setIsLoading(false);
+        //setError(json.message || "Something went wrong.");
+        return json; // Return full error response
       }
 
-      console.log(json);
-      return "Login successfull"
+      // Handle application-level errors (e.g., wrong credentials)
+      if (!json.success) {
+        setIsLoading(false);
+        //setError(json.message);
+        return json;
+      }
+
+      // Store user data in localStorage
+      const userData = {
+        token: json.token,
+        email: json.email,
+        username: json.username,
+      };
+      localStorage.setItem("user", JSON.stringify(userData));
+
+      // Dispatch login action
+      dispatch({ type: "LOGIN", payload: userData });
+
+      setIsLoading(false);
+      return json; // Return full success response
     } catch (error) {
-      console.log(error);
+      console.error("Login Error:", error);
+      setIsLoading(false);
+      //setError("Network error. Please try again later.");
+      return { success: false, message: "Network error. Please try again later." };
     }
   };
-  return { login, isLoading, error };
+
+  return { login, isLoading };
 };

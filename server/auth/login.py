@@ -25,14 +25,21 @@ def login_user(email, password):
                 }
                 token = jwt.encode(token_payload, SECRET_KEY, algorithm="HS256")
                 
-                return {"message": "Login successful", "token": token, "email": email, "username": user["username"], "role": user["role"]}
+                return {
+                    "success": True,
+                    "message": "Login successful",
+                    "token": token,
+                    "email": email,
+                    "username": user["username"],
+                    "role": user["role"]
+                }
             else:
-                return {"error": "Invalid email or password"}
+                return {"success": False, "message": "Invalid email or password"}
         else:
-            return {"error": "User not found"}
+            return {"success": False, "message": "User not found"}
 
     except Exception as e:
-        return {"error": f"An error occurred: {str(e)}"}
+        return {"success": False, "message": f"An error occurred: {str(e)}"}
 
     finally:
         cursor.close()

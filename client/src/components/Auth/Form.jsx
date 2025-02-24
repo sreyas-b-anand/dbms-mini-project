@@ -3,37 +3,52 @@ import { useLogin } from "../../hooks/useLogin";
 import { useSignup } from "../../hooks/useSignup";
 import "../../styles/Form.css";
 import { useState } from "react";
+import Loader from "../utils/Loader";
+import { toast } from "sonner";
+import Logo from '../../assets/logo.jpg'
 const Form = () => {
-
-    //usestate vars
+  //usestate vars
   const [isSignUp, setIsSignUp] = useState(true);
-  const [SMessage, setSMessage] = useState("");
-  const [LMessage, setSLogin] = useState("");
+  //const [success, setSuccess] = useState("");
+  const [error, setError] = useState("");
   //hooks
-  const { signup, SignUpisLoading, SignUperror } = useSignup();
-  const { login, LoginisLoading, Loginerror } = useLogin();
-  const navigate = useNavigate()
+  const { signup, isLoading : signUpisLoading } = useSignup();
+  const { login,isLoading :  loginisLoading } = useLogin();
+  const navigate = useNavigate();
   //form vars
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  let jsonData;
   //event functions
   const handleSignUp = async (e) => {
     e.preventDefault();
-    const SignupMessage = await signup(email, username, password);
-    setSMessage(SignupMessage);
+    jsonData = await signup(email, username, password);
+    console.log(jsonData)
+    if (jsonData.success) {
+      ////////////////////////////
+      toast.success(jsonData.message)
+      navigate("/");
+    } else {
+      setError(jsonData.message);
+    }
     setEmail("");
     setPassword("");
     setUsername("");
-    navigate('/')
   };
   const handleLogin = async (e) => {
     e.preventDefault();
-    const LoginMessage = await login(email, password);
-    setSLogin(LoginMessage);
+    jsonData = await login(email, password);
+    console.log(jsonData)
+    if (jsonData.success) {
+      ////////////////////////////////
+      toast.success(jsonData.message)
+      navigate("/");
+    } else {
+      setError(jsonData.message);
+    }
     setEmail("");
     setPassword("");
-    navigate('/')
   };
   if (isSignUp) {
     {
@@ -44,10 +59,10 @@ const Form = () => {
         onSubmit={handleSignUp}
         className="flex flex-col items-center justify-center gap-3 px-10 py-7 rounded-lg border m-2 min-w-[344px] sm:min-w-[362px]"
       >
-        <div className="py-2">
+        <div className="py-1">
           <img
-            className="w-[60px] h-[60px] rounded-full"
-            src="https://i.pinimg.com/736x/37/6e/27/376e27c7811a79746fc3c3b8bb9aa6f1.jpg"
+            className="w-[80px] h-[80px] rounded-full"
+            src={Logo}
             alt="logo"
           />
         </div>
@@ -95,22 +110,11 @@ const Form = () => {
             <label className="form-label">Password</label>
           </div>
         </div>
-        <button className="my-2 bg-slate-800 text-white w-full py-2 rounded-md hover:cursor-pointer">
-          Create an account
+        <button className="my-2 bg-slate-800 text-white w-full py-2 rounded-md hover:cursor-pointer flex items-center justify-center">
+          {signUpisLoading ? <Loader /> : "Create an account"}
         </button>
-        {SignUperror ||
-          (Loginerror && (
-            <div className="w-full">
-              <p className="text-center">{SignUperror || Loginerror}</p>
-            </div>
-          ))}
-        {SignUpisLoading ||
-          (LoginisLoading && (
-            <div className="w-full">
-              <p className="text-center">Loading</p>
-            </div>
-          ))}
-        {SMessage && <p>Sign up successfull</p>}
+        {error && <p className="text-center text-red-600">{error}</p>}
+        
 
         <div className="py-2 text-sm">
           Already have an account?{" "}
@@ -135,7 +139,7 @@ const Form = () => {
         <div className="py-2">
           <img
             className="w-[60px] h-[60px] rounded-full"
-            src="https://i.pinimg.com/736x/37/6e/27/376e27c7811a79746fc3c3b8bb9aa6f1.jpg"
+       src={Logo}
             alt="logo"
           />
         </div>
@@ -176,20 +180,11 @@ const Form = () => {
             Forgot password?
           </p>
         </div>
-        <button className="my-2 bg-slate-800 text-white w-full py-2 rounded-md hover:cursor-pointer">
-          Login
+        <button className="my-2 bg-slate-800 text-white w-full py-2 rounded-md hover:cursor-pointer flex items-center justify-center">
+          {loginisLoading ? <Loader /> : "Login"}
         </button>
-        {Loginerror && (
-          <div className="w-full">
-            <p className="text-center">{Loginerror}</p>
-          </div>
-        )}
-        {LoginisLoading && (
-          <div className="w-full">
-            <p className="text-center">Loading</p>
-          </div>
-        )}
-        {LMessage && <p className="text-center">Login successfull</p>}
+        {error && <p className="text-center text-red-600">{error}</p>}
+        
 
         <div className="py-2 text-sm">
           Don&apos;t have an account?{" "}
