@@ -1,30 +1,27 @@
 import os
-import mysql.connector
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from dotenv import load_dotenv
 
-# Load environment variables from .env file
+# Load environment variables from a .env file
 load_dotenv()
 
-# Fetch credentials securely (without hardcoded defaults)
-DB_HOST = os.getenv("DB_HOST")
-DB_USER = os.getenv("DB_USER")
-DB_PASSWORD = os.getenv("DB_PASSWORD")
-DB_DATABASE = os.getenv("DB_DATABASE")
+db = SQLAlchemy()
+migrate = Migrate()
 
-# Ensure all required env variables are set
-if not all([DB_HOST, DB_USER, DB_PASSWORD, DB_DATABASE]):
-    raise ValueError("Error: One or more database environment variables are missing!")
+def init_db(app):
+    # Fetch database credentials from environment variables
+    db_user = os.getenv('DB_USER', 'root')
+    db_password = os.getenv('DB_PASSWORD', 'password')
+    db_host = os.getenv('DB_HOST', 'localhost')
+    db_name = os.getenv('DB_NAME', 'bidsnap')
 
-# Function to connect to MySQL database securely
-def get_db_connection():
-    try:
-        connection = mysql.connector.connect(
-            host=DB_HOST,
-            user=DB_USER,
-            password=DB_PASSWORD,
-            database=DB_DATABASE
-        )
-        return connection
-    except mysql.connector.Error as e:
-        print(f"Error: Could not connect to database. {e}")
-        return None
+    # Construct the database URI
+    app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://{db_user}:{db_password}@{db_host}/{db_name}"
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+    # Initialize the SQLAlchemy app
+    db.init_app(app)
+    
+    # Initialize Flask-Migrate
+    migrate.init_app(app, db)

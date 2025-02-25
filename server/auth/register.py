@@ -1,19 +1,16 @@
 import jwt
 import datetime
-from config.db import get_db_connection
 import bcrypt
+from config.db import db
+from models.user import User  # Import the User model
 
-SECRET_KEY = "your_secret_key"
+SECRET_KEY = "gbfkjsdbjeewjknrje"
 
 def register_user(username, email, password, role="user"):  # Default role = "user"
     """Registers a new user and returns a JWT token"""
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-
-        # Check if email already exists
-        cursor.execute("SELECT id FROM users WHERE email = %s", (email,)) 
-        existing_user = cursor.fetchone()
+        # Check if the email already exists
+        existing_user = User.query.filter_by(email=email).first()
 
         if existing_user:
             return {"success": False, "message": "Email already in use"}
@@ -21,18 +18,16 @@ def register_user(username, email, password, role="user"):  # Default role = "us
         # Hash the password
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
-        # Insert user into database with role
-        cursor.execute("""
-            INSERT INTO users (username, email, password_hash, role)    
-            VALUES (%s, %s, %s, %s)
-        """, (username, email, hashed_password, role))
-        
-        conn.commit()
-        user_id = cursor.lastrowid
+        # Create a new user instance
+        new_user = User(username=username, email=email, password_hash=hashed_password, role="user")
+
+        # Add user to the database
+        db.session.add(new_user)
+        db.session.commit()
 
         # Generate JWT token
         token_payload = {
-            "user_id": user_id,
+            "user_id": new_user.id,
             "email": email,
             "role": role,  # Include role in JWT token
             "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=24)
@@ -45,12 +40,9 @@ def register_user(username, email, password, role="user"):  # Default role = "us
             "token": token,
             "email": email,
             "username": username,
-            "role": role
+            "role": role,
         }
 
     except Exception as e:
+        db.session.rollback()  # Rollback in case of any error
         return {"success": False, "message": f"An error occurred: {str(e)}"}
-
-    finally:
-        cursor.close()
-        conn.close()

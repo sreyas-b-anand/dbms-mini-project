@@ -1,24 +1,22 @@
-from config.db import get_db_connection
+# models/user.py
+from config.db import db
+from sqlalchemy import Column, Integer, String, Float, Text, TIMESTAMP, DECIMAL
+from sqlalchemy.sql import func
 
-def create_users_table():
-    """Creates the users table if it doesn't exist"""
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS users (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            username VARCHAR(50) NOT NULL,
-            email VARCHAR(100) UNIQUE NOT NULL,
-            password VARCHAR(255) NOT NULL,
-            wallet_balance DECIMAL(10,2) DEFAULT 10000.00,
-            profile_pic VARCHAR(255),
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-        );
-    """)
-    conn.commit()
-    cursor.close()
-    conn.close()
+class User(db.Model):
+    __tablename__ = "users"
+    
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(100), unique=True, nullable=False)
+    password_hash = db.Column(db.String(255), nullable=False)
+    address = db.Column(db.Text, nullable=True)
+    role = db.Column(db.String(20), nullable=False, default="user")
+    wallet = db.Column(db.Float, default=0.0, nullable=False)
+    
+    # These were causing the error - fix with server_default
+    created_at = db.Column(db.TIMESTAMP, server_default=func.now())
+    updated_at = db.Column(db.TIMESTAMP, server_default=func.now(), onupdate=func.now())
 
-# Run this when the model is imported
-create_users_table()
+    def __repr__(self):
+        return f"<User {self.username} ({self.role})>"
