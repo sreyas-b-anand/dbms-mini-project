@@ -1,52 +1,98 @@
 import PropTypes from "prop-types";
-import { Banknote } from "lucide-react";
+import { DollarSign, Clock, ArrowRight } from "lucide-react";
+import { Card, CardContent } from "../ui/card";
+import { Button } from "../ui/button";
+import { getTimeRemaining } from "../../lib/getTimeRemaining";
+const ItemCard = ({
+  title,
+  imageUrl,
+  currentBid,
+  deadline,
+  onBid,
+  onViewDetails,
+}) => {
+  // Calculate time remaining
 
-const ItemCard = ({ title, imageUrl, currentBid, onBid }) => {
+  const timeRemaining = getTimeRemaining(deadline);
+  const isEnded = timeRemaining === "Ended";
+
   return (
-    <div className="w-[280px] overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-200 hover:shadow-md">
-      <div className="relative aspect-square overflow-hidden">
-        <div className="absolute inset-0 bg-black/5" />
-        <img
-          src={imageUrl || "/placeholder.svg"}
-          alt={title}
-          className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
-        />
+    <Card className="w-56 rounded-lg py-2 px-1 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-border">
+      {/* Image Container */}
+      <div className="relative">
+        <div className="h-40 overflow-hidden bg-gray-100">
+          <img
+            src={imageUrl || "/placeholder.svg?height=160&width=224"}
+            alt={title}
+            className={`w-full rounded-md h-full transition-all duration-300 rounded-radius px-2 ${
+              isEnded ? "grayscale opacity-90" : "group-hover:brightness-105"
+            }`}
+          />
+
+          {/* Dark overlay for text readability */}
+          <div className="absolute w-full inset-0 bg-gradient-to-t from-gray-900/80 via-gray-900/40 to-transparent" />
+        </div>
+
+        {/* Current bid indicator */}
+        <div className="absolute top-3 left-3 bg-primary/90 backdrop-blur-sm rounded-md px-2.5 py-1 flex items-center gap-1 shadow-sm">
+          <DollarSign className="h-3.5 w-3.5 text-indigo-600" />
+          <span className="font-semibold text-gray-800 text-sm">
+            {currentBid}
+          </span>
+        </div>
+
+        {/* Deadline indicator */}
+        <div
+          className={`absolute top-3 right-3 ${
+            isEnded ? "bg-gray-800" : "bg-indigo-600"
+          } text-primary rounded-md px-2.5 py-1 text-xs flex items-center gap-1 shadow-sm`}
+        >
+          <Clock className="h-3 w-3" />
+          <span>{timeRemaining}</span>
+        </div>
       </div>
-      <div className="p-4">
-        <h3 className="line-clamp-2 text-lg font-semibold leading-none tracking-tight">
+
+      <CardContent className="py-1 px-2">
+        {/* Item title */}
+        <h3 className="font-bold text-sm leading-tight mb-3 line-clamp-2 text-gray-800">
           {title}
         </h3>
-      </div>
-      <div className="px-4 pb-4 flex items-center gap-2 text-gray-600">
-        <Banknote className="h-4 w-4" />
-        <span className="font-medium">Current Bid:</span>
-        <span className="text-lg font-bold text-orange-600">
-          ${currentBid.toLocaleString()}
-        </span>
-      </div>
-      <div className="p-4 space-y-2">
-        <button
-          onClick={onBid}
-          className="w-full rounded-md bg-orange-600 px-4 py-2 text-white font-semibold transition hover:bg-orange-700"
-        >
-          Place Bid
-        </button>
-        <button
-          onClick={onBid}
-          className="w-full rounded-md bg-white-600 px-4 py-2 text-black border font-semibold transition hover:bg-gray-600 hover:text-white"
-        >
-          More details
-        </button>
-      </div>
-    </div>
+
+        {/* Stacked buttons */}
+        <div className="flex flex-col gap-2">
+          <Button
+            className={`w-full text-sm py-1 h-9 ${
+              isEnded
+                ? "bg-gray-400 hover:bg-gray-500 cursor-not-allowed"
+                : "bg-indigo-600 hover:bg-indigo-700"
+            }`}
+            onClick={onBid}
+            disabled={isEnded}
+          >
+            {isEnded ? "Auction Ended" : "Bid Now"}
+          </Button>
+
+          <Button
+            variant="outline"
+            className="w-full h-9  border-gray-200 text-gray-700 hover:text-indigo-600 hover:border-indigo-200 hover:bg-indigo-50 flex items-center justify-center gap-1"
+            onClick={onViewDetails}
+          >
+            <span>More Details</span>
+            <ArrowRight className="h-3.5 w-3.5" />
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 
 ItemCard.propTypes = {
   title: PropTypes.string.isRequired,
-  imageUrl: PropTypes.string.isRequired,
+  imageUrl: PropTypes.string,
   currentBid: PropTypes.number.isRequired,
+  deadline: PropTypes.string.isRequired,
   onBid: PropTypes.func.isRequired,
+  onViewDetails: PropTypes.func.isRequired,
 };
 
 export default ItemCard;

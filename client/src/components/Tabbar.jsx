@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { User, Wallet } from "lucide-react";
-const Tabbar = () => {
+import { Plus, User, Wallet, ChevronDown } from "lucide-react";
+
+const Topbar = () => {
   const [page, setPage] = useState("Home");
   const location = useLocation();
 
@@ -17,19 +18,34 @@ const Tabbar = () => {
   }, [location.pathname]);
 
   return (
-    <div className="flex-1 max-h-[50px] bg-white py-3 rounded-lg flex items-center justify-between px-6 mx-3 mt-3">
-      <div>
-        <p>{page}</p>
-      </div>
-      <div className="flex items-center justify-center gap-9 flex-wrap ">
-        <div className="flex items-center justify-center gap-2 flex-wrap px-2 py-1 bg-gray-200 rounded-lg">
-          <Wallet size={20} strokeWidth={1.75} />
-          <p className="text-center">{1000}</p>
+    <div className="bg-card border border-border m-3 mb-0 rounded-lg">
+      <div className="px-3">
+        <div className="flex items-center justify-between h-14">
+          <div className="flex items-center">
+            <h1 className="text-lg font-medium text-card-foreground">{page}</h1>
+            <ChevronDown className="h-4 w-4 ml-1 text-muted-foreground" />
+          </div>
+
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center bg-secondary rounded-full py-1.5 pl-3 pr-1.5 border border-border">
+              <Wallet size={16} className="text-secondary-foreground mr-2" />
+              <span className="text-sm font-medium text-secondary-foreground mr-2">
+                $1,000
+              </span>
+              <button className="bg-sidebar-primary text-sidebar-primary-foreground p-1.5 rounded-full hover:opacity-90 transition-opacity">
+                <Plus size={12} />
+              </button>
+            </div>
+
+            <button className="relative flex items-center justify-center w-9 h-9 bg-accent rounded-full hover:bg-accent/80 transition-colors">
+              <User size={18} className="text-accent-foreground" />
+              <span className="absolute top-0 right-0 block w-2.5 h-2.5 bg-chart-1 border-2 border-card rounded-full"></span>
+            </button>
+          </div>
         </div>
-        <User size={20} strokeWidth={1.75} />
       </div>
     </div>
   );
 };
 
-export default Tabbar;
+export default Topbar;

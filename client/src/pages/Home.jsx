@@ -6,7 +6,7 @@ const Home = () => {
       id: 1,
       title: "Vintage Camera",
       description: "A classic vintage camera in excellent condition.",
-      imageUrl: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fsharpi.in%2Fproduct%2Fcanon-eos-r7-mirrorless-camera-with-18-150mm-lens-online-buy-india%2F&psig=AOvVaw2WlAG1glKyEfs1pnuwaFVa&ust=1740598538980000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCNCAqf_I34sDFQAAAAAdAAAAABAE",
+      imageUrl: "https://i1.adis.ws/i/canon/eos-r5_front_rf24-105mmf4lisusm_square_32c26ad194234d42b3cd9e582a21c99b",
       currentBid: 150,
     },
     {
@@ -35,6 +35,7 @@ const Home = () => {
               title={item.title}
               imageUrl={item.imageUrl}
               currentBid={item.currentBid}
+              deadline={"2025-10-12"}
               onBid={() => console.log(`Bid placed on item ${item.id}`)}
             />;
           })}

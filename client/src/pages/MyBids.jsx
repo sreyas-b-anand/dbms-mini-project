@@ -2,7 +2,7 @@
 const MyBids = () => {
   return (
     <>
-    <div>Bids</div>
+    <div className="">Bids</div>
     </>
   )
 }
