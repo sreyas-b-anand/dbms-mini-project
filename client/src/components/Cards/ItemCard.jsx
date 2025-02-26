@@ -63,8 +63,8 @@ const ItemCard = ({
           <Button
             className={`w-full text-sm py-1 h-9 ${
               isEnded
-                ? "bg-gray-400 hover:bg-gray-500 cursor-not-allowed"
-                : "bg-indigo-600 hover:bg-indigo-700"
+                ? "bg-gray-400 opacity-100 hover:opacity-80 cursor-not-allowed"
+                : "bg-accent-foreground opacity-100 hover:opacity-80 hover:cursor-pointer"
             }`}
             onClick={onBid}
             disabled={isEnded}
@@ -74,7 +74,7 @@ const ItemCard = ({
 
           <Button
             variant="outline"
-            className="w-full h-9  border-gray-200 text-gray-700 hover:text-indigo-600 hover:border-indigo-200 hover:bg-indigo-50 flex items-center justify-center gap-1"
+            className="w-full h-9  border-border text-foreground opacity-100 hover:opacity-80 flex items-center justify-center gap-1"
             onClick={onViewDetails}
           >
             <span>More Details</span>
