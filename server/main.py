@@ -14,7 +14,7 @@ def create_app(config=None):
     # Initialize database
     init_db(app)
 
-    CORS(app, resources={r"/*": {"origins": "*"}})
+    CORS(app, resources={r"/*": {"origins": "*"}} , supports_credentials=True)
 
     # Register blueprints
     app.register_blueprint(auth, url_prefix='/auth')

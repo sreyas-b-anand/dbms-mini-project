@@ -3,9 +3,10 @@ from models.user import User
 
 profile = Blueprint("profile", __name__)
 
-@profile.route('/', methods=['POST'])
+@profile.route("", methods=['POST'])
 def fetchUser():
     try:
+        print("Received Data:", request.data)  # Debugging line
         data = request.get_json()
         email = data.get("email")
 
