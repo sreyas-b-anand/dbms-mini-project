@@ -2,7 +2,7 @@
 const MyBids = () => {
   return (
     <>
-    <div className="">Bids</div>
+    <div className="flex-1">Bids</div>
     </>
   )
 }
