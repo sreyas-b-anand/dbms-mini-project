@@ -43,6 +43,7 @@ export const useSignup = () => {
         token: json.token,
         email: json.email,
         username: json.username,
+        wallet:json.wallet
       };
       localStorage.setItem("user", JSON.stringify(userData));
   

@@ -2,11 +2,14 @@ import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Plus, Search, User, Wallet } from "lucide-react";
 import { Input } from "./ui/input";
+import { useAuthContext } from "../hooks/useAuthContext";
 
 const Topbar = () => {
   const [page, setPage] = useState("Home");
   const location = useLocation();
-
+  const { user } = useAuthContext();
+  const [wallet, setWallet] = useState(0);
+  user?.wallet && setWallet(user.wallet)
   useEffect(() => {
     const pageMap = {
       "my-bids": "My Bids",
@@ -39,7 +42,7 @@ const Topbar = () => {
           <div className="flex items-center bg-secondary rounded-full py-1.5 pl-3 pr-1.5 border border-border">
             <Wallet size={16} className="text-secondary-foreground mr-2" />
             <span className="text-sm font-medium text-secondary-foreground mr-2">
-              $1,000
+              ${wallet}
             </span>
             <button className="bg-sidebar-primary hover:cursor-pointer text-sidebar-primary-foreground p-1.5 rounded-full hover:opacity-90 transition-opacity">
               <Plus size={12} />

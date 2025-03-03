@@ -1,10 +1,11 @@
 import jwt
 import datetime
-import bcrypt
+import bcrypt ,os
 from config.db import db
 from models.user import User  # Import User model
-
-SECRET_KEY = "your_secret_key"
+from dotenv import load_dotenv
+load_dotenv()
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 def login_user(email, password):
     """Authenticates a user and returns a JWT token with role"""
@@ -13,9 +14,8 @@ def login_user(email, password):
         user = User.query.filter_by(email=email).first()
 
         if user:
-            # Using password_hash instead of password to match your User model
-            stored_hashed_password = user.password_hash.encode()
-            if bcrypt.checkpw(password.encode('utf-8'), stored_hashed_password):
+            # Check if the provided password matches the stored hashed password
+            if bcrypt.checkpw(password.encode('utf-8'), user.password_hash.encode('utf-8')): 
                 # Generate JWT Token
                 token_payload = {
                     "user_id": user.id,
@@ -31,7 +31,8 @@ def login_user(email, password):
                     "token": token,
                     "email": user.email,
                     "username": user.username,
-                    "role": user.role
+                    "role": user.role,
+                    "wallet": user.wallet
                 }
             else:
                 return {"success": False, "message": "Invalid email or password"}

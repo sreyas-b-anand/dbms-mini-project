@@ -4,6 +4,7 @@ from config.db import init_db, db
 from models import User  
 from routes.auth import auth
 from routes.profile import profile
+
 def create_app(config=None):
     app = Flask(__name__)
     
@@ -14,11 +15,20 @@ def create_app(config=None):
     # Initialize database
     init_db(app)
 
-    CORS(app, resources={r"/*": {"origins": "*"}} , supports_credentials=True)
+    # Enable CORS for all routes and methods
+    CORS(app, resources={
+        r"/*": {
+            "origins": ["http://localhost:5173"],  # Allow only your frontend origin
+            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],  # Allow all necessary methods
+            "allow_headers": ["Content-Type", "Authorization"],  # Allow necessary headers
+            "supports_credentials": True
+        }
+    })
 
     # Register blueprints
     app.register_blueprint(auth, url_prefix='/auth')
-    app.register_blueprint(profile , url_prefix="/profile")
+    app.register_blueprint(profile, url_prefix="/profile")
+    
     return app
 
 # This makes the app available for Flask CLI commands
