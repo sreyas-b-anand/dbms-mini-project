@@ -5,15 +5,15 @@ import "../../styles/Form.css";
 import { useState } from "react";
 import Loader from "../utils/Loader";
 import { toast } from "sonner";
-import Logo from '../../assets/logo.jpg'
+import Logo from "../../assets/logo.jpg";
 const Form = () => {
   //usestate vars
   const [isSignUp, setIsSignUp] = useState(true);
   //const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
   //hooks
-  const { signup, isLoading : signUpisLoading } = useSignup();
-  const { login,isLoading :  loginisLoading } = useLogin();
+  const { signup, isLoading: signUpisLoading } = useSignup();
+  const { login, isLoading: loginisLoading } = useLogin();
   const navigate = useNavigate();
   //form vars
   const [email, setEmail] = useState("");
@@ -24,10 +24,10 @@ const Form = () => {
   const handleSignUp = async (e) => {
     e.preventDefault();
     jsonData = await signup(email, username, password);
-    console.log(jsonData)
+    console.log(jsonData);
     if (jsonData.success) {
       ////////////////////////////
-      toast.success(jsonData.message)
+      toast.success(jsonData.message);
       navigate("/");
     } else {
       setError(jsonData.message);
@@ -39,10 +39,10 @@ const Form = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     jsonData = await login(email, password);
-    console.log(jsonData)
+    console.log(jsonData);
     if (jsonData.success) {
       ////////////////////////////////
-      toast.success(jsonData.message)
+      toast.success(jsonData.message);
       navigate("/");
     } else {
       setError(jsonData.message);
@@ -114,7 +114,6 @@ const Form = () => {
           {signUpisLoading ? <Loader /> : "Create an account"}
         </button>
         {error && <p className="text-center text-red-600">{error}</p>}
-        
 
         <div className="py-2 text-sm">
           Already have an account?{" "}
@@ -139,7 +138,7 @@ const Form = () => {
         <div className="py-2">
           <img
             className="w-[60px] h-[60px] rounded-full"
-       src={Logo}
+            src={Logo}
             alt="logo"
           />
         </div>
@@ -184,7 +183,6 @@ const Form = () => {
           {loginisLoading ? <Loader /> : "Login"}
         </button>
         {error && <p className="text-center text-red-600">{error}</p>}
-        
 
         <div className="py-2 text-sm">
           Don&apos;t have an account?{" "}

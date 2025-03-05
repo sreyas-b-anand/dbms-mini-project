@@ -17,12 +17,12 @@ const AuthContextProvider = ({ children }) => {
     user: null,
   });
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem('user'))
+    const user = JSON.parse(localStorage.getItem("user"));
 
     if (user) {
-      dispatch({ type: 'LOGIN', payload: user }) 
+      dispatch({ type: "LOGIN", payload: user });
     }
-  }, [])
+  }, []);
 
   return (
     <AuthContext.Provider value={{ ...user, dispatch }}>
