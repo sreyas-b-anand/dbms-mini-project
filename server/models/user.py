@@ -14,6 +14,7 @@ class User(db.Model):
     role = db.Column(db.String(20), nullable=False, default="user")
     wallet = db.Column(db.Float, default=0.0, nullable=False)
     img=db.Column(db.String(1000) , nullable=True)
+    phone=db.Column(db.Integer , nullable=True)
     # These were causing the error - fix with server_default
     created_at = db.Column(db.TIMESTAMP, server_default=func.now())
     updated_at = db.Column(db.TIMESTAMP, server_default=func.now(), onupdate=func.now())

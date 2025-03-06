@@ -61,10 +61,11 @@ const ItemCard = ({
         {/* Stacked buttons */}
         <div className="flex flex-col gap-2">
           <Button
+          variant={"outlined"}
             className={`w-full text-sm py-1 h-9 ${
               isEnded
                 ? "bg-gray-400 opacity-100 hover:opacity-80 cursor-not-allowed"
-                : "bg-accent-foreground opacity-100 hover:opacity-80 hover:cursor-pointer"
+                : "bg-accent-foreground text-accent opacity-100 hover:opacity-80 hover:cursor-pointer"
             }`}
             onClick={onBid}
             disabled={isEnded}

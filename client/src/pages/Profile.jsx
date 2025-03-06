@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Camera, Edit, Save, X } from 'lucide-react';
+import { Camera, Edit, Save, X } from "lucide-react";
 import { useAuthContext } from "../hooks/useAuthContext";
 
 export default function Profile() {
@@ -83,9 +83,9 @@ export default function Profile() {
             <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2">
               <div className="w-32 h-32 border-4 border-white rounded-full overflow-hidden">
                 {profileData?.img ? (
-                  <img 
-                    src={profileData.img} 
-                    alt="Profile" 
+                  <img
+                    src={profileData.img}
+                    alt="Profile"
                     className="w-full h-full object-cover"
                   />
                 ) : (
@@ -99,11 +99,15 @@ export default function Profile() {
 
           {/* Edit Toggle */}
           <div className="absolute top-4 right-4">
-            <button 
+            <button
               onClick={() => setIsEditing(!isEditing)}
               className="bg-white/80 p-2 rounded-full shadow hover:bg-white transition"
             >
-              {isEditing ? <X className="text-red-500" /> : <Edit className="text-gray-700" />}
+              {isEditing ? (
+                <X className="text-red-500" />
+              ) : (
+                <Edit className="text-gray-700" />
+              )}
             </button>
           </div>
         </div>
@@ -114,7 +118,9 @@ export default function Profile() {
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* Image URL Input */}
               <div>
-                <label className="block text-sm font-medium text-gray-700">Profile Image URL</label>
+                <label className="block text-sm font-medium text-gray-700">
+                  Profile Image URL
+                </label>
                 <input
                   type="url"
                   name="img"
@@ -126,7 +132,9 @@ export default function Profile() {
 
               {/* Username */}
               <div>
-                <label className="block text-sm font-medium text-gray-700">Username</label>
+                <label className="block text-sm font-medium text-gray-700">
+                  Username
+                </label>
                 <input
                   type="text"
                   name="username"
@@ -138,7 +146,9 @@ export default function Profile() {
 
               {/* Address */}
               <div>
-                <label className="block text-sm font-medium text-gray-700">Address</label>
+                <label className="block text-sm font-medium text-gray-700">
+                  Address
+                </label>
                 <input
                   type="text"
                   name="address"
@@ -150,7 +160,9 @@ export default function Profile() {
 
               {/* Phone */}
               <div>
-                <label className="block text-sm font-medium text-gray-700">Phone</label>
+                <label className="block text-sm font-medium text-gray-700">
+                  Phone
+                </label>
                 <input
                   type="tel"
                   name="phone"
@@ -160,8 +172,8 @@ export default function Profile() {
                 />
               </div>
 
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
                 <Save className="mr-2" /> Save Changes
@@ -170,31 +182,47 @@ export default function Profile() {
           ) : (
             <div className="space-y-4">
               <div className="text-center">
-                <h2 className="text-2xl font-bold text-gray-800">{profileData?.username}</h2>
+                <h2 className="text-2xl font-bold text-gray-800">
+                  {profileData?.username}
+                </h2>
                 <p className="text-gray-600">{profileData?.email}</p>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-gray-100 p-4 rounded-lg">
                   <p className="text-sm text-gray-500">Role</p>
-                  <p className="font-semibold">{profileData?.role || 'Not specified'}</p>
+                  <p className="font-semibold">
+                    {profileData?.role || "Not specified"}
+                  </p>
                 </div>
 
                 <div className="bg-gray-100 p-4 rounded-lg">
                   <p className="text-sm text-gray-500">Wallet Balance</p>
-                  <p className="font-semibold">${profileData?.wallet?.toFixed(2) || '0.00'}</p>
+                  <p className="font-semibold">
+                    ${profileData?.wallet?.toFixed(2) || "0.00"}
+                  </p>
                 </div>
 
-                <div className="col-span-2 bg-gray-100 p-4 rounded-lg">
+                <div className=" bg-gray-100 p-4 rounded-lg">
+                  <p className="text-sm text-gray-500">Phone</p>
+                  <p className="font-semibold">
+                    {profileData?.address || "Not provided"}
+                  </p>
+                </div>
+
+                <div className=" bg-gray-100 p-4 rounded-lg">
                   <p className="text-sm text-gray-500">Address</p>
-                  <p className="font-semibold">{profileData?.address || 'Not provided'}</p>
+                  <p className="font-semibold">
+                    {profileData?.address || "Not provided"}
+                  </p>
                 </div>
               </div>
 
               <div className="text-center text-sm text-gray-500 mt-4">
-                Joined: {profileData?.createdAt 
-                  ? new Date(profileData.createdAt).toLocaleDateString() 
-                  : 'Unknown'}
+                Joined:{" "}
+                {profileData?.createdAt
+                  ? new Date(profileData.createdAt).toLocaleDateString()
+                  : "Unknown"}
               </div>
             </div>
           )}
