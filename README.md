@@ -39,6 +39,11 @@ BidSnap is an online auction platform where users can bid on various items. The 
 - Python 3.x
 - MySQL
 
+
+   Clone the repository
+   ```sh
+   git clone https://github.com/sreyas-b-anand/dbms-mini-project.git
+
 ### Client
 
 1. Navigate to the `client` directory:
