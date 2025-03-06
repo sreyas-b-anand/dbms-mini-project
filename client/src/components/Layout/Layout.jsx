@@ -4,7 +4,7 @@ import Tabbar from "../Tabbar";
 
 const Layout = () => {
   return (
-    <main className="w-screen min-h-screen font-poppins flex bg-gray-200 overflow-auto">
+    <main className="w-screen h-screen font-poppins flex bg-gray-200 overflow-auto">
       {/* Sidebar (Navbar) */}
 
       <Navbar />

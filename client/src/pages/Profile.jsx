@@ -10,6 +10,7 @@ export default function Profile() {
   const { user } = useAuthContext();
 
   useEffect(() => {
+    console.log("profile" , user)
     const fetchProfile = async () => {
       try {
         const response = await fetch("http://127.0.0.1:5000/profile", {
@@ -34,7 +35,7 @@ export default function Profile() {
     };
 
     fetchProfile();
-  }, [user.email]);
+  }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -206,7 +207,7 @@ export default function Profile() {
                 <div className=" bg-gray-100 p-4 rounded-lg">
                   <p className="text-sm text-gray-500">Phone</p>
                   <p className="font-semibold">
-                    {profileData?.address || "Not provided"}
+                    {profileData?.phone || "Not provided"}
                   </p>
                 </div>
 

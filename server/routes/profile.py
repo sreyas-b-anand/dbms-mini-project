@@ -28,7 +28,8 @@ def fetchUser():
             "role": user.role if user.role else "",
             "wallet": user.wallet if user.wallet is not None else 0.0,
             "createdAt" : user.created_at,
-            "img":user.img
+            "img":user.img,
+            "phone":user.phone
         }
 
         return jsonify({"success": True, "message": "Data fetched successfully", "profile": user_data}), 200
