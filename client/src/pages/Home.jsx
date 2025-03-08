@@ -1,45 +1,15 @@
-import { Link } from "react-router-dom";
+import { Link, useOutletContext } from "react-router-dom";
 import ItemCard from "../components/Cards/ItemCard";
 import { ArrowRight } from "lucide-react";
-import { useEffect, useState } from "react";
-import { useAuthContext } from "../hooks/useAuthContext";
 import Loader from "../components/utils/Loader";
+import { useItemContext } from "../hooks/useItems";
+
 const Home = () => {
-  const { user } = useAuthContext();
-  const [items, setItems] = useState([]);
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  useEffect(() => {
-    setIsLoading(true);
-    const fetchItems = async () => {
-      console.log("in home", user);
-
-      try {
-        const response = await fetch("http://127.0.0.1:5000/items/get-items", {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        });
-
-        const json = await response.json();
-
-        if (!response.ok || json.response.success === false) {
-          setError(json.response.message || "Failed to fetch items");
-          return;
-        }
-
-        setItems(json.response.items);
-        console.log(json);
-      } catch (err) {
-        setError(`An error occurred: ${err.message}`);
-      }
-    };
-
-    fetchItems();
-    setIsLoading(false);
-  }, [user]);
-
+  const { items, isLoading, error } = useItemContext();
+  const { searchQuery } = useOutletContext();
+  const filteredItems = items?.filter((item) =>
+    item.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
   return (
     <>
       <main className="flex-1 h-full mt-0 gap-3 flex items-center p-3 flex-wrap">
@@ -59,12 +29,13 @@ const Home = () => {
             </div>
           )}
 
-          {items ? (
+          {filteredItems ? (
             <div className="outer h-[500px] px-3 py-3 overflow-y-auto scroll-smooth scroll-p-1 scroll-m-1">
               <div className="inner grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {items.map((item) => (
+                {filteredItems.map((item) => (
                   <ItemCard
                     key={item.id}
+                    id={item.id}
                     title={item.title}
                     imageUrl={item.imageUrl}
                     currentBid={item.currentBid}

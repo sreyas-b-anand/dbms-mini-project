@@ -8,11 +8,12 @@ import Auth from "./pages/Auth";
 import NotFound from "./NotFound";
 import SellItems from "./pages/SellItems";
 import { Toaster } from "sonner";
+import ItemDetails from "./pages/itemDetails";
 
 function App() {
   return (
     <>
-      <Toaster position="top-right"/>
+      <Toaster position="top-right" />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Auth />} />
@@ -21,7 +22,8 @@ function App() {
             <Route path="/my-bids" element={<MyBids />} />
             <Route path="/history" element={<History />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="/sell-items" element={<SellItems/>}/>
+            <Route path="/sell-items" element={<SellItems />} />
+            <Route path="/item/:id" element={< ItemDetails/>} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

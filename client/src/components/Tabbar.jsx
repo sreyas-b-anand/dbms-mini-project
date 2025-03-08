@@ -1,21 +1,26 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { Plus, Search, User, Wallet } from "lucide-react";
+import { Plus, User, Wallet } from "lucide-react";
 import { Input } from "./ui/input";
 import { useAuthContext } from "../hooks/useAuthContext";
 import useWallet from "../hooks/useWallet";
 import Loader from "./utils/Loader";
 import { toast } from "sonner";
 
-const Topbar = ({ onWalletOpen }) => {
+const Topbar = ({
+  onWalletOpen,
+  onProfileOpen,
+  searchQuery,
+  setSearchQuery,
+}) => {
   const [page, setPage] = useState("Home");
   const location = useLocation();
   const { user } = useAuthContext();
-  
-  const {wallet ,isLoading , error} = useWallet(user)
-  if(error){
-    toast.error(error)
+
+  const { wallet, isLoading, error } = useWallet(user);
+  if (error) {
+    toast.error(error);
   }
   useEffect(() => {
     const pageMap = {
@@ -36,12 +41,11 @@ const Topbar = ({ onWalletOpen }) => {
           <div className="flex items-center justify-center gap-3">
             <Input
               type={"Search"}
-              className="w-[280px]"
+              className="max-w-[280px] pr-20"
               placeholder="Search for items....."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <button className="p-2 bg-accent-foreground rounded-lg">
-              <Search color="white" size={20} />
-            </button>
           </div>
         </div>
 
@@ -55,12 +59,15 @@ const Topbar = ({ onWalletOpen }) => {
               onClick={onWalletOpen}
               className="bg-sidebar-primary hover:cursor-pointer text-sidebar-primary-foreground p-1.5 rounded-full hover:opacity-90 transition-opacity"
             >
-             {!isLoading && <Plus size={12} />}
-             {isLoading && <Loader/>}
+              {!isLoading && <Plus size={12} />}
+              {isLoading && <Loader />}
             </button>
           </div>
 
-          <button className="relative flex items-center justify-center w-9 h-9 bg-accent rounded-full hover:bg-accent/80 transition-colors hover:cursor-pointer">
+          <button
+            onClick={onProfileOpen}
+            className="relative flex items-center justify-center w-9 h-9 bg-accent rounded-full hover:bg-accent/80 transition-colors hover:cursor-pointer"
+          >
             <User size={18} className="text-accent-foreground" />
             <span className="absolute top-0 right-0 block w-2.5 h-2.5 bg-chart-1 border-2 border-card rounded-full"></span>
           </button>

@@ -3,18 +3,19 @@ import { DollarSign, Clock, ArrowRight } from "lucide-react";
 import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
 import { getTimeRemaining } from "../../lib/getTimeRemaining";
+import { useNavigate } from "react-router-dom";
 const ItemCard = ({
   title,
+  id,
   imageUrl,
   currentBid,
   deadline,
   onBid,
-  onViewDetails,
 }) => {
-  // Calculate time remaining
-
+  
   const timeRemaining = getTimeRemaining(deadline);
   const isEnded = timeRemaining === "Ended";
+  const navigate = useNavigate()
 
   return (
     <Card className="w-56 rounded-lg py-2 px-1 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-border">
@@ -75,8 +76,8 @@ const ItemCard = ({
 
           <Button
             variant="outline"
-            className="w-full h-9  border-border text-foreground opacity-100 hover:opacity-80 flex items-center justify-center gap-1"
-            onClick={onViewDetails}
+            className="w-full h-9  border-border text-foreground opacity-100 hover:cursor-pointer hover:opacity-80 flex items-center justify-center gap-1"
+            onClick={()=> navigate(`/item/${id}`)}
           >
             <span>More Details</span>
             <ArrowRight className="h-3.5 w-3.5" />
@@ -89,6 +90,7 @@ const ItemCard = ({
 
 ItemCard.propTypes = {
   title: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
   imageUrl: PropTypes.string,
   currentBid: PropTypes.number.isRequired,
   deadline: PropTypes.string.isRequired,

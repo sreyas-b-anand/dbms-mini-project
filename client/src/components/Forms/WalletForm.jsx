@@ -17,14 +17,13 @@ import { toast } from "sonner";
 import Loader from "../utils/Loader";
 import useWallet from "../../hooks/useWallet";
 export default function WalletForm({ onWalletOpen }) {
-  const { user } = useAuthContext(); // Get user token
-  const [amount, setAmount] = useState(""); // Store amount input
+  const { user } = useAuthContext();
+  const [amount, setAmount] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const { wallet } = useWallet(user);
 
   const handleSubmit = async () => {
-    // e.preventDefault();
     setLoading(true);
     setError(null);
 
@@ -61,20 +60,32 @@ export default function WalletForm({ onWalletOpen }) {
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto">
+    <Card className="w-full max-w-md mx-auto p-5 px-7 ">
       <form onSubmit={handleSubmit}>
         <CardHeader>
-          <CardTitle className="text-2xl">Wallet</CardTitle>
-          <CardDescription>Add funds to your bidding wallet</CardDescription>
+          <CardTitle className="text-2xl p-2">Wallet</CardTitle>
+          <CardDescription className={"pb-3"}>
+            Add funds to your bidding wallet
+          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           {error && <p className="text-red-500">{error}</p>}
 
           <div className="bg-muted/50 p-4 rounded-lg mb-4">
-            <p className="text-sm text-muted-foreground">Current Balance</p>
+            <p className="text-sm text-muted-foreground py-2">
+              Current Balance
+            </p>
             <p className="text-3xl font-bold">${wallet}</p>{" "}
           </div>
-
+          <div className="space-y-4">
+            <Label htmlFor="upi-id">UPI ID</Label>
+            <Input
+              id="upi-id"
+              type="text"
+              placeholder="Enter UPI ID"
+              required
+            />
+          </div>
           <div className="space-y-2">
             <Label htmlFor="amount">Amount</Label>
             <Input
