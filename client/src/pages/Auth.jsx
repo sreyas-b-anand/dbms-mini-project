@@ -1,4 +1,4 @@
-import Form from "../components/Auth/Form";
+import Form from "../components/Forms/AuthForm";
 
 const Auth = () => {
   return (

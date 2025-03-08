@@ -10,7 +10,7 @@ const Navbar = () => {
   const navigate = useNavigate()
   const handleSubmit = async()=>{
     await logout()
-    navigate('/auth')
+    navigate('/')
   }
    return (
     <>
@@ -27,7 +27,7 @@ const Navbar = () => {
             </p>
           </header>
           <div className="flex flex-col items-start justify-around gap-4 w-full py-6 font-poppins">
-            <Link className="flex items-center justify-center gap-2 " to={"/"}>
+            <Link className="flex items-center justify-center gap-2 " to={"/dashboard"}>
               <Home size={18} /> Home
             </Link>
             <Link

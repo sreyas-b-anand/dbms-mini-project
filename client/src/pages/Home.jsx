@@ -3,13 +3,14 @@ import ItemCard from "../components/Cards/ItemCard";
 import { ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useAuthContext } from "../hooks/useAuthContext";
-
+import Loader from "../components/utils/Loader";
 const Home = () => {
   const { user } = useAuthContext();
   const [items, setItems] = useState([]);
   const [error, setError] = useState(null);
-
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
+    setIsLoading(true);
     const fetchItems = async () => {
       console.log("in home", user);
 
@@ -36,6 +37,7 @@ const Home = () => {
     };
 
     fetchItems();
+    setIsLoading(false);
   }, [user]);
 
   return (
@@ -51,6 +53,11 @@ const Home = () => {
               Go to My Bids <ArrowRight size={20} />
             </Link>
           </div>
+          {isLoading && (
+            <div className="flex-1 items-center justify-center">
+              <Loader />
+            </div>
+          )}
 
           {items ? (
             <div className="outer h-[500px] px-3 py-3 overflow-y-auto scroll-smooth scroll-p-1 scroll-m-1">

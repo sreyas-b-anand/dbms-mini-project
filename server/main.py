@@ -1,7 +1,7 @@
 from flask import Flask, request , jsonify
 from flask_cors import CORS
 from config.db import init_db
-from routes import auth,profile ,items
+from routes import auth,profile ,items, wallet
 
 def create_app(config=None):
     app = Flask(__name__)
@@ -23,7 +23,7 @@ def create_app(config=None):
     app.register_blueprint(auth, url_prefix='/auth')
     app.register_blueprint(profile, url_prefix='/profile')
     app.register_blueprint(items , url_prefix="/items")
-
+    app.register_blueprint(wallet , url_prefix="/wallet")
     return app
 
 

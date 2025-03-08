@@ -1,15 +1,22 @@
+/* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Plus, Search, User, Wallet } from "lucide-react";
 import { Input } from "./ui/input";
 import { useAuthContext } from "../hooks/useAuthContext";
+import useWallet from "../hooks/useWallet";
+import Loader from "./utils/Loader";
+import { toast } from "sonner";
 
-const Topbar = () => {
+const Topbar = ({ onWalletOpen }) => {
   const [page, setPage] = useState("Home");
   const location = useLocation();
   const { user } = useAuthContext();
-  const [wallet, setWallet] = useState(0);
-  user?.wallet && setWallet(user.wallet)
+  
+  const {wallet ,isLoading , error} = useWallet(user)
+  if(error){
+    toast.error(error)
+  }
   useEffect(() => {
     const pageMap = {
       "my-bids": "My Bids",
@@ -44,8 +51,12 @@ const Topbar = () => {
             <span className="text-sm font-medium text-secondary-foreground mr-2">
               ${wallet}
             </span>
-            <button className="bg-sidebar-primary hover:cursor-pointer text-sidebar-primary-foreground p-1.5 rounded-full hover:opacity-90 transition-opacity">
-              <Plus size={12} />
+            <button
+              onClick={onWalletOpen}
+              className="bg-sidebar-primary hover:cursor-pointer text-sidebar-primary-foreground p-1.5 rounded-full hover:opacity-90 transition-opacity"
+            >
+             {!isLoading && <Plus size={12} />}
+             {isLoading && <Loader/>}
             </button>
           </div>
 

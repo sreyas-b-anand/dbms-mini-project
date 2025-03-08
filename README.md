@@ -94,7 +94,7 @@ BidSnap is an online auction platform where users can bid on various items. The 
 ## Usage
 
 1. Open your browser and navigate to `http://localhost:5173` to access the client.
-2. Use `http://localhost:4000` for server-side API requests.
+2. Use `http://localhost:5000` for server-side API requests.
 
 
 ## License

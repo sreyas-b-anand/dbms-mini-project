@@ -15,9 +15,9 @@ function App() {
       <Toaster position="top-right"/>
       <BrowserRouter>
         <Routes>
-          <Route path="/auth" element={<Auth />} />
+          <Route path="/" element={<Auth />} />
           <Route element={<Layout />}>
-            <Route path="/" element={<Home />} />
+            <Route path="/dashboard" element={<Home />} />
             <Route path="/my-bids" element={<MyBids />} />
             <Route path="/history" element={<History />} />
             <Route path="/profile" element={<Profile />} />

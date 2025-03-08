@@ -28,7 +28,7 @@ const Form = () => {
     if (jsonData.success) {
       ////////////////////////////
       toast.success(jsonData.message);
-      navigate("/");
+      navigate("/dashboard");
     } else {
       setError(jsonData.message);
     }
@@ -43,7 +43,7 @@ const Form = () => {
     if (jsonData.success) {
       ////////////////////////////////
       toast.success(jsonData.message);
-      navigate("/");
+      navigate("/dashboard");
     } else {
       setError(jsonData.message);
     }

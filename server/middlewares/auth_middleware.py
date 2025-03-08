@@ -1,8 +1,9 @@
 from flask import request, jsonify
-import jwt , os
+import jwt, os
 from functools import wraps
 from dotenv import load_dotenv
-from models.user import User  # Import your User model
+from models.user import User  
+
 load_dotenv()
 SECRET_KEY = os.getenv("SECRET_KEY")
 
@@ -26,13 +27,11 @@ def token_required(f):
             if not user:
                 return jsonify({"message": "User not found", "success": False}), 401
 
-            request.user = user  # Attach user to request
-
         except jwt.ExpiredSignatureError:
             return jsonify({"message": "Token expired", "success": False}), 401
         except jwt.InvalidTokenError:
             return jsonify({"message": "Invalid token", "success": False}), 401
 
-        return f(*args, **kwargs)
+        return f(user, *args, **kwargs)  # ✅ Pass `user` as an argument
 
     return decorated
