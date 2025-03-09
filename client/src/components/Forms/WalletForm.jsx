@@ -60,66 +60,75 @@ export default function WalletForm({ onWalletOpen }) {
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto p-5 px-7 ">
-      <form onSubmit={handleSubmit}>
-        <CardHeader>
-          <CardTitle className="text-2xl p-2">Wallet</CardTitle>
-          <CardDescription className={"pb-3"}>
-            Add funds to your bidding wallet
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {error && <p className="text-red-500">{error}</p>}
+    <Card className="w-full max-w-md min-w-[350px] m-2 px-2 bg-background text-foreground rounded-lg shadow-md">
+  <form onSubmit={handleSubmit}>
+    <CardHeader>
+      <CardTitle className="text-2xl p-2">Wallet</CardTitle>
+      <CardDescription className="pb-3 text-muted-foreground">
+        Add funds to your bidding wallet
+      </CardDescription>
+    </CardHeader>
+    <CardContent className="space-y-4">
+      {error && <p className="text-red-500">{error}</p>}
 
-          <div className="bg-muted/50 p-4 rounded-lg mb-4">
-            <p className="text-sm text-muted-foreground py-2">
-              Current Balance
-            </p>
-            <p className="text-3xl font-bold">${wallet}</p>{" "}
-          </div>
-          <div className="space-y-4">
-            <Label htmlFor="upi-id">UPI ID</Label>
-            <Input
-              id="upi-id"
-              type="text"
-              placeholder="Enter UPI ID"
-              required
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="amount">Amount</Label>
-            <Input
-              id="amount"
-              type="number"
-              placeholder="0.00"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              required
-            />
-          </div>
-        </CardContent>
-        <CardFooter className="flex items-center justify-center gap-2 py-4">
-          <Button
-            type="submit"
-            className="w-full bg-foreground hover:bg-foreground/80 hover:cursor-pointer"
-            disabled={loading}
-          >
-            <span className="flex items-center gap-2">
-              {loading ? <Loader /> : <PlusCircle size={30} />}
-              Add Funds
-            </span>
-          </Button>
-          <Button
-            onClick={onWalletOpen}
-            className="w-full bg-secondary border-border text-foreground hover:bg-accent hover:cursor-pointer"
-          >
-            <span className="flex items-center gap-2">
-              <CircleX size={30} />
-              Cancel
-            </span>
-          </Button>
-        </CardFooter>
-      </form>
-    </Card>
+      {/* Current Balance */}
+      <div className="bg-gray-800 p-4 rounded-lg mb-4">
+        <p className="text-sm text-background py-2">Current Balance</p>
+        <p className="text-3xl font-bold text-background">${wallet}</p>
+      </div>
+
+      {/* UPI ID Input */}
+      <div className="space-y-2">
+        <Label htmlFor="upi-id">UPI ID</Label>
+        <Input
+          id="upi-id"
+          type="text"
+          placeholder="Enter UPI ID"
+          required
+          className="bg-gray-900 border-gray-700 text-white focus:ring-primary"
+        />
+      </div>
+
+      {/* Amount Input */}
+      <div className="space-y-2">
+        <Label htmlFor="amount">Amount</Label>
+        <Input
+          id="amount"
+          type="number"
+          placeholder="0.00"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+          required
+          className="bg-gray-900 border-gray-700 text-white focus:ring-primary"
+        />
+      </div>
+    </CardContent>
+
+    {/* Buttons */}
+    <CardFooter className="flex items-center justify-center gap-2 py-4">
+      <Button
+        type="submit"
+        className="w-full bg-primary hover:bg-primary/80 hover:cursor-pointer"
+        disabled={loading}
+      >
+        <span className="flex items-center gap-2 text-background">
+          {loading ? <Loader /> : <PlusCircle size={30} />}
+          Add Funds
+        </span>
+      </Button>
+
+      <Button
+        onClick={onWalletOpen}
+        className="w-full bg-gray-700 border-gray-600 text-white hover:bg-gray-600 hover:cursor-pointer"
+      >
+        <span className="flex items-center gap-2">
+          <CircleX size={30} />
+          Cancel
+        </span>
+      </Button>
+    </CardFooter>
+  </form>
+</Card>
+
   );
 }

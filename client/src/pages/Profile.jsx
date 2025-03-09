@@ -41,11 +41,11 @@ export default function Profile() {
 
   return (
     <div className="container mx-auto max-w-2xl p-6">
-      <div className="bg-white shadow-lg rounded-xl overflow-hidden">
+      <div className="bg-background shadow-lg rounded-xl overflow-hidden">
         {/* Profile Header */}
-        <div className="relative h-48 bg-gradient-to-r from-blue-500 to-purple-600">
+        <div className="relative h-48 bg-gradient-to-r from-primary to-accent">
           <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2">
-            <div className="w-32 h-32 border-4 border-white rounded-full overflow-hidden">
+            <div className="w-32 h-32 border-4 border-background rounded-full overflow-hidden">
               {profileData?.img ? (
                 <img
                   src={profileData.img}
@@ -53,20 +53,20 @@ export default function Profile() {
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                  <Camera className="text-gray-500 w-12 h-12" />
+                <div className="w-full h-full bg-muted flex items-center justify-center">
+                  <Camera className="text-foreground w-12 h-12" />
                 </div>
               )}
             </div>
           </div>
           <button
             onClick={() => setIsEditing(!isEditing)}
-            className="absolute top-4 right-4 bg-white/80 p-2 rounded-full shadow hover:bg-white"
+            className="absolute top-4 right-4 bg-background/80 p-2 rounded-full shadow hover:bg-background"
           >
             {isEditing ? (
-              <X className="text-red-500" />
+              <X className="text-failure" />
             ) : (
-              <Edit className="text-gray-700" />
+              <Edit className="text-foreground" />
             )}
           </button>
         </div>
@@ -77,7 +77,7 @@ export default function Profile() {
             <form onSubmit={handleSubmit} className="space-y-4">
               {["img", "username", "address", "phone"].map((field) => (
                 <div key={field}>
-                  <label className="block text-sm font-medium  text-gray-700 capitalize">
+                  <label className="block text-sm font-medium text-foreground capitalize">
                     {field}
                   </label>
                   <input
@@ -91,31 +91,31 @@ export default function Profile() {
                     name={field}
                     value={profileData?.[field] || ""}
                     onChange={handleInputChange}
-                    className="mt-1 block w-full rounded-md p-2 border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200"
+                    className="mt-1 block w-full rounded-md p-2 border-border shadow-sm focus:border-primary focus:ring focus:ring-primary"
                   />
                 </div>
               ))}
               <button
                 type="submit"
-                className="w-full py-2 px-4 rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
+                className="w-full py-2 px-4 rounded-md shadow-sm text-sm font-medium text-background bg-primary hover:bg-primary"
               >
                 <span className="flex items-center justify-center gap-2">
-                <Save className="mr-2" /> Save Changes 
+                  <Save className="mr-2" /> Save Changes
                 </span>
               </button>
             </form>
           ) : (
             <div className="space-y-4">
               <div className="text-center">
-                <h2 className="text-2xl font-bold text-gray-800">
+                <h2 className="text-2xl font-bold text-foreground">
                   {profileData?.username}
                 </h2>
-                <p className="text-gray-600">{profileData?.email}</p>
+                <p className="text-foreground">{profileData?.email}</p>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 {["role", "wallet", "phone", "address"].map((field) => (
-                  <div key={field} className="bg-gray-100 p-4 rounded-lg">
-                    <p className="text-sm text-gray-500 capitalize">
+                  <div key={field} className="bg-muted p-4 rounded-lg">
+                    <p className="text-sm text-foreground capitalize">
                       {field.replace("wallet", "Wallet Balance")}
                     </p>
                     <p className="font-semibold">
@@ -126,7 +126,7 @@ export default function Profile() {
                   </div>
                 ))}
               </div>
-              <div className="text-center text-sm text-gray-500 mt-4">
+              <div className="text-center text-sm text-foreground mt-4">
                 Joined:{" "}
                 {profileData?.createdAt
                   ? new Date(profileData.createdAt).toLocaleDateString()

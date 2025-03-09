@@ -23,7 +23,7 @@ const Layout = () => {
           initial={{ opacity: 0, translateY: -20 }}
           animate={{ opacity: 1, translateY: 0 }}
           transition={{ duration: 0.3 }}
-          className="absolute z-30  right-1/12 top-1/12 p-3 m-3 min-w-[230px] translate-x-[140px]"
+          className="absolute z-30 hidden sm:block right-1/12 top-1/12 p-3 m-3 min-w-[230px] translate-x-[140px]"
         >
           <ProfileCard onProfileOpen={onProfileOpen} />
         </motion.div>
@@ -57,7 +57,7 @@ const Layout = () => {
 
         {/* Page Content (Outlet) */}
 
-        <Outlet context={{ searchQuery }}/>
+        <Outlet context={{ searchQuery }} />
       </div>
     </main>
   );

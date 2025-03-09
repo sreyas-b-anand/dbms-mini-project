@@ -67,7 +67,7 @@ const Form = () => {
           />
         </div>
         <header className="text-center pb-2 flex items-center justify-center gap-2 flex-col text-wrap flex-wrap">
-          <p className="font-extrabold text-3xl text-center">Welcome</p>
+          <p className="font-bold text-3xl text-center">Welcome</p>
           <p className="text-sm text-center text-wrap ">
             Please enter your details to sign up
           </p>
@@ -110,7 +110,7 @@ const Form = () => {
             <label className="form-label">Password</label>
           </div>
         </div>
-        <button className="my-2 bg-slate-800 text-white w-full py-2 rounded-md hover:cursor-pointer flex items-center justify-center">
+        <button className="my-2 bg-primary text-white w-full py-2 rounded-md hover:cursor-pointer flex items-center justify-center">
           {signUpisLoading ? <Loader /> : "Create an account"}
         </button>
         {error && <p className="text-center text-red-600">{error}</p>}
@@ -119,7 +119,7 @@ const Form = () => {
           Already have an account?{" "}
           <span
             onClick={() => setIsSignUp(!isSignUp)}
-            className="text-cyan-500 cursor-pointer"
+            className="text-accent cursor-pointer"
           >
             Login
           </span>
@@ -143,7 +143,7 @@ const Form = () => {
           />
         </div>
         <header className="text-center pb-2 flex items-center justify-center gap-2 flex-col text-wrap flex-wrap">
-          <p className="font-extrabold text-3xl text-center">Welcome Back</p>
+          <p className="font-bold text-3xl text-center">Welcome Back</p>
           <p className="text-sm text-center text-wrap ">
             Please enter your details to login
           </p>
@@ -175,11 +175,11 @@ const Form = () => {
           </div>
         </div>
         <div className="w-full ">
-          <p className="text-sm text-cyan-500 cursor-pointer ">
+          <p className="text-sm text-accent cursor-pointer ">
             Forgot password?
           </p>
         </div>
-        <button className="my-2 bg-slate-800 text-white w-full py-2 rounded-md hover:cursor-pointer flex items-center justify-center">
+        <button className="my-2 bg-primary text-white w-full py-2 rounded-md hover:cursor-pointer flex items-center justify-center">
           {loginisLoading ? <Loader /> : "Login"}
         </button>
         {error && <p className="text-center text-red-600">{error}</p>}
@@ -188,7 +188,7 @@ const Form = () => {
           Don&apos;t have an account?{" "}
           <span
             onClick={() => setIsSignUp(!isSignUp)}
-            className="text-cyan-500 cursor-pointer"
+            className="text-accent cursor-pointer"
           >
             Sign up
           </span>

@@ -34,15 +34,15 @@ const Topbar = ({
   }, [location.pathname]);
 
   return (
-    <div className="bg-card border border-border m-3 mb-0 rounded-lg px-3">
+    <div className="bg-background border border-border m-3 mb-0 rounded-lg px-3">
       <div className="flex items-center justify-between h-14">
         <div className="flex items-center justify-center gap-20 px-3">
-          <h1 className="text-lg font-medium text-card-foreground">{page}</h1>
+          <h1 className="text-lg font-medium text-foreground">{page}</h1>
           <div className="flex items-center justify-center gap-3">
             <Input
-              type={"Search"}
+              type="search"
               className="max-w-[280px] pr-20"
-              placeholder="Search for items....."
+              placeholder="Search for items..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -50,17 +50,16 @@ const Topbar = ({
         </div>
 
         <div className="flex items-center space-x-4">
-          <div className="flex items-center bg-secondary rounded-full py-1.5 pl-3 pr-1.5 border border-border">
-            <Wallet size={16} className="text-secondary-foreground mr-2" />
-            <span className="text-sm font-medium text-secondary-foreground mr-2">
+          <div className="flex items-center bg-muted rounded-full py-1.5 pl-3 pr-1.5 border border-border">
+            <Wallet size={16} className="text-foreground mr-2" />
+            <span className="text-sm font-medium text-foreground mr-2">
               ${wallet}
             </span>
             <button
               onClick={onWalletOpen}
-              className="bg-sidebar-primary hover:cursor-pointer text-sidebar-primary-foreground p-1.5 rounded-full hover:opacity-90 transition-opacity"
+              className="bg-accent hover:cursor-pointer text-background p-1.5 rounded-full hover:opacity-90 transition-opacity"
             >
-              {!isLoading && <Plus size={12} />}
-              {isLoading && <Loader />}
+              {!isLoading ? <Plus size={12} /> : <Loader />}
             </button>
           </div>
 
@@ -68,8 +67,8 @@ const Topbar = ({
             onClick={onProfileOpen}
             className="relative flex items-center justify-center w-9 h-9 bg-accent rounded-full hover:bg-accent/80 transition-colors hover:cursor-pointer"
           >
-            <User size={18} className="text-accent-foreground" />
-            <span className="absolute top-0 right-0 block w-2.5 h-2.5 bg-chart-1 border-2 border-card rounded-full"></span>
+            <User size={18} className="text-background" />
+            <span className="absolute top-0 right-0 block w-2.5 h-2.5 bg-failure border-2 border-background rounded-full"></span>
           </button>
         </div>
       </div>
