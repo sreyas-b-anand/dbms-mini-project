@@ -3,19 +3,30 @@ import { Outlet } from "react-router-dom";
 import Navbar from "../Navbar";
 import Tabbar from "../Tabbar";
 import WalletForm from "../Forms/WalletForm";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ProfileCard from "../Cards/ProfileCard";
 import { motion } from "framer-motion";
 const Layout = () => {
   const [isWallet, setIsWallet] = useState(false);
   const [isProfile, setIsProfile] = useState(false);
+  const [isNavbar, setIsNavbar] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+
   const onWalletOpen = async () => {
     setIsWallet(!isWallet);
   };
   const onProfileOpen = async () => {
     setIsProfile(!isProfile);
   };
+  const onNavbarOpen = async () => {
+    setIsNavbar(!isNavbar);
+  };
+  useEffect(() => {
+    document.documentElement.addEventListener("touchstart", () => {
+      setIsNavbar(false);
+    });
+  }, []);
+
   return (
     <main className="w-screen h-screen font-poppins flex bg-gray-200 overflow-auto">
       {isProfile && (
@@ -23,7 +34,7 @@ const Layout = () => {
           initial={{ opacity: 0, translateY: -20 }}
           animate={{ opacity: 1, translateY: 0 }}
           transition={{ duration: 0.3 }}
-          className="absolute z-30 hidden sm:block right-1/12 top-1/12 p-3 m-3 min-w-[230px] translate-x-[140px]"
+          className="absolute z-30 block right-1/12 top-1/12 p-3 m-3 min-w-[230px]  sm:translate-x-[140px]"
         >
           <ProfileCard onProfileOpen={onProfileOpen} />
         </motion.div>
@@ -40,7 +51,15 @@ const Layout = () => {
         </motion.div>
       )}
       {/* Sidebar (Navbar) */}
-      <Navbar />
+      <motion.div
+        initial={{ x: -10, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        className={`md:block ${
+          isNavbar ? "absolute z-20" : "hidden"
+        } md:static md:z-0`}
+      >
+        <Navbar onNavbarOpen={onNavbarOpen} />
+      </motion.div>
 
       {/* Main Content Area */}
       <div
@@ -53,6 +72,7 @@ const Layout = () => {
           setSearchQuery={setSearchQuery}
           onWalletOpen={onWalletOpen}
           onProfileOpen={onProfileOpen}
+          onNavbarOpen={onNavbarOpen}
         />
 
         {/* Page Content (Outlet) */}

@@ -40,7 +40,7 @@ export default function Profile() {
   if (error) return <div className="text-red-500 text-center">{error}</div>;
 
   return (
-    <div className="container mx-auto max-w-2xl p-6">
+    <div className="container mx-auto max-w-2xl p-3">
       <div className="bg-background shadow-lg rounded-xl overflow-hidden">
         {/* Profile Header */}
         <div className="relative h-48 bg-gradient-to-r from-primary to-accent">

@@ -3,17 +3,30 @@ import ItemCard from "../components/Cards/ItemCard";
 import { ArrowRight } from "lucide-react";
 import Loader from "../components/utils/Loader";
 import { useItemContext } from "../hooks/useItems";
-
+import { Input } from "../components/ui/input";
+import { useEffect, useState } from "react";
 const Home = () => {
   const { items, isLoading, error } = useItemContext();
   const { searchQuery } = useOutletContext();
-  const filteredItems = items?.filter((item) =>
-    item.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const [result, setResult] = useState([]);
+  const filterItems = (items, query) => {
+    const filteredItems = items?.filter((item) =>
+      item.title.toLowerCase().includes(query.toLowerCase())
+    );
+    console.log(filteredItems);
+    return filteredItems;
+  };
+  useEffect(() => {
+    setResult(() => filterItems(items, searchQuery));
+  }, [items, searchQuery]);
+  const handleInputChange = (e) => {
+    setResult(() => filterItems(items, e.target.value));
+  };
   return (
     <>
       <main className="flex-1 h-full mt-0 gap-3 flex items-center p-3 flex-wrap">
-        <section className="bg-background w-full xl:w-[70%] h-full rounded-lg shadow-md p-3 overflow-hidden">
+        <section className="bg-background w-full flex-1 h-full rounded-lg shadow-md p-3 overflow-hidden">
+          <div>
           <div className="flex items-center justify-between border-b px-3 py-3">
             <p className="font-semibold text-xl text-foreground">
               Explore Auctions
@@ -26,15 +39,23 @@ const Home = () => {
             </Link>
           </div>
           {isLoading && (
-            <div className="flex-1 items-center justify-center">
+            <div className="w-full flex items-center justify-center">
               <Loader />
             </div>
           )}
+          <div>
+            <Input
+              type="search"
+              className="w-full px-3 py-3 m-3"
+              placeholder="Search for items..."
+              onChange={handleInputChange}
+            />
+          </div>
 
-          {filteredItems ? (
+          {result ? (
             <div className="outer h-[500px] px-3 py-3 overflow-y-auto scroll-smooth scroll-p-1 scroll-m-1">
-              <div className="inner grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {filteredItems.map((item) => (
+              <div className="inner grid sm:grid-cols-2 md:grid-cols-3  xl:grid-cols-4 gap-4">
+                {result?.map((item) => (
                   <ItemCard
                     key={item.id}
                     id={item.id}
@@ -50,15 +71,16 @@ const Home = () => {
           ) : (
             <p className="text-center text-failure">{error}</p>
           )}
+          </div>
         </section>
-        <section className="hidden xl:flex xl:flex-1 h-full flex-col items-center justify-between gap-3 ">
+        {/* { <section className="hidden xl:flex xl:flex-1 h-full flex-col items-center justify-between gap-3 ">
           <div className="bg-background flex-3/4 w-full rounded-lg shadow-md p-4">
             some component
           </div>
           <div className="bg-background flex-1/2 w-full rounded-lg shadow-md p-4">
             some component
           </div>
-        </section>
+        </section>} */}
       </main>
     </>
   );

@@ -1,18 +1,18 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { Plus, User, Wallet } from "lucide-react";
+import { Plus, User, Wallet, Menu } from "lucide-react";
 import { Input } from "./ui/input";
 import { useAuthContext } from "../hooks/useAuthContext";
 import useWallet from "../hooks/useWallet";
 import Loader from "./utils/Loader";
 import { toast } from "sonner";
-
 const Topbar = ({
   onWalletOpen,
   onProfileOpen,
   searchQuery,
   setSearchQuery,
+  onNavbarOpen,
 }) => {
   const [page, setPage] = useState("Home");
   const location = useLocation();
@@ -37,8 +37,13 @@ const Topbar = ({
     <div className="bg-background border border-border m-3 mb-0 rounded-lg px-3">
       <div className="flex items-center justify-between h-14">
         <div className="flex items-center justify-center gap-20 px-3">
-          <h1 className="text-lg font-medium text-foreground">{page}</h1>
-          <div className="flex items-center justify-center gap-3">
+          <div className="flex items-center justify-center gap-2 ">
+            <div className="block md:hidden">
+              <Menu onClick={onNavbarOpen} />
+            </div>
+            <h1 className="text-lg font-medium text-foreground">{page}</h1>
+          </div>
+          <div className="hidden md:flex items-center justify-center gap-3">
             <Input
               type="search"
               className="max-w-[280px] pr-20"
@@ -50,7 +55,7 @@ const Topbar = ({
         </div>
 
         <div className="flex items-center space-x-4">
-          <div className="flex items-center bg-muted rounded-full py-1.5 pl-3 pr-1.5 border border-border">
+          <div className=" items-center bg-muted rounded-full py-1.5 pl-3 pr-1.5 border border-border hidden md:flex">
             <Wallet size={16} className="text-foreground mr-2" />
             <span className="text-sm font-medium text-foreground mr-2">
               ${wallet}
