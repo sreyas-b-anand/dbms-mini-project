@@ -1,12 +1,9 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { Plus, User, Wallet, Menu } from "lucide-react";
+import {  User, Menu } from "lucide-react";
 import { Input } from "./ui/input";
-import { useAuthContext } from "../hooks/useAuthContext";
-import useWallet from "../hooks/useWallet";
-import Loader from "./utils/Loader";
-import { toast } from "sonner";
+import WalletCard from "./Cards/WalletCard";
 const Topbar = ({
   onWalletOpen,
   onProfileOpen,
@@ -16,12 +13,6 @@ const Topbar = ({
 }) => {
   const [page, setPage] = useState("Home");
   const location = useLocation();
-  const { user } = useAuthContext();
-
-  const { wallet, isLoading, error } = useWallet(user);
-  if (error) {
-    toast.error(error);
-  }
   useEffect(() => {
     const pageMap = {
       "my-bids": "My Bids",
@@ -53,20 +44,8 @@ const Topbar = ({
             />
           </div>
         </div>
-
         <div className="flex items-center space-x-4">
-          <div className=" items-center bg-muted rounded-full py-1.5 pl-3 pr-1.5 border border-border hidden md:flex">
-            <Wallet size={16} className="text-foreground mr-2" />
-            <span className="text-sm font-medium text-foreground mr-2">
-              ${wallet}
-            </span>
-            <button
-              onClick={onWalletOpen}
-              className="bg-accent hover:cursor-pointer text-background p-1.5 rounded-full hover:opacity-90 transition-opacity"
-            >
-              {!isLoading ? <Plus size={12} /> : <Loader />}
-            </button>
-          </div>
+          <WalletCard onWalletOpen={onWalletOpen} />
 
           <button
             onClick={onProfileOpen}
@@ -76,6 +55,7 @@ const Topbar = ({
             <span className="absolute top-0 right-0 block w-2.5 h-2.5 bg-failure border-2 border-background rounded-full"></span>
           </button>
         </div>
+        
       </div>
     </div>
   );
