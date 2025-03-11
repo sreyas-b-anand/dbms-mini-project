@@ -45,7 +45,7 @@ const Layout = () => {
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.3 }}
-          className="absolute z-20 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+          className="absolute z-50 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
         >
           <WalletForm onWalletOpen={onWalletOpen} />
         </motion.div>
