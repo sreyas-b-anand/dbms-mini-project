@@ -7,7 +7,7 @@ const WalletCard = ({ onWalletOpen }) => {
   const { user } = useAuthContext();
   const { wallet } = useWallet(user);
   return (
-    <div className="justify-center gap-1 items-center bg-muted rounded-full py-1.5 pl-3 pr-1.5 border border-border hidden md:flex">
+    <div className="flex justify-center gap-1 items-center bg-muted rounded-full py-1.5 pl-3 pr-1.5 border border-border ">
       <Wallet size={16} className="text-foreground mr-2" />
       <span className="text-sm font-medium text-foreground mr-2">
         ${wallet}

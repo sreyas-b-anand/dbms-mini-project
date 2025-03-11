@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from models.items import Item
-from services import get_items ,get_an_item
+from services import get_items ,get_an_item , add_an_item
 from middlewares import token_required
 
 items = Blueprint("items", __name__)
@@ -35,6 +35,24 @@ def fetch_an_item(user, id):
     except Exception as e:
         return jsonify({"message": "An error occurred", "success": False, "error": str(e)}), 500
 #route POST add an item
+
+@items.route("/add-item" , methods=['POST'])
+@token_required
+def post_item(user):
+    try:
+        if not user:
+            return jsonify({"message": "Authorization error", "success": False}), 401
+        
+        data = request.get_json()
+        if not data:
+            return jsonify({"message": "No data has been received", "success": False}), 400
+        print(data)
+        result = add_an_item(data ,user.id)
+
+        return jsonify(result),  201
+    except Exception as e:
+        return jsonify({"message":f'An error occured {str(e)}', "success": False})
+
 
 #route DELETE hehehe
 

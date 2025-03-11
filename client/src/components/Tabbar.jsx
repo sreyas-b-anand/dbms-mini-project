@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import {  User, Menu } from "lucide-react";
+import { User, Menu } from "lucide-react";
 import { Input } from "./ui/input";
 import WalletCard from "./Cards/WalletCard";
 const Topbar = ({
@@ -45,7 +45,10 @@ const Topbar = ({
           </div>
         </div>
         <div className="flex items-center space-x-4">
+          <div className="hidden md:block">
           <WalletCard onWalletOpen={onWalletOpen} />
+
+          </div>
 
           <button
             onClick={onProfileOpen}
@@ -55,7 +58,6 @@ const Topbar = ({
             <span className="absolute top-0 right-0 block w-2.5 h-2.5 bg-failure border-2 border-background rounded-full"></span>
           </button>
         </div>
-        
       </div>
     </div>
   );

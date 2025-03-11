@@ -42,7 +42,10 @@ const ProfileCard = ({ onProfileOpen, onWalletOpen }) => {
               <User size={20} />
               <span>Go to My Profile</span>
             </Link>
+            <div className="block md:hidden">
             <WalletCard onWalletOpen={onWalletOpen} />
+
+            </div>
           </>
         )}
       </CardContent>

@@ -32,7 +32,6 @@ def login_user(email, password):
                     "email": user.email,
                     "username": user.username,
                     "role": user.role,
-                    "wallet": user.wallet
                 }
             else:
                 return {"success": False, "message": "Invalid email or password"}

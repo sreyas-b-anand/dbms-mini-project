@@ -41,7 +41,7 @@ def register_user(username, email, password, role="user"):
             "email": email,
             "username": username,
             "role": role,
-            "wallet": new_user.wallet or 0
+            "wallet": new_user.wallet or 0,
         }
 
     except Exception as e:
