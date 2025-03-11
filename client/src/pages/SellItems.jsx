@@ -1,13 +1,35 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SellItemForm from "../components/Forms/SellItemForm";
 import { ShoppingBag } from "lucide-react";
 
 import ListedItemCard from "../components/Cards/ListedItemCard";
+import { useAuthContext } from "../hooks/useAuthContext";
 const SellItems = () => {
+  const {user} = useAuthContext()
   const [isSellFormOpen, setIsFormOpen] = useState(false);
+  const [items , setItems]= useState([])
   const onSellFormOpen = () => {
     setIsFormOpen(!isSellFormOpen);
   };
+
+  useEffect(()=>{
+    const fetchItems = async () => {
+      const response = await fetch("http://127.0.0.1:5000/items/get-listed-items" , {
+        headers : {
+          "Authorization" : `Bearer ${user.token}`
+        }
+      })
+      const json =  await response.json()
+
+      if (!response.ok || !json.success)
+        throw new Error(json.message || "Failed to update profile");
+
+      setItems(json.items)
+      
+
+    }
+    fetchItems()
+  } ,[])
   return (
     <>
       {isSellFormOpen && (
@@ -38,11 +60,9 @@ const SellItems = () => {
           <div className="flex flex-1 gap-3 flex-wrap w-full overflow-hidden">
             <div className="max-h-[400px] overflow-y-auto w-full">
               <div className="flex flex-wrap justify-center place-items-center  gap-8">
-                <ListedItemCard />
-                <ListedItemCard />
-                <ListedItemCard />
-                <ListedItemCard />
-                <ListedItemCard />
+                {items.map((item , index)=>{
+                  return <ListedItemCard key={index} item={item}/>
+                })}
               </div>
             </div>
           </div>

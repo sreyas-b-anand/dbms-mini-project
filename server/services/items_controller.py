@@ -20,7 +20,7 @@ def get_an_item(id):
         #print(item)
 
         if not item:
-             return {"success": False, "message": "No such item available"}
+             return {"success": False, "message": "No items available"}
         return {"success": True,"message": "Items fetched successfully", "item": item.to_dict()}
     except Exception as e:
         return {"success": False, "message": f"An error occurred: {str(e)}"}
@@ -60,6 +60,23 @@ def add_an_item(data , user_id):
     except Exception as e:
         return {"message" :f'An error occured {str(e)}' , "success" : False}
    
+
+def get_listed_items(user):
+    try:
+        items = Item.query.filter_by(seller_id=user.id).all()
+        
+        if not items:
+            return {"success": False, "message": "No items available"}
+        
+        return {
+            "success": True,
+            "message": "Items fetched successfully",
+            "items": [item.to_dict() for item in items],
+        }
+
+    except Exception as e:
+        return {"success": False, "message": f"An error occurred: {str(e)}"}
+
 
 
 

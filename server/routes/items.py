@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from models.items import Item
-from services import get_items ,get_an_item , add_an_item
+from services import get_items ,get_an_item , add_an_item , get_listed_items
 from middlewares import token_required
 
 items = Blueprint("items", __name__)
@@ -50,6 +50,22 @@ def post_item(user):
         result = add_an_item(data ,user.id)
 
         return jsonify(result),  201
+    except Exception as e:
+        return jsonify({"message":f'An error occured {str(e)}', "success": False})
+
+
+@items.route("/get-listed-items" , methods=['GET'])
+@token_required
+def fetch_listed_items(user):
+    try:
+        if not user:
+            return jsonify({"message": "Authorization error", "success": False}), 401
+        
+        result = get_listed_items(user)
+        
+        return jsonify(result), 200 if result["success"] == True else 400
+        
+    
     except Exception as e:
         return jsonify({"message":f'An error occured {str(e)}', "success": False})
 
