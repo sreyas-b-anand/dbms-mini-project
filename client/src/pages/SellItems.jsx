@@ -13,6 +13,9 @@ const SellItems = () => {
   const onSellFormOpen = () => {
     setIsFormOpen(!isSellFormOpen);
   };
+  const handleDeleteItem = (itemId) => {
+    setItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
+  };
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -26,20 +29,22 @@ const SellItems = () => {
       );
       const json = await response.json();
 
-      if (!response.ok || !json.success)
-        setMessage(json.message)
-      console.log("message ",message)
+      if (!response.ok || !json.success) setMessage(json.message);
+      console.log("message ", message);
 
-      json.items ? setItems(json.items) : setItems([])
+      if (json.success == true) {
+        setItems(json.items);
+      }
     };
     fetchItems();
-  }, []);
-  
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.token]);
+
   return (
     <>
       {isSellFormOpen && (
         <section className="left-1/2 top-1/2 mt-7 -translate-x-1/2 -translate-y-1/2 z-30 absolute max-w-lg w-full m-3">
-          <SellItemForm onSellFormOpen={onSellFormOpen} />
+          <SellItemForm onSellFormOpen={onSellFormOpen} setItems={setItems} />
         </section>
       )}
       <main className="flex-1 flex  flex-col rounded-lg bg-background p-6 m-3 overflow-hidden">
@@ -66,12 +71,20 @@ const SellItems = () => {
             <div className="max-h-[400px] overflow-y-auto w-full">
               {items ? (
                 <div className="flex flex-wrap justify-center place-items-center  gap-8">
-                {items.map((item, index) => {
-                  return <ListedItemCard key={index} item={item} />;
-                })}
-              </div>
+                  {items.map((item, index) => {
+                    return (
+                      <ListedItemCard
+                        key={index}
+                        item={item}
+                        onDelete={handleDeleteItem}
+                      />
+                    );
+                  })}
+                </div>
               ) : (
-                <><p className="text-center">{message}</p></>
+                <>
+                  <p className="text-center">{message}</p>
+                </>
               )}
             </div>
           </div>

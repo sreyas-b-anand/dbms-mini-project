@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from models.items import Item
-from services import get_items ,get_an_item , add_an_item , get_listed_items
+from services import get_items ,get_an_item , add_an_item , get_listed_items , delete_item
 from middlewares import token_required
 
 items = Blueprint("items", __name__)
@@ -24,7 +24,7 @@ def fetch_items(user):
 @items.route('/get-item/<id>', methods=['GET'])
 @token_required  # ✅ Apply middleware here
 def fetch_an_item(user, id):
-    print(id)
+    # print(id)
     try:
         if not user:
             return jsonify({"message": "Authorization error", "success": False}), 401
@@ -51,7 +51,7 @@ def post_item(user):
 
         return jsonify(result),  201
     except Exception as e:
-        return jsonify({"message":f'An error occured {str(e)}', "success": False})
+        return jsonify({"message":f'An error occured {str(e)}', "success": False}) , 500
 
 
 @items.route("/get-listed-items" , methods=['GET'])
@@ -67,8 +67,22 @@ def fetch_listed_items(user):
         
     
     except Exception as e:
-        return jsonify({"message":f'An error occured {str(e)}', "success": False})
+        return jsonify({"message":f'An error occured {str(e)}', "success": False}) , 500
 
 
-#route DELETE hehehe
+#route DELETE 
+@items.route("/delete-item/<item_id>" , methods=['DELETE'])
+@token_required
+def delete(user , item_id):
+    try:
 
+        if not user:
+            return jsonify({"message": "Authorization error", "success": False}), 401
+        
+        if not item_id:
+            return jsonify({"message": "Item id not specified", "success": False}), 402
+        
+        result = delete_item(item_id , user)
+        return jsonify(result),200
+    except Exception as e:
+        return jsonify({"message":f'An error occured {str(e)}', "success": False}), 500

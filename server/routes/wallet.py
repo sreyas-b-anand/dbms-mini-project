@@ -37,3 +37,4 @@ def fetch_amount(user):
     
     except Exception as e:
         return jsonify({"message": f"Server error: {str(e)}", "success": False}), 500
+

@@ -56,7 +56,7 @@ def add_an_item(data , user_id):
         db.session.commit()
 
 
-        return {"message" : "Item added successfully" , "success" : True}
+        return {"message" : "Item added successfully" , "success" : True , "id" :new_item.id , "item":new_item.to_dict()}
     except Exception as e:
         return {"message" :f'An error occured {str(e)}' , "success" : False}
    
@@ -77,10 +77,22 @@ def get_listed_items(user):
     except Exception as e:
         return {"success": False, "message": f"An error occurred: {str(e)}"}
 
+def delete_item(item_id, user):
+    try:
+        item = Item.query.filter_by(id=item_id, seller_id=user.id).first()
+        
+        if not item:
+            return {"success": False, "message": "Item not found or not authorized to delete"}
+        
+        db.session.delete(item)
+        db.session.commit()
+        
+        return {"success": True, "message": "Item deleted successfully"}
+
+    except Exception as e:
+        return {"success": False, "message": str(e)}
 
 
-
-# delete item()
 #    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 #     title = db.Column(db.String(255), nullable=False)
 #     description = db.Column(db.Text, nullable=True)
