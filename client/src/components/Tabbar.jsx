@@ -16,6 +16,7 @@ const Topbar = ({
   useEffect(() => {
     const pageMap = {
       "my-bids": "My Bids",
+      "sell-items": "Sell Items",
       history: "History",
       profile: "Profile",
     };
@@ -34,20 +35,21 @@ const Topbar = ({
             </div>
             <h1 className="text-lg font-medium text-foreground">{page}</h1>
           </div>
-          <div className="hidden md:flex items-center justify-center gap-3">
-            <Input
-              type="search"
-              className="max-w-[280px] pr-20"
-              placeholder="Search for items..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
+          {page === "Home"  && (
+            <div className="hidden md:flex items-center justify-center gap-3">
+              <Input
+                type="search"
+                className="max-w-[280px] pr-20"
+                placeholder="Search for items..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+          )}
         </div>
         <div className="flex items-center space-x-4">
           <div className="hidden md:block">
-          <WalletCard onWalletOpen={onWalletOpen} />
-
+            <WalletCard onWalletOpen={onWalletOpen} />
           </div>
 
           <button

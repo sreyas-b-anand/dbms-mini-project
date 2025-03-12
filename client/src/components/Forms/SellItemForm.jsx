@@ -51,7 +51,7 @@ const SellItemForm = ({ onSellFormOpen, setItems }) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="p-6 bg-background/80 rounded-lg shadow-md"
+      className="p-6 bg-background rounded-lg shadow-md"
     >
       <h2 className="text-xl font-semibold text-foreground mb-4">
         List an Item for Sale

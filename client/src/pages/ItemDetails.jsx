@@ -17,6 +17,7 @@ import { Alert, AlertDescription } from "../components/ui/alert";
 import { formatCurrency } from "../lib/formatCurrency";
 import { formatRelativeTime } from "../lib/formatRelativeTime";
 import { getTimeRemaining } from "../lib/getTimeRemaining";
+import Loader from "../components/utils/Loader";
 export default function ItemDetails() {
   const { id } = useParams();
   const [item, setItem] = useState(null);
@@ -95,10 +96,7 @@ export default function ItemDetails() {
   if (isLoading) {
     return (
       <div className="page flex-1 p-3 bg-background m-3 rounded-lg overflow-hidden flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-          <p>Loading item details...</p>
-        </div>
+        <Loader />
       </div>
     );
   }
@@ -215,7 +213,7 @@ export default function ItemDetails() {
               <div className="flex items-center gap-2 mb-2">
                 <Badge variant="outline">{item.category}</Badge>
                 <Badge
-                className={"text-background"}
+                  className={"text-background"}
                   variant={item.status === "Active" ? "default" : "secondary"}
                 >
                   {item.status.toUpperCase()}

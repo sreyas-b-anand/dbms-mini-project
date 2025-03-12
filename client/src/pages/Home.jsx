@@ -52,11 +52,7 @@ const Home = () => {
                   {result?.map((item) => (
                     <ItemCard
                       key={item.id}
-                      id={item.id}
-                      title={item.title}
-                      imageUrl={item.imageUrl}
-                      currentBid={item.currentBid}
-                      deadline={"2025-10-12"}
+                      item={item}
                       onBid={() => console.log(`Bid placed on item ${item.id}`)}
                     />
                   ))}

@@ -1,21 +1,14 @@
+/* eslint-disable react/prop-types */
 import PropTypes from "prop-types";
 import { DollarSign, Clock, ArrowRight } from "lucide-react";
 import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
 import { getTimeRemaining } from "../../lib/getTimeRemaining";
 import { useNavigate } from "react-router-dom";
-const ItemCard = ({
-  title,
-  id,
-  imageUrl,
-  currentBid,
-  deadline,
-  onBid,
-}) => {
-  
-  const timeRemaining = getTimeRemaining(deadline);
+const ItemCard = ({ item, onBid }) => {
+  const timeRemaining = getTimeRemaining(item.auction_end);
   const isEnded = timeRemaining === "Ended";
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   return (
     <Card className="w-56 rounded-lg py-2 px-1 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-border bg-background">
@@ -23,8 +16,8 @@ const ItemCard = ({
       <div className="relative">
         <div className="h-40 overflow-hidden bg-muted">
           <img
-            src={imageUrl || "/placeholder.svg?height=160&width=224"}
-            alt={title}
+            src={item.imageUrl || "/placeholder.svg?height=160&width=224"}
+            alt={item.title}
             className={`w-full rounded-md h-full transition-all duration-300 px-2 ${
               isEnded ? "grayscale opacity-90" : "group-hover:brightness-105"
             }`}
@@ -38,14 +31,14 @@ const ItemCard = ({
         <div className="absolute top-3 left-3 bg-primary/90 backdrop-blur-sm rounded-md px-2.5 py-1 flex items-center gap-1 shadow-sm">
           <DollarSign className="h-3.5 w-3.5 text-background" />
           <span className="font-semibold text-white text-sm">
-            {currentBid}
+            {item.currentBid}
           </span>
         </div>
 
         {/* Deadline indicator */}
         <div
           className={`absolute top-3 right-3 ${
-            isEnded ? "bg-muted" : "bg-primary"
+            isEnded ? "bg-muted text-foreground" : "bg-primary"
           } text-background rounded-md px-2.5 py-1 text-xs flex items-center gap-1 shadow-sm`}
         >
           <Clock className="h-3 w-3" />
@@ -56,7 +49,7 @@ const ItemCard = ({
       <CardContent className="py-1 px-2">
         {/* Item title */}
         <h3 className="font-bold text-sm leading-tight mb-3 line-clamp-2 text-foreground">
-          {title}
+          {item.title}
         </h3>
 
         {/* Stacked buttons */}
@@ -66,7 +59,7 @@ const ItemCard = ({
             className={`w-full text-sm py-1 h-9 ${
               isEnded
                 ? "bg-muted opacity-100 hover:opacity-80 cursor-not-allowed"
-                : "bg-accent text-background opacity-100 hover:opacity-80 hover:cursor-pointer"
+                : "bg-accent text-background opacity-100 hover:opacity-90 hover:cursor-pointer"
             }`}
             onClick={onBid}
             disabled={isEnded}
@@ -76,8 +69,8 @@ const ItemCard = ({
 
           <Button
             variant="outline"
-            className="w-full h-9 border-border text-foreground opacity-100 hover:cursor-pointer hover:opacity-80 flex items-center justify-center gap-1"
-            onClick={() => navigate(`/item/${id}`)}
+            className="w-full h-9 border-border text-foreground opacity-100 hover:cursor-pointer hover:bg-gray-200 flex items-center justify-center gap-1"
+            onClick={() => navigate(`/item/${item.id}`)}
           >
             <span>More Details</span>
             <ArrowRight className="h-3.5 w-3.5" />
@@ -85,7 +78,6 @@ const ItemCard = ({
         </div>
       </CardContent>
     </Card>
-
   );
 };
 
