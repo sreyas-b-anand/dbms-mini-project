@@ -1,10 +1,50 @@
 /* eslint-disable react/prop-types */
+import { toast } from "sonner";
+import { useAuthContext } from "../../hooks/useAuthContext";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import { useNavigate } from "react-router-dom";
 
-const SellItemForm = ({onSellFormOpen}) => {
+const SellItemForm = ({ onSellFormOpen }) => {
+  const navigate = useNavigate()
+  const { user } = useAuthContext();
+
+  const handleSubmit = async (e) => {
+    try {
+      //e.preventDefault();
+
+      const formData = new FormData(e.target);
+      const formObject = Object.fromEntries(formData);
+
+      const response = await fetch("http://127.0.0.1:5000/items/add-item", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify(formObject),
+      });
+
+      const json = await response.json();
+
+      if (!response.ok || !json.success) {
+        toast.error(json.message);
+      } else {
+        toast.success(json.message);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      onSellFormOpen();
+      navigate("/dashboard")
+    }
+  };
+
   return (
-    <form className="  p-6 bg-background/80 rounded-lg shadow-md">
+    <form
+      onSubmit={handleSubmit}
+      className="p-6 bg-background/80 rounded-lg shadow-md"
+    >
       <h2 className="text-xl font-semibold text-foreground mb-4">
         List an Item for Sale
       </h2>
@@ -52,11 +92,20 @@ const SellItemForm = ({onSellFormOpen}) => {
             id="category"
             name="category"
             className="w-full border border-border rounded-md p-2 bg-white"
+            required
           >
             <option value="">Select category</option>
             <option value="Electronics">Electronics</option>
             <option value="Clothing">Clothing</option>
             <option value="Home & Garden">Home & Garden</option>
+            <option value="Books">Books</option>
+            <option value="Toys & Games">Toys & Games</option>
+            <option value="Sports & Outdoors">Sports & Outdoors</option>
+            <option value="Automotive">Automotive</option>
+            <option value="Music Instruments">Music Instruments</option>
+            <option value="Collectibles & Art">Collectibles & Art</option>
+            <option value="Health & Beauty">Health & Beauty</option>
+            <option value="Office Supplies">Office Supplies</option>
           </select>
         </div>
         <div className="space-y-2">
@@ -80,6 +129,7 @@ const SellItemForm = ({onSellFormOpen}) => {
             id="condition"
             name="condition"
             className="w-full border border-border rounded-md p-2 bg-white"
+            required
           >
             <option value="">Select condition</option>
             <option value="new">New</option>
@@ -89,27 +139,24 @@ const SellItemForm = ({onSellFormOpen}) => {
 
         <div className="space-y-2">
           <Label htmlFor="auction_end">Auction End Date</Label>
-          <Input
-          
-            id="auction_end"
-            name="auction_end"
-            type="datetime-local"
-            required
-          />
+          <Input id="auction_end" name="auction_end" type="date" required />
         </div>
       </div>
 
       {/* Submit Button */}
-      <div className="flex items-center justify-center gap-3 w-full ">
-      <button
-        type="submit"
-        className="w-full mt-6 py-2 bg-accent text-foreground font-medium rounded-md hover:opacity-90 hover:cursor-pointer"
-      >
-        List Item
-      </button>
-      <button onClick={onSellFormOpen} className="w-full mt-6 py-2 bg-gray-200 text-foreground font-medium rounded-md hover:opacity-90 hover:cursor-pointer">
-      Cancel
-      </button>
+      <div className="flex items-center justify-center gap-3 w-full">
+        <button
+          type="submit"
+          className="w-full mt-6 py-2 bg-accent text-foreground font-medium rounded-md hover:opacity-90 hover:cursor-pointer"
+        >
+          List Item
+        </button>
+        <button
+          onClick={onSellFormOpen}
+          className="w-full mt-6 py-2 bg-gray-200 text-foreground font-medium rounded-md hover:opacity-90 hover:cursor-pointer"
+        >
+          Cancel
+        </button>
       </div>
     </form>
   );

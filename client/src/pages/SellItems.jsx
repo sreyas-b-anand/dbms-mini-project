@@ -4,32 +4,37 @@ import { ShoppingBag } from "lucide-react";
 
 import ListedItemCard from "../components/Cards/ListedItemCard";
 import { useAuthContext } from "../hooks/useAuthContext";
+
 const SellItems = () => {
-  const {user} = useAuthContext()
+  const { user } = useAuthContext();
   const [isSellFormOpen, setIsFormOpen] = useState(false);
-  const [items , setItems]= useState([])
+  const [items, setItems] = useState([]);
+  const [message, setMessage] = useState();
   const onSellFormOpen = () => {
     setIsFormOpen(!isSellFormOpen);
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     const fetchItems = async () => {
-      const response = await fetch("http://127.0.0.1:5000/items/get-listed-items" , {
-        headers : {
-          "Authorization" : `Bearer ${user.token}`
+      const response = await fetch(
+        "http://127.0.0.1:5000/items/get-listed-items",
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
         }
-      })
-      const json =  await response.json()
+      );
+      const json = await response.json();
 
       if (!response.ok || !json.success)
-        throw new Error(json.message || "Failed to update profile");
+        setMessage(json.message)
+      console.log("message ",message)
 
-      setItems(json.items)
-      
-
-    }
-    fetchItems()
-  } ,[])
+      json.items ? setItems(json.items) : setItems([])
+    };
+    fetchItems();
+  }, []);
+  
   return (
     <>
       {isSellFormOpen && (
@@ -59,11 +64,15 @@ const SellItems = () => {
           </div>
           <div className="flex flex-1 gap-3 flex-wrap w-full overflow-hidden">
             <div className="max-h-[400px] overflow-y-auto w-full">
-              <div className="flex flex-wrap justify-center place-items-center  gap-8">
-                {items.map((item , index)=>{
-                  return <ListedItemCard key={index} item={item}/>
+              {items ? (
+                <div className="flex flex-wrap justify-center place-items-center  gap-8">
+                {items.map((item, index) => {
+                  return <ListedItemCard key={index} item={item} />;
                 })}
               </div>
+              ) : (
+                <><p className="text-center">{message}</p></>
+              )}
             </div>
           </div>
         </section>

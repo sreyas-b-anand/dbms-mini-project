@@ -45,7 +45,7 @@ def add_an_item(data , user_id):
             category=data["category"],
             condition=data["condition"],
             seller_id=int(user_id),
-            auction_end=datetime.datetime.strptime(data["auction_end"], "%Y-%m-%dT%H:%M:%S"),
+            auction_end=datetime.datetime.strptime(data["auction_end"], "%Y-%m-%d"),
             status="active",
             created_at=datetime.datetime.now()
             )
