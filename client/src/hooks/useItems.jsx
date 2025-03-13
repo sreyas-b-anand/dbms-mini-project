@@ -36,7 +36,7 @@ export const ItemProvider = ({ children }) => {
         }
 
         setItems(json.items);
-        console.log(items)
+        console.log(items);
       } catch (err) {
         setError(err.message);
       } finally {

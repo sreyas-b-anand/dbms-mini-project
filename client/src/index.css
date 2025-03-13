@@ -3,7 +3,7 @@
 @import 'tailwindcss';
 :root {
  
-    font-family: Poppins;
+  font-family: Poppins;
   /* Primary Colors */
   --primary: #3B82F6;      /* Vibrant Blue - main brand color */
   --secondary: #10B981;    /* Emerald Green - for success states and CTAs */
@@ -34,6 +34,7 @@
   --color-background: var(--background);    /* White #FFFFFF */
   --color-foreground: var(--text);          /* Dark Gray #1F2937 */
   --color-primary: var(--primary);          /* Blue #3B82F6 */
+   --color-secondary :var(--secondary)     /*Emerald Green  #10B981*/
   --color-accent: var(--accent);            /* Purple #8B5CF6 */
   --color-muted: var(--surface);            /* Light Gray #F3F4F6 */
   --color-success: var(--secondary);        /* Green #10B981 */

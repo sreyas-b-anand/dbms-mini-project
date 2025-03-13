@@ -43,8 +43,7 @@ const ProfileCard = ({ onProfileOpen, onWalletOpen }) => {
               <span>Go to My Profile</span>
             </Link>
             <div className="block md:hidden">
-            <WalletCard onWalletOpen={onWalletOpen} />
-
+              <WalletCard onWalletOpen={onWalletOpen} />
             </div>
           </>
         )}

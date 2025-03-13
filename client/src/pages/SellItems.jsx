@@ -10,7 +10,7 @@ const SellItems = () => {
   const [isSellFormOpen, setIsFormOpen] = useState(false);
   const [items, setItems] = useState([]);
   const [message, setMessage] = useState();
- 
+
   const onSellFormOpen = () => {
     setIsFormOpen(!isSellFormOpen);
   };
@@ -41,7 +41,6 @@ const SellItems = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.token]);
 
- 
   return (
     <>
       {isSellFormOpen && (
@@ -76,7 +75,7 @@ const SellItems = () => {
           </div>
           <div className="flex flex-1 gap-3 flex-wrap w-full overflow-hidden">
             <div className="max-h-[400px] overflow-y-auto w-full">
-              {items.length ==0 ? (
+              {items.length == 0 ? (
                 <div className="flex flex-wrap justify-center place-items-center  gap-8">
                   {items.map((item, index) => {
                     return (

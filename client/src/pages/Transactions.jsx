@@ -1,7 +1,7 @@
 const History = () => {
   return (
     <>
-      <div>hstory</div>
+      <div>history</div>
     </>
   );
 };

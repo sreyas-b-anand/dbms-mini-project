@@ -12,13 +12,16 @@ const useWallet = (user) => {
       setIsLoading(true);
       setError(null);
       try {
-        const response = await fetch("http://127.0.0.1:5000/wallet/get-wallet", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${user.token}`, 
-          },
-        });
+        const response = await fetch(
+          "http://127.0.0.1:5000/wallet/get-wallet",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        );
 
         const json = await response.json();
         if (!response.ok || !json.success) {
@@ -34,7 +37,7 @@ const useWallet = (user) => {
     };
 
     fetchWallet();
-  }, [user]);  
+  }, [user]);
 
   return { wallet, isLoading, error };
 };

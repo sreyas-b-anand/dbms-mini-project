@@ -23,7 +23,7 @@ function App() {
             <Route path="/history" element={<History />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/sell-items" element={<SellItems />} />
-            <Route path="/item/:id" element={< ItemDetails/>} />
+            <Route path="/item/:id" element={<ItemDetails />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
