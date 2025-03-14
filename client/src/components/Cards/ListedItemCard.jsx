@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { toast } from "sonner";
 
 const ListedItemCard = ({ item, onDelete }) => {
-  const {user} = useAuthContext()
+  const { user } = useAuthContext();
   const handleDelete = async () => {
     if (!window.confirm("Are you sure you want to delete this item?")) return;
 
@@ -27,7 +27,7 @@ const ListedItemCard = ({ item, onDelete }) => {
       }
 
       toast.success(json.message);
-      onDelete(item.id); 
+      onDelete(item.id);
     } catch (error) {
       console.error(error);
     }
