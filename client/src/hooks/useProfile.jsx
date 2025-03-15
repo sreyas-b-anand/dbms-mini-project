@@ -4,7 +4,7 @@ const useProfile = (user) => {
   const [profileData, setProfileData] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
- 
+
   useEffect(() => {
     console.log("profile", user);
     const fetchProfile = async () => {
@@ -33,7 +33,7 @@ const useProfile = (user) => {
     fetchProfile();
   }, [user]);
 
-  return {profileData , isLoading , error , setProfileData}
+  return { profileData, isLoading, error, setProfileData };
 };
 
 export default useProfile;
