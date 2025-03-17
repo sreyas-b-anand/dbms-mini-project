@@ -7,7 +7,7 @@ export const getTimeRemaining = (deadline) => {
   if (isNaN(endTime)) return "Invalid Date"; // Handle incorrect formats
 
   const diff = endTime - now;
-  
+
   if (diff <= 0) return "Ended";
 
   const days = Math.floor(diff / (1000 * 60 * 60 * 24));
