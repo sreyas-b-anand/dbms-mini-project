@@ -4,11 +4,12 @@ import { DollarSign, Clock, ArrowRight } from "lucide-react";
 import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
 import { getTimeRemaining } from "../../lib/getTimeRemaining";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 const ItemCard = ({ item, onBid }) => {
   const timeRemaining = getTimeRemaining(item.auction_end);
   const isEnded = timeRemaining === "Ended";
   const navigate = useNavigate();
+  const isWon = item.id == 11 ? true : false;
 
   return (
     <Card className="w-56 rounded-lg py-2 px-1 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-border bg-background">
@@ -54,19 +55,28 @@ const ItemCard = ({ item, onBid }) => {
 
         {/* Stacked buttons */}
         <div className="flex flex-col gap-2">
-          <Button
-            variant={"outlined"}
-            className={`w-full text-sm py-1 h-9 ${
-              isEnded
-                ? "bg-muted opacity-100 hover:opacity-80 cursor-not-allowed"
-                : "bg-accent text-background opacity-100 hover:opacity-90 hover:cursor-pointer"
-            }`}
-            onClick={onBid}
-            disabled={isEnded}
-          >
-            {isEnded ? "Auction Ended" : "Bid Now"}
-          </Button>
-
+          {isEnded && !isWon && (
+            <Button
+              variant={"outlined"}
+              className={`w-full text-sm py-1 h-9 ${
+                isEnded
+                  ? "bg-muted opacity-100 hover:opacity-80 cursor-not-allowed"
+                  : "bg-accent text-background opacity-100 hover:opacity-90 hover:cursor-pointer"
+              }`}
+              onClick={onBid}
+              disabled={isEnded}
+            >
+              {isEnded ? "Auction Ended " : "Bid Now"}
+            </Button>
+          )}
+          {isWon && (
+            <Link
+              className={`inline-flex items-center justify-center gap-2 py-1 h-9 whitespace-nowrap rounded-md text-sm font-medium  bg-accent "border border-border text-background  shadow-xs hover:bg-accent hover:text-foreground"`}
+              to={`/checkout/${item.id}`}
+            >
+              Go to Checkout
+            </Link>
+          )}
           <Button
             variant="outline"
             className="w-full h-9 border-border text-foreground opacity-100 hover:cursor-pointer hover:bg-gray-200 flex items-center justify-center gap-1"

@@ -23,7 +23,7 @@ const Home = () => {
         <section className="bg-background w-full flex-1 h-full rounded-lg shadow-md p-3 overflow-hidden">
           <div className="flex flex-col px-3">
             <div className="flex flex-col md:flex-row items-center justify-center md:justify-between border-b px-3 py-6 w-full">
-              <p className="font-semibold text-xl md:text-xl text-foreground my-2">
+              <p className="font-semibold text-xl md:text-2xl text-foreground my-2">
                 Explore Auctions
               </p>
               <Link

@@ -19,6 +19,7 @@ const Topbar = ({
       "sell-items": "Sell Items",
       history: "History",
       profile: "Profile",
+      checkout : "Checkout"
     };
 
     const pageName = location.pathname?.split("/").filter(Boolean).pop();

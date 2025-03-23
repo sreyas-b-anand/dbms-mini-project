@@ -34,7 +34,7 @@ export default function Profile() {
       if (!response.ok || !json.success)
         throw new Error(json.message || "Failed to update profile");
 
-      setIsEditing(false);
+      setIsEditing(!isEditing);
     } catch (err) {
       console.error("Update failed:", err);
     }
@@ -50,7 +50,12 @@ export default function Profile() {
   if (error) return <div className="text-red-500 text-center">{error}</div>;
 
   return (
-    <motion.div className="container mx-auto max-w-2xl p-3" initial={{opacity:0, scale:0.8}} animate={{opacity:1, scale:1}} transition={{duration:0.2}}>
+    <motion.div
+      className="container mx-auto max-w-2xl p-3"
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.2 }}
+    >
       <div className="bg-background shadow-lg rounded-xl overflow-hidden">
         {/* Profile Header */}
         <div className="relative h-48 bg-gradient-to-r from-primary to-accent">

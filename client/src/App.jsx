@@ -9,6 +9,7 @@ import NotFound from "./NotFound";
 import SellItems from "./pages/SellItems";
 import { Toaster } from "sonner";
 import ItemDetails from "./pages/itemDetails";
+import Checkout from "./pages/Checkout";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/sell-items" element={<SellItems />} />
             <Route path="/item/:id" element={<ItemDetails />} />
+            <Route path="/checkout/:id" element={<Checkout />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
