@@ -103,10 +103,10 @@ export default function ItemDetails() {
 
   if (error) {
     return (
-      <div className="page flex-1 p-3 bg-background m-3 rounded-lg overflow-hidden">
+      <div className="flex-1 p-3 bg-background m-3 rounded-lg overflow-hidden">
         <Link
           to="/dashboard"
-          className="inline-flex items-center text-sm text-primary hover:underline mb-4"
+          className="inline-flex items-center text-sm text-primary hover:underline mb-4 p-3"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Dashboard
@@ -122,7 +122,7 @@ export default function ItemDetails() {
 
   if (!item) {
     return (
-      <div className="page flex-1 p-3 bg-background m-3 rounded-lg overflow-hidden">
+      <div className="flex-1 p-3 bg-background m-3 rounded-lg overflow-hidden">
         <Link
           to="/dashboard"
           className="inline-flex px-2 py-1 items-center text-sm text-primary hover:underline mb-4 bg-foreground"
@@ -147,13 +147,13 @@ export default function ItemDetails() {
       <div>
         <Link
           to="/dashboard"
-          className="inline-flex items-center text-sm hover:underline mb-4 py-1 px-2 text-foreground"
+          className="inline-flex items-center text-sm hover:underline mb-4 py-3 px-2 text-foreground"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back
         </Link>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 px-3">
           {/* Left column: Image and bid form */}
           <div>
             <div className="rounded-lg overflow-hidden border border-border mb-4 h-64 md:h-80">
@@ -165,7 +165,7 @@ export default function ItemDetails() {
             </div>
 
             {/* Bid form */}
-            <div className="bg-muted p-4 flex gap-3 flex-col rounded-lg border border-border">
+            <div className="bg-background p-4 flex gap-3 flex-col rounded-lg border border-border">
               <div className="flex items-center justify-between mb-2">
                 <div className="font-bold text-xl">
                   {formatCurrency(item.current_price)}
@@ -211,23 +211,23 @@ export default function ItemDetails() {
           <div>
             <div className="mb-6">
               <div className="flex items-center gap-2 mb-2">
-                <Badge variant="outline">{item.category}</Badge>
+                <Badge variant="outline">{item.category}</Badge> {/* category */}
                 <Badge
                   className={"text-background"}
-                  variant={item.status === "Active" ? "default" : "secondary"}
+                  variant={!isAuctionEnded ? "default" : "secondary"}
                 >
-                  {item.status.toUpperCase()}
+                  {isAuctionEnded ? "ENDED" : "ACTIVE"}  {/* status */}
                 </Badge>
               </div>
 
               <h1 className="text-2xl font-bold">{item.title}</h1>
               <p className="text-sm text-foreground/60 mt-1">
-                {item.condition} • Listed on{" "}
+                {item.condition} • Listed on{" "}   {/* listed */}
                 {new Date(item.created_at).toLocaleDateString()}
               </p>
 
               <div className="mt-4 text-sm text-foreground">
-                {item.description}
+                {item.description}   {/* desc */} 
               </div>
             </div>
 

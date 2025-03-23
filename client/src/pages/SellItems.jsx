@@ -1,16 +1,17 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import SellItemForm from "../components/Forms/SellItemForm";
 import { ShoppingBag } from "lucide-react";
 import { motion } from "framer-motion";
 import ListedItemCard from "../components/Cards/ListedItemCard";
 import { useAuthContext } from "../hooks/useAuthContext";
+import useSellItems from "../hooks/useSellItems";
+import Loader from "../components/utils/Loader";
 
 const SellItems = () => {
   const { user } = useAuthContext();
   const [isSellFormOpen, setIsFormOpen] = useState(false);
-  const [items, setItems] = useState([]);
-  const [message, setMessage] = useState();
-
+  const {items , isLoading , message ,setItems} = useSellItems(user)
+  
   const onSellFormOpen = () => {
     setIsFormOpen(!isSellFormOpen);
   };
@@ -18,28 +19,7 @@ const SellItems = () => {
     setItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
   };
 
-  useEffect(() => {
-    const fetchItems = async () => {
-      const response = await fetch(
-        "http://127.0.0.1:5000/items/get-listed-items",
-        {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        }
-      );
-      const json = await response.json();
 
-      if (!response.ok || !json.success) setMessage(json.message);
-      console.log("message ", message);
-
-      if (json.success == true) {
-        setItems(json.items);
-      }
-    };
-    fetchItems();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.token]);
 
   return (
     <>
@@ -74,8 +54,10 @@ const SellItems = () => {
             </p>
           </div>
           <div className="flex flex-1 gap-3 flex-wrap w-full overflow-hidden">
+            {isLoading && <div className="w-full flex items-center justify-center p-6"><Loader/></div>}
+            
             <div className="max-h-[400px] overflow-y-auto w-full">
-              {items.length == 0 ? (
+              {!isLoading && items.length == 0 ? (
                 <div className="flex flex-wrap justify-center place-items-center  gap-8">
                   {items.map((item, index) => {
                     return (
@@ -89,7 +71,7 @@ const SellItems = () => {
                 </div>
               ) : (
                 <>
-                  <p className="text-center">No items to show</p>
+                  <p className="text-center">{message}</p>
                 </>
               )}
             </div>

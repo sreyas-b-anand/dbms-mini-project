@@ -6,6 +6,7 @@ import { useItemContext } from "../hooks/useItems";
 import { Input } from "../components/ui/input";
 import { useEffect, useState } from "react";
 import { filterItems } from "../lib/filterItems";
+import { motion } from "framer-motion";
 const Home = () => {
   const { items, isLoading, error } = useItemContext();
   const { searchQuery } = useOutletContext();
@@ -21,8 +22,8 @@ const Home = () => {
       <main className="flex-1 h-full mt-0 gap-3 flex items-center p-3 flex-wrap">
         <section className="bg-background w-full flex-1 h-full rounded-lg shadow-md p-3 overflow-hidden">
           <div className="flex flex-col px-3">
-            <div className="flex items-center justify-between border-b px-3 py-6">
-              <p className="font-semibold text-md md:text-xl text-foreground">
+            <div className="flex flex-col md:flex-row items-center justify-center md:justify-between border-b px-3 py-6 w-full">
+              <p className="font-semibold text-xl md:text-xl text-foreground my-2">
                 Explore Auctions
               </p>
               <Link
@@ -31,10 +32,10 @@ const Home = () => {
               >
                 Go to My Bids <ArrowRight size={20} />
               </Link>
-              <div className="md:hidden block">
+              <div className="md:hidden block w-full">
                 <Input
                   type="search"
-                  className="py-3 m-3"
+                  className="my-3"
                   placeholder="Search for items..."
                   onChange={handleInputChange}
                 />
@@ -49,12 +50,27 @@ const Home = () => {
             {result ? (
               <div className="outer h-[500px] px-3 py-3 overflow-y-auto scroll-smooth scroll-p-1 scroll-m-1">
                 <div className="inner grid sm:grid-cols-2 lg:grid-cols-3  xl:grid-cols-4 gap-4 place-items-center">
-                  {result?.map((item) => (
-                    <ItemCard
+                  {result?.map((item, index) => (
+                    <motion.div
                       key={item.id}
-                      item={item}
-                      onBid={() => console.log(`Bid placed on item ${item.id}`)}
-                    />
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{
+                        delay: index * 0.1,
+                        duration: 0.4,
+                        ease: "easeOut",
+                      }}
+                      viewport={{ once: true }}
+                    >
+                      <ItemCard
+                        key={item.id}
+                        item={item}
+                        onBid={() =>
+                          console.log(`Bid placed on item ${item.id}`)
+                        }
+                      />
+                    </motion.div>
                   ))}
                 </div>
               </div>

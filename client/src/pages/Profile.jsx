@@ -1,12 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Camera, Edit, Save, X } from "lucide-react";
 import { useAuthContext } from "../hooks/useAuthContext";
 import useProfile from "../hooks/useProfile";
-
+import { motion } from "framer-motion";
 export default function Profile() {
   const [isEditing, setIsEditing] = useState(false);
+  const [authUser, setAuthUser] = useState(null);
   const { user } = useAuthContext();
-  const { profileData, isLoading, error, setProfileData } = useProfile(user);
+
+  useEffect(() => {
+    if (!user) {
+      const u = localStorage.getItem("user");
+      setAuthUser(u);
+    }
+  }, [user]);
+  const { profileData, isLoading, error, setProfileData } = useProfile(
+    user || authUser
+  );
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -40,7 +50,7 @@ export default function Profile() {
   if (error) return <div className="text-red-500 text-center">{error}</div>;
 
   return (
-    <div className="container mx-auto max-w-2xl p-3">
+    <motion.div className="container mx-auto max-w-2xl p-3" initial={{opacity:0, scale:0.8}} animate={{opacity:1, scale:1}} transition={{duration:0.2}}>
       <div className="bg-background shadow-lg rounded-xl overflow-hidden">
         {/* Profile Header */}
         <div className="relative h-48 bg-gradient-to-r from-primary to-accent">
@@ -136,6 +146,6 @@ export default function Profile() {
           )}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
