@@ -1,8 +1,8 @@
-"""Reinitialize migrations
+"""Added some fields
 
-Revision ID: 554bc53e77a0
+Revision ID: 77bb0bbde394
 Revises: 
-Create Date: 2025-03-06 21:17:39.194433
+Create Date: 2025-03-24 18:01:40.711793
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '554bc53e77a0'
+revision = '77bb0bbde394'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -23,15 +23,21 @@ def upgrade():
     sa.Column('username', sa.String(length=50), nullable=False),
     sa.Column('email', sa.String(length=100), nullable=False),
     sa.Column('password_hash', sa.String(length=255), nullable=False),
+    sa.Column('full_name', sa.String(length=100), nullable=True),
     sa.Column('address', sa.Text(), nullable=True),
+    sa.Column('city', sa.String(length=100), nullable=True),
+    sa.Column('state', sa.String(length=100), nullable=True),
+    sa.Column('zip_code', sa.String(length=20), nullable=True),
+    sa.Column('country', sa.String(length=100), nullable=True),
     sa.Column('role', sa.String(length=20), nullable=False),
     sa.Column('wallet', sa.Float(), nullable=False),
     sa.Column('img', sa.String(length=1000), nullable=True),
-    sa.Column('phone', sa.Integer(), nullable=True),
+    sa.Column('phone', sa.String(length=20), nullable=True),
     sa.Column('created_at', sa.TIMESTAMP(), server_default=sa.text('now()'), nullable=True),
     sa.Column('updated_at', sa.TIMESTAMP(), server_default=sa.text('now()'), nullable=True),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('email')
+    sa.UniqueConstraint('email'),
+    sa.UniqueConstraint('username')
     )
     op.create_table('items',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),

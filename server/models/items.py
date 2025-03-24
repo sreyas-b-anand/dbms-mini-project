@@ -16,7 +16,7 @@ class Item(db.Model):
     auction_end = db.Column(db.DateTime, nullable=False)
     status = db.Column(db.String(50), default="active", nullable=False)
     created_at = db.Column(db.DateTime, default=func.now(), nullable=False)
-
+   
     # Relationship with User model (assuming 'User' model exists)
     seller = db.relationship("User", backref="items")
 
@@ -26,6 +26,7 @@ class Item(db.Model):
             "id": self.id,
             "title": self.title,
             "description": self.description,
+            "seller_name": self.seller.username if self.seller else None,
             "image_url": self.image_url,
             "starting_price": self.starting_price,
             "current_price": self.current_price,

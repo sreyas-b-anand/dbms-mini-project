@@ -8,9 +8,12 @@ import { useEffect, useState } from "react";
 import { filterItems } from "../lib/filterItems";
 import { motion } from "framer-motion";
 const Home = () => {
-  const { items, isLoading, error } = useItemContext();
+  const { items, isLoading, error, refetchItems } = useItemContext();
   const { searchQuery } = useOutletContext();
   const [result, setResult] = useState([]);
+  useEffect(() => {
+    refetchItems();
+  }, []);
   useEffect(() => {
     setResult(() => filterItems(items, searchQuery));
   }, [items, searchQuery]);
@@ -19,7 +22,7 @@ const Home = () => {
   };
   return (
     <>
-      <main className="flex-1 h-full mt-0 gap-3 flex items-center p-3 flex-wrap">
+      <main className="flex-1 h-full mt-0 gap-3 flex items-center p-3 flex-wrap overflow-hidden">
         <section className="bg-background w-full flex-1 h-full rounded-lg shadow-md p-3 overflow-hidden">
           <div className="flex flex-col px-3">
             <div className="flex flex-col md:flex-row items-center justify-center md:justify-between border-b px-3 py-6 w-full">
@@ -49,7 +52,7 @@ const Home = () => {
 
             {result ? (
               <div className="outer h-[500px] px-3 py-3 overflow-y-auto scroll-smooth scroll-p-1 scroll-m-1">
-                <div className="inner grid sm:grid-cols-2 lg:grid-cols-3  xl:grid-cols-4 gap-4 place-items-center">
+                <div className="inner grid sm:grid-cols-2 lg:grid-cols-3  xl:grid-cols-4 gap-4 place-items-center py-6">
                   {result?.map((item, index) => (
                     <motion.div
                       key={item.id}

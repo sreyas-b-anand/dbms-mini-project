@@ -1,8 +1,9 @@
 from flask import Blueprint, jsonify, request
 from models import User
 from config.db import db
-from services import add_info
 from middlewares import token_required
+import logging
+
 profile = Blueprint("profile", __name__)
 
 @profile.route("", methods=['POST'])
@@ -29,59 +30,56 @@ def fetchUser():
             "address": user.address if user.address else "",
             "role": user.role if user.role else "",
             "wallet": user.wallet if user.wallet is not None else 0.0,
-            "createdAt" : user.created_at,
-            "img":user.img,
-            "phone":user.phone
+            "createdAt": user.created_at,
+            "img": user.img,
+            "phone": user.phone
         }
 
         return jsonify({"success": True, "message": "Data fetched successfully", "profile": user_data}), 200
 
     except Exception as e:
+        logging.error(f"Error in fetchUser: {str(e)}")
         return jsonify({"success": False, "message": f"An error occurred: {str(e)}"}), 500
 
 
 @profile.route("/update-profile", methods=['POST'])
-def updateUser():
-    try:
-        data = request.get_json()
-        print("Update request received:", data)  # Debugging
-
-        email = data.get('email')
-        profileData = data.get('profile')
-
-        if not email or not profileData:
-            return jsonify({"success": False, "message": "Email or profile data missing"}), 400
-        
-        user = User.query.filter_by(email=email).first()
-
-        if not user:
-            return jsonify({"success": False, "message": "User not found"}), 404
-
-        # Update user fields dynamically while ignoring None values
-        for key, value in profileData.items():
-            if hasattr(user, key) and value is not None:
-                setattr(user, key, value)
-
-        db.session.commit()
-
-        return jsonify({"success": True, "message": "Profile updated successfully"}), 200
-
-    except Exception as e:
-        return jsonify({"success": False, "message": f"An error occurred: {str(e)}"}), 500
-
-@profile.route("/address" , methods=['POST'])
 @token_required
-def add_address_ph(user):
+def updateProfile(user):
     try:
+        print("Update request received:", request.get_json())
+        
+        # If token_required worked, we should have a current_user
         if not user:
-            return jsonify({"success": False, "message": "Authorization error"}), 401
+            return jsonify({"success": False, "message": "Unauthorized access"}), 401
+            
         data = request.get_json()
+        
+        # Extract fields that we want to update
         address = data.get('address')
         phone = data.get('phone')
-        if not phone or not address:
-            return jsonify({"success": False, "message": "All fields must be required"}), 400
         
-        result = add_info(user ,address , phone)
-        return jsonify(result)
+        # Find the user in the database
+        user_info = User.query.filter_by(id = user.id).first()
+        
+        if not user_info:
+            return jsonify({"success": False, "message": "User not found"}), 404
+        
+        # Update fields if they are provided
+        if address is not None:
+            user_info.address = address
+            
+        if phone is not None:
+            user_info.phone = phone
+        
+        # Commit changes to database
+        db.session.commit()
+        
+        return jsonify({
+            "success": True, 
+            "message": "Profile updated successfully",
+        }), 200
+
     except Exception as e:
+        db.session.rollback()
+        print(f"Error in updateProfile: {str(e)}")
         return jsonify({"success": False, "message": f"An error occurred: {str(e)}"}), 500

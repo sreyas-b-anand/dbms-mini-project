@@ -27,6 +27,8 @@ const AuthContextProvider = ({ children }) => {
     }
   }, []);
 
+  
+
   return (
     <AuthContext.Provider value={{ user: state.user, dispatch }}>
       {children}

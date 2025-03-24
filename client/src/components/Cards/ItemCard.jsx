@@ -9,7 +9,7 @@ const ItemCard = ({ item, onBid }) => {
   const timeRemaining = getTimeRemaining(item.auction_end);
   const isEnded = timeRemaining === "Ended";
   const navigate = useNavigate();
-  const isWon = item.id == 11 ? true : false;
+  const isWon = item.id == 12 ? true : false;
 
   return (
     <Card className="w-56 rounded-lg py-2 px-1 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-border bg-background">
@@ -55,7 +55,7 @@ const ItemCard = ({ item, onBid }) => {
 
         {/* Stacked buttons */}
         <div className="flex flex-col gap-2">
-          {isEnded && !isWon && (
+          {!isWon && (
             <Button
               variant={"outlined"}
               className={`w-full text-sm py-1 h-9 ${

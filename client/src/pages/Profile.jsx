@@ -25,8 +25,16 @@ export default function Profile() {
         "http://127.0.0.1:5000/profile/update-profile",
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: user.email, profile: profileData }),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+
+          body: JSON.stringify({
+            email: user.email,
+            address: profileData.address,
+            phone: profileData.phone,
+          }),
         }
       );
 

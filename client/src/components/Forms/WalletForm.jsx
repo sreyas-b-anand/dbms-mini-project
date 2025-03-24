@@ -24,6 +24,7 @@ export default function WalletForm({ onWalletOpen }) {
   const { wallet } = useWallet(user);
 
   const handleSubmit = async () => {
+    //e.preventDefault();
     setLoading(true);
     setError(null);
 

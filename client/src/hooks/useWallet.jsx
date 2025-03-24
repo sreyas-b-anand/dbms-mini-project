@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 
 const useWallet = (user) => {
   const [wallet, setWallet] = useState(0);
@@ -39,7 +39,10 @@ const useWallet = (user) => {
     fetchWallet();
   }, [user]);
 
-  return { wallet, isLoading, error };
+  // Memoize wallet value to prevent unnecessary recomputations
+  const memoizedWallet = useMemo(() => wallet, [wallet]);
+
+  return { wallet: memoizedWallet, isLoading, error };
 };
 
 export default useWallet;

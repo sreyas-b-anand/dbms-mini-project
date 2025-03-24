@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 
 const useProfile = (user) => {
   const [profileData, setProfileData] = useState(null);
@@ -33,7 +33,10 @@ const useProfile = (user) => {
     fetchProfile();
   }, [user]);
 
-  return { profileData, isLoading, error, setProfileData };
+  // Memoize the profile data to avoid unnecessary recalculations
+  const memoizedProfileData = useMemo(() => profileData, [profileData]);
+
+  return { profileData: memoizedProfileData, isLoading, error, setProfileData };
 };
 
 export default useProfile;

@@ -27,7 +27,7 @@ const PaymentCard = ({ bidItem }) => {
 
                 {/* Seller Name */}
                 <p className="text-sm text-muted-foreground">
-                  Seller: {bidItem.seller_id}
+                  Seller: {bidItem.seller_name}
                 </p>
 
                 {/* Bid Amount */}
@@ -63,7 +63,8 @@ const PaymentCard = ({ bidItem }) => {
             <div className="bg-secondary/10 border border-secondary/20 rounded-md p-3 text-sm flex gap-2">
               <AlertCircle className="h-5 w-5 text-secondary flex-shrink-0" />
               <p className="text-foreground">
-                By completing this purchase, you agree to pay the applicable fees.
+                By completing this purchase, you agree to pay the applicable
+                fees.
               </p>
             </div>
 

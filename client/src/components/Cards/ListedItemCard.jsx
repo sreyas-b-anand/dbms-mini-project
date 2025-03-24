@@ -1,38 +1,8 @@
 /* eslint-disable react/prop-types */
-import { useAuthContext } from "../../hooks/useAuthContext";
 import { Trash } from "lucide-react";
 import { Link } from "react-router-dom";
-import { toast } from "sonner";
 
-const ListedItemCard = ({ item, onDelete }) => {
-  const { user } = useAuthContext();
-  const handleDelete = async () => {
-    if (!window.confirm("Are you sure you want to delete this item?")) return;
-
-    try {
-      const response = await fetch(
-        `http://127.0.0.1:5000/items/delete-item/${item.id}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        }
-      );
-      const json = await response.json();
-
-      if (!response.ok || !json.success) {
-        toast.error("Failed to delete item");
-        return;
-      }
-
-      toast.success(json.message);
-      onDelete(item.id);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
+const ListedItemCard = ({ item , onDelete}) => {
   return (
     <div className="border rounded-lg p-4 bg-muted shadow-sm flex flex-col gap-2">
       <img
@@ -60,7 +30,7 @@ const ListedItemCard = ({ item, onDelete }) => {
         </Link>
         <span
           className="p-2 bg-background/80 rounded-md hover:cursor-pointer hover:bg-red-500 hover:text-white transition"
-          onClick={handleDelete}
+          onClick={onDelete}
         >
           <Trash />
         </span>
