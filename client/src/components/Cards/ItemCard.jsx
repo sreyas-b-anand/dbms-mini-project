@@ -13,47 +13,44 @@ const ItemCard = ({ item, onBid }) => {
 
   return (
     <Card className="w-56 rounded-lg py-2 px-1 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-border bg-background">
-      {/* Image Container */}
       <div className="relative">
         <div className="h-40 overflow-hidden bg-muted">
           <img
-            src={item.imageUrl || "/placeholder.svg?height=160&width=224"}
+            src={item.image_url || "/placeholder.svg?height=160&width=224"}
             alt={item.title}
             className={`w-full rounded-md h-full transition-all duration-300 px-2 ${
               isEnded ? "grayscale opacity-90" : "group-hover:brightness-105"
             }`}
           />
 
-          {/* Dark overlay for text readability */}
           <div className="absolute w-full inset-0 bg-gradient-to-t from-foreground/80 via-foreground/40 to-transparent" />
         </div>
 
         {/* Current bid indicator */}
-        <div className="absolute top-3 left-3 bg-primary/90 backdrop-blur-sm rounded-md px-2.5 py-1 flex items-center gap-1 shadow-sm">
-          <DollarSign className="h-3.5 w-3.5 text-background" />
-          <span className="font-semibold text-white text-sm">
-            {item.currentBid}
+        <div className="absolute top-[120px] left-3 bg-background/90 backdrop-blur-sm rounded-md px-2.5 py-1 flex items-center justify-center gap-1 shadow-sm">
+          <DollarSign className="h-3.5 w-3.5 text-foreground" />
+          <span className="font-semibold text-foreground text-sm">
+            {item.current_price }
           </span>
         </div>
 
         {/* Deadline indicator */}
         <div
-          className={`absolute top-3 right-3 ${
+          className={`absolute top-[120px] right-3 ${
             isEnded ? "bg-muted text-foreground" : "bg-primary"
-          } text-background rounded-md px-2.5 py-1 text-xs flex items-center gap-1 shadow-sm`}
+          } text-background rounded-md px-2.5 py-1 text-sm flex items-center gap-1 shadow-sm`}
         >
-          <Clock className="h-3 w-3" />
+          <Clock className="h-3.5 w-3.5" />
           <span>{timeRemaining}</span>
         </div>
       </div>
 
       <CardContent className="py-1 px-2">
-        {/* Item title */}
+        
         <h3 className="font-bold text-sm leading-tight mb-3 line-clamp-2 text-foreground">
           {item.title}
         </h3>
 
-        {/* Stacked buttons */}
         <div className="flex flex-col gap-2">
           {!isWon && (
             <Button

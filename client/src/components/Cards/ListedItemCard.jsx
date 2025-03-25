@@ -6,9 +6,9 @@ const ListedItemCard = ({ item , onDelete}) => {
   return (
     <div className="border rounded-lg p-4 bg-muted shadow-sm flex flex-col gap-2">
       <img
-        src="https://via.placeholder.com/150"
+        src={item.image_url}
         alt="Item Image"
-        className="w-full h-36 object-cover rounded-md mb-3"
+        className="w-full h-36 object-contain rounded-md mb-3 bg-white"
       />
       <h3 className="text-lg font-semibold">{item.title}</h3>
       <p className="text-sm text-foreground">

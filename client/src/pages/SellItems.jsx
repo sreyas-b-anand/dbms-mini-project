@@ -65,8 +65,6 @@ const SellItems = () => {
           <SellItemForm onSellFormOpen={onSellFormOpen} setItems={setItems} />
         </motion.section>
       )}
-
-      {/* Delete Confirmation Modal */}
       {isDeleteModalOpen && (
         <DeleteConfirmationDialog
           isOpen={isDeleteModalOpen}

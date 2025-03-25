@@ -211,30 +211,31 @@ export default function ItemDetails() {
           <div>
             <div className="mb-6">
               <div className="flex items-center gap-2 mb-2">
-                <Badge variant="outline">{item.category}</Badge> {/* category */}
+                <Badge variant="outline">{item.category}</Badge>{" "}
+                {/* category */}
                 <Badge
                   className={"text-background"}
                   variant={!isAuctionEnded ? "default" : "secondary"}
                 >
-                  {isAuctionEnded ? "ENDED" : "ACTIVE"}  {/* status */}
+                  {isAuctionEnded ? "ENDED" : "ACTIVE"} {/* status */}
                 </Badge>
               </div>
 
               <h1 className="text-2xl font-bold">{item.title}</h1>
               <p className="text-sm text-foreground/60 mt-1">
-                {item.condition} • Listed on{" "}   {/* listed */}
+                {item.condition} • Listed on {/* listed */}
                 {new Date(item.created_at).toLocaleDateString()}
               </p>
 
               <div className="mt-4 text-sm text-foreground">
-                {item.description}   {/* desc */} 
+                {item.description} {/* desc */}
               </div>
             </div>
 
             {/* Bid history */}
             <div className="bg-muted rounded-lg border border-border p-4">
               <h2 className="text-lg font-medium mb-4 sticky top-0 bg-muted pt-1">
-                Bid History
+                {"Bid History  (Random Data)"}
               </h2>
 
               <Table>

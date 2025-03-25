@@ -30,7 +30,7 @@ const Home = () => {
                 Explore Auctions
               </p>
               <Link
-                className="hidden md:flex bg-accent text-background py-1 px-3 rounded-lg items-center justify-center gap-2"
+                className="hidden md:flex bg-accent text-background py-2 px-3 rounded-lg items-center justify-center gap-2"
                 to={"/my-bids"}
               >
                 Go to My Bids <ArrowRight size={20} />
