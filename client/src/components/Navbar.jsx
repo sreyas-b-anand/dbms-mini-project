@@ -1,22 +1,16 @@
 /* eslint-disable react/prop-types */
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Logo from "../assets/logo.jpg";
 import { Gavel, History, Home, Tag, User, ArrowLeft } from "lucide-react";
-import { useLogout } from "../hooks/useLogout";
 
 const Navbar = ({ onNavbarOpen }) => {
-  const { logout } = useLogout();
-  const navigate = useNavigate();
-  const handleSubmit = async () => {
-    await logout();
-    navigate("/");
-  };
+  
   return (
     <>
       <nav className="bg-sidebar text-sidebar-foreground flex min-h-screen max-h-screen items-start flex-col justify-between px-5 py-1 pb-3 gap-4 w-[200px]">
         <section className="flex flex-col items-start justify-start gap-5 w-full">
           {/* Logo & Title */}
-          <header className="flex items-center justify-evenly py-3 min-w-full border-b border-sidebar-border w-full">
+          <header className="flex items-center justify-evenly py-3 min-w-full border-b w-full">
             <img
               className="w-[35px] h-[35px] rounded-full"
               src={Logo}
@@ -47,14 +41,8 @@ const Navbar = ({ onNavbarOpen }) => {
         </section>
 
         {/* Logout Button */}
-        <div className="flex w-full items-start justify-start pt-3 border-t border-sidebar-border">
-          <a
-            onClick={handleSubmit}
-            role="button"
-            className="px-3 py-2 w-full text-center rounded-lg hover:opacity-80 hover:cursor-pointer bg-accent text-background"
-          >
-            Logout
-          </a>
+        <div className="flex w-full items-center justify-center pt-3 border-t ">
+          <p>&copy; Bidsnap</p>
         </div>
       </nav>
     </>

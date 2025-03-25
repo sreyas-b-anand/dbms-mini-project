@@ -29,3 +29,21 @@ def get_wallet(user_id):
         return {"success": True, "message": "Wallet fetched successfully", "wallet": wallet_amount}
     except Exception as e:
         return {"message": f"An error occurred: {str(e)}", "success": False}
+
+
+def deduct_wallet(user , deduct_amount):
+    try:
+        user_info = User.query.filter_by(id=user.id).first()
+
+        if not user:
+            return {"message": "User not found", "success": False}
+        
+        user_info.wallet = user_info.wallet - deduct_amount
+        if(user_info.wallet < 0):
+            return {"message": "Insufficient wallet amount", "success": False}
+        else:
+            db.session.commit()
+
+        return {"success": True, "message": "Wallet updated successfully"}
+    except Exception as e:
+        return {"message": f"An error occurred: {str(e)}", "success": False}

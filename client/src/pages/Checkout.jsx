@@ -40,7 +40,7 @@ const Checkout = () => {
         }
 
         setItem(json.item);
-        console.log(item)
+        console.log(item);
         // Set initial bid amount to current price + 10 or 10% more, whichever is greater
       } catch (err) {
         setError(err.message);

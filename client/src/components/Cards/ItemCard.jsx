@@ -23,7 +23,7 @@ const ItemCard = ({ item, onBid }) => {
             }`}
           />
 
-          <div className="absolute w-full inset-0 bg-gradient-to-t from-foreground/80 via-foreground/40 to-transparent" />
+          <div className="absolute w-full inset-0 bg-gradient-to-t from-foreground/80 via-foreground/40 to-transparent " />
         </div>
 
         {/* Current bid indicator */}
