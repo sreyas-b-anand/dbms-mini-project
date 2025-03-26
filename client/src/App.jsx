@@ -10,6 +10,7 @@ import SellItems from "./pages/SellItems";
 import { Toaster } from "sonner";
 import ItemDetails from "./pages/itemDetails";
 import Checkout from "./pages/Checkout";
+import DeliveryPage from "./pages/DeliveryPage";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
             <Route path="/sell-items" element={<SellItems />} />
             <Route path="/item/:id" element={<ItemDetails />} />
             <Route path="/checkout/:id" element={<Checkout />} />
+            <Route path="/delivery" element={<DeliveryPage/>} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

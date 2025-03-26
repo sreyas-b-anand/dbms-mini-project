@@ -9,13 +9,14 @@ const ItemCard = ({ item, onBid }) => {
   const timeRemaining = getTimeRemaining(item.auction_end);
   const isEnded = timeRemaining === "Ended";
   const navigate = useNavigate();
-  const isWon = item.id == 12 ? true : false;
+  const isWon = item.id == 31 ? true : false;/////////////////////////////////////////////////////
 
   return (
     <Card className="w-56 rounded-lg py-2 px-1 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-border bg-background">
       <div className="relative">
         <div className="h-40 overflow-hidden bg-muted">
           <img
+          loading="lazy"
             src={item.image_url || "/placeholder.svg?height=160&width=224"}
             alt={item.title}
             className={`w-full rounded-md h-full transition-all duration-300 px-2 ${

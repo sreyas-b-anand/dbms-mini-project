@@ -15,7 +15,7 @@ def create_app(config=None):
         r"/*": {
             "origins": ["http://localhost:5173"],
             "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-            "allow_headers": ["Content-Type", "Authorization"],
+            "allow_headers": ["Content-Type", "Authorization" , "Content_Type"],
             "supports_credentials": True
         }
     })

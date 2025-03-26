@@ -1,37 +1,30 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { useAuthContext } from "../hooks/useAuthContext";
 
-const useSellItems = (user) => {
-  const [message, setMessage] = useState();
-  const [items, setItems] = useState([]);
+const fetchSellItems = async (user) => {
+  if (!user?.token) throw new Error("No token provided");
 
-  const [isLoading, setIsLoading] = useState(true);
-  useEffect(() => {
-    setIsLoading(true);
-    const fetchItems = async () => {
-      const response = await fetch(
-        "http://127.0.0.1:5000/items/get-listed-items",
-        {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        }
-      );
-      const json = await response.json();
+  const { data } = await axios.get("http://127.0.0.1:5000/items/get-listed-items", {
+    headers: { Authorization: `Bearer ${user.token}` },
+  });
 
-      if (!response.ok || !json.success) {
-        setMessage(json.message);
-        console.log("message ", message);
-      }
-
-      if (json.success == true) {
-        setItems(json.items);
-      }
-      console.log(items);
-    };
-    fetchItems();
-    setIsLoading(false);
-  }, [user?.token]);
-  return { items, isLoading, message, setItems };
+  if (!data.success) throw new Error(data.message || "Failed to fetch listed items");
+  return data.items;
 };
 
-export default useSellItems;
+export const useSellItems = () => {
+  const { user } = useAuthContext();
+  
+  const { data: items, isLoading, error, refetch } = useQuery({
+    queryKey: ["sellItems", user?.token], // Caches and refetches when token changes
+    queryFn: () => fetchSellItems(user),
+    enabled: !!user?.token, // Fetch only if token exists
+    staleTime: 5 * 60 * 1000, // Cache for 5 minutes
+    retry: 2, // Retry twice if API fails
+  });
+  //console.log("Sell Items Data:", items, isLoading, error);
+  
+
+  return { items, isLoading, error, refetch };
+};

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Camera, Edit, Save, X } from "lucide-react";
 import { useAuthContext } from "../hooks/useAuthContext";
-import useProfile from "../hooks/useProfile";
+import {useProfile} from "../hooks/useProfile";
 import { motion } from "framer-motion";
 export default function Profile() {
   const [isEditing, setIsEditing] = useState(false);
@@ -72,6 +72,7 @@ export default function Profile() {
               {profileData?.img ? (
                 <img
                   src={profileData.img}
+                  loading="lazy"
                   alt="Profile"
                   className="w-full h-full object-cover"
                 />

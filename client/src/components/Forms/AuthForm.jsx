@@ -61,6 +61,7 @@ const Form = () => {
       >
         <div className="py-1">
           <img
+          loading="lazy"
             className="w-[80px] h-[80px] rounded-full"
             src={Logo}
             alt="logo"
@@ -137,6 +138,7 @@ const Form = () => {
       >
         <div className="py-2">
           <img
+          loading="lazy"
             className="w-[60px] h-[60px] rounded-full"
             src={Logo}
             alt="logo"

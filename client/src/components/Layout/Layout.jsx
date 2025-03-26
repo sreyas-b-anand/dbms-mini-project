@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
-import Navbar from "../Navbar";
-import Tabbar from "../Tabbar";
+import Navbar from "./Navbar";
+import Tabbar from "./Tabbar";
 import WalletForm from "../Forms/WalletForm";
 import { useState, useEffect } from "react";
 import ProfileCard from "../Cards/ProfileCard";

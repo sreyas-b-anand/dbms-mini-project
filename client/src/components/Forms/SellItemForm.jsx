@@ -6,12 +6,15 @@ import { Label } from "../ui/label";
 import { Camera } from "lucide-react";
 import { useState } from "react";
 import { uploadImage } from "../../lib/uploadImages";
-
-const SellItemForm = ({ onSellFormOpen, setItems }) => {
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
+import Loader from "../utils/Loader";
+const SellItemForm = ({ onSellFormOpen }) => {
   const { user } = useAuthContext();
   const [imageFile, setImageFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState("");
-
+  const [isLoading, setIsLoading] = useState(false);
+  const queryClient = useQueryClient();
   const imageHandler = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -20,10 +23,42 @@ const SellItemForm = ({ onSellFormOpen, setItems }) => {
     }
   };
 
+  const addItemMutation = useMutation({
+    mutationFn: async (newItem) => {
+      const { data } = await axios.post(
+        "http://127.0.0.1:5000/items/add-item",
+        newItem,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+
+      if (!data.success) {
+        throw new Error(data.message || "Failed to add item");
+      }
+
+      return data.item;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["sellItems"]);
+
+      toast.success("Item listed successfully!");
+      onSellFormOpen();
+    },
+    onError: (error) => {
+      toast.error(error.response?.data?.message || "Something went wrong.");
+    },
+  });
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
 
+    setIsLoading(true);
+
+    const formData = new FormData(e.target);
     try {
       let uploadedImageUrl = "";
       if (imageFile) {
@@ -34,34 +69,16 @@ const SellItemForm = ({ onSellFormOpen, setItems }) => {
         title: formData.get("title"),
         description: formData.get("description"),
         category: formData.get("category"),
-        image_url: uploadedImageUrl, // Use uploaded image URL
+        image_url: uploadedImageUrl,
         starting_price: parseFloat(formData.get("starting_price")),
         condition: formData.get("condition"),
         auction_end: formData.get("end_date"),
       };
 
-      const response = await fetch("http://127.0.0.1:5000/items/add-item", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${user.token}`,
-        },
-        body: JSON.stringify(newItem),
-      });
-
-      const json = await response.json();
-
-      if (!response.ok || !json.success) {
-        toast.error(json.message);
-      } else {
-        toast.success(json.message);
-        setItems((prevItems) => [...prevItems, json.item]);
-      }
+      addItemMutation.mutate(newItem);
     } catch (error) {
       toast.error("Something went wrong. Please try again.");
       console.error(error);
-    } finally {
-      onSellFormOpen();
     }
   };
 
@@ -182,7 +199,7 @@ const SellItemForm = ({ onSellFormOpen, setItems }) => {
           type="submit"
           className="w-full mt-6 py-2 bg-accent text-background font-medium rounded-md hover:opacity-90"
         >
-          List Item
+          {isLoading ? <Loader /> : " List Item"}
         </button>
         <button
           type="button"

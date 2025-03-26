@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import Loader from "../utils/Loader";
 import { useAuthContext } from "../../hooks/useAuthContext";
-import useProfile from "../../hooks/useProfile";
+import{ useProfile} from "../../hooks/useProfile";
 import { Link, useNavigate } from "react-router-dom";
 import WalletCard from "./WalletCard";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";

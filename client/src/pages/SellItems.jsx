@@ -4,13 +4,18 @@ import { ShoppingBag } from "lucide-react";
 import { motion } from "framer-motion";
 import ListedItemCard from "../components/Cards/ListedItemCard";
 import { useAuthContext } from "../hooks/useAuthContext";
-import useSellItems from "../hooks/useSellItems";
+import { useSellItems } from "../hooks/useSellItems";
 import Loader from "../components/utils/Loader";
 import DeleteConfirmationDialog from "../components/modals/DialogBox";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
+import { toast } from "sonner";
+
 const SellItems = () => {
   const { user } = useAuthContext();
   const [isSellFormOpen, setIsFormOpen] = useState(false);
-  const { items, isLoading, message, setItems } = useSellItems(user);
+  const { items, isLoading, error } = useSellItems();
+  const queryClient = useQueryClient();
 
   // Modal state
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -20,39 +25,42 @@ const SellItems = () => {
     setIsFormOpen(!isSellFormOpen);
   };
 
-  const handleDeleteItem = async () => {
-    if (!selectedItem) return;
-
-    try {
-      const response = await fetch(
-        `http://127.0.0.1:5000/items/delete-item/${selectedItem.id}`,
+  // ✅ Delete mutation with React Query & Axios
+  const deleteMutation = useMutation({
+    mutationFn: async (itemId) => {
+      const { data } = await axios.delete(
+        `http://127.0.0.1:5000/items/delete-item/${itemId}`,
         {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
+          headers: { Authorization: `Bearer ${user.token}` },
         }
       );
-      const json = await response.json();
-
-      if (!response.ok || !json.success) {
-        alert("Failed to delete item");
-        return;
+      if (!data.success) {
+        throw new Error(data.message || "Failed to delete item");
       }
+      return itemId; // Return the deleted item ID
+    },
+    onSuccess: () => {
+      // ✅ Optimistically update cache to remove the deleted item
+      queryClient.invalidateQueries(["sellItems"]); 
+      toast.success("Item deleted successfully!");
+    },
+    onError: () => {
+      toast.error("Failed to delete item.");
+    },
+    // onSettled ensures that the query refetches if needed
+    
+  });
 
-      setItems((prevItems) =>
-        prevItems.filter((item) => item.id !== selectedItem.id)
-      );
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setDeleteModalOpen(!isDeleteModalOpen);
-    }
+  const handleDeleteItem = () => {
+    if (!selectedItem) return;
+    deleteMutation.mutate(selectedItem.id);
+    setDeleteModalOpen(false);
   };
+
   const onModalAction = () => {
     setDeleteModalOpen(!isDeleteModalOpen);
   };
-
+  if (!items || items.length === 0) return <p className="w-full text-center">No items found.</p>;
   return (
     <>
       {isSellFormOpen && (
@@ -62,7 +70,7 @@ const SellItems = () => {
           transition={{ duration: 0.3 }}
           className="left-1/2 top-1/2 mt-7 -translate-x-1/2 -translate-y-1/2 z-30 absolute max-w-lg w-full m-3"
         >
-          <SellItemForm onSellFormOpen={onSellFormOpen} setItems={setItems} />
+          <SellItemForm onSellFormOpen={onSellFormOpen} />
         </motion.section>
       )}
       {isDeleteModalOpen && (
@@ -109,13 +117,13 @@ const SellItems = () => {
                       item={item}
                       onDelete={() => {
                         setSelectedItem(item);
-                        setDeleteModalOpen(!isDeleteModalOpen);
+                        setDeleteModalOpen(true);
                       }}
                     />
                   ))}
                 </div>
               ) : (
-                <p className="text-center">{message}</p>
+                <p className="text-center">{error}</p>
               )}
             </div>
           </div>

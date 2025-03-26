@@ -15,49 +15,55 @@ import { Label } from "../ui/label";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { toast } from "sonner";
 import Loader from "../utils/Loader";
-import useWallet from "../../hooks/useWallet";
+import { useWalletContext } from "../../hooks/useWallet";
+import axios from "axios";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
+
 export default function WalletForm({ onWalletOpen }) {
   const { user } = useAuthContext();
   const [amount, setAmount] = useState("");
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const { wallet } = useWallet(user);
+  const queryClient = useQueryClient();
+  const { wallet , refetch} = useWalletContext(); // Assuming wallet is fetched in a query
 
-  const handleSubmit = async () => {
-    //e.preventDefault();
-    setLoading(true);
+  const addMutation = useMutation({
+    mutationFn: async (amount) => {
+      const { data } = await axios.post(
+        "http://127.0.0.1:5000/wallet/add-wallet",
+        { amount: Number(amount) }, // Ensure amount is sent as a number
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+      if (!data.success) {
+        throw new Error(data.message || "Failed to add funds");
+      }
+      return data.new_balance; // Backend returns only the new balance
+    },
+    onSuccess: (newBalance) => {
+      queryClient.setQueryData(["wallet"], newBalance); // ✅ Immediate UI update
+      refetch(); // ✅ Only refetch the wallet data, not other API calls
+      toast.success("Funds added successfully!");
+      onWalletOpen()
+    },
+    onError: (error) => {
+      toast.error(error.response?.data?.message || "Something went wrong.");
+    },
+  });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     setError(null);
 
     if (!amount || isNaN(amount) || amount <= 0) {
       setError("Please enter a valid amount.");
-      setLoading(false);
       return;
     }
 
-    try {
-      const response = await fetch("http://127.0.0.1:5000/wallet/add-wallet", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${user.token}`,
-        },
-        body: JSON.stringify({ amount: Number(amount) }),
-      });
-
-      const json = await response.json();
-      console.log(json);
-      if (!response.ok || !json.success) {
-        setError(json.message || "An error occurred");
-      } else {
-        toast.success(json.message);
-      }
-    } catch (error) {
-      console.log(error);
-      setError("Server error: Unable to update wallet.");
-    } finally {
-      setLoading(false);
-    }
-    onWalletOpen();
+    addMutation.mutate(amount);
   };
 
   return (
@@ -75,7 +81,9 @@ export default function WalletForm({ onWalletOpen }) {
           {/* Current Balance */}
           <div className="bg-gray-800 p-4 rounded-lg mb-4">
             <p className="text-sm text-background py-2">Current Balance</p>
-            <p className="text-3xl font-bold text-background">${wallet}</p>
+            <p className="text-3xl font-bold text-background">
+              ${wallet || 0}
+            </p>
           </div>
 
           {/* UPI ID Input */}
@@ -98,7 +106,7 @@ export default function WalletForm({ onWalletOpen }) {
               type="number"
               placeholder="0.00"
               value={amount}
-              onChange={(e) => setAmount(e.target.value)}
+              onChange={(e) => setAmount(Number(e.target.value))}
               required
               className="bg-gray-900 border-gray-700 text-white focus:ring-primary"
             />
@@ -110,10 +118,10 @@ export default function WalletForm({ onWalletOpen }) {
           <Button
             type="submit"
             className="w-full bg-primary hover:bg-primary/80 hover:cursor-pointer"
-            disabled={loading}
+            disabled={addMutation.isLoading}
           >
             <span className="flex items-center gap-2 text-background">
-              {loading ? <Loader /> : <PlusCircle size={30} />}
+              {addMutation.isLoading ? <Loader /> : <PlusCircle size={30} />}
               Add Funds
             </span>
           </Button>

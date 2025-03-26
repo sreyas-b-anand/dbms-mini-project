@@ -6,6 +6,7 @@ const ListedItemCard = ({ item , onDelete}) => {
   return (
     <div className="border rounded-lg p-4 bg-muted shadow-sm flex flex-col gap-2">
       <img
+      loading="lazy"
         src={item.image_url}
         alt="Item Image"
         className="w-full h-36 object-contain rounded-md mb-3 bg-white"

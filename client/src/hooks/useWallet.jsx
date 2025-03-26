@@ -1,48 +1,36 @@
-import { useState, useEffect, useMemo } from "react";
+/* eslint-disable react-refresh/only-export-components */
+/* eslint-disable react/prop-types */
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { useAuthContext } from "./useAuthContext";
 
-const useWallet = (user) => {
-  const [wallet, setWallet] = useState(0);
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+const fetchWallet = async (user) => {
+  if (!user?.token) throw new Error("No token provided");
 
-  useEffect(() => {
-    if (!user || !user.token) return;
+  const { data } = await axios.get("http://127.0.0.1:5000/wallet/get-wallet", {
+    headers: { Authorization: `Bearer ${user.token}` },
+  });
 
-    const fetchWallet = async () => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        const response = await fetch(
-          "http://127.0.0.1:5000/wallet/get-wallet",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${user.token}`,
-            },
-          }
-        );
-
-        const json = await response.json();
-        if (!response.ok || !json.success) {
-          throw new Error(json.message || "Failed to fetch wallet data");
-        }
-
-        setWallet(json.wallet);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchWallet();
-  }, [user]);
-
-  // Memoize wallet value to prevent unnecessary recomputations
-  const memoizedWallet = useMemo(() => wallet, [wallet]);
-
-  return { wallet: memoizedWallet, isLoading, error };
+  if (!data.success)
+    throw new Error(data.message || "Failed to fetch wallet data");
+  return data.wallet;
 };
 
-export default useWallet;
+export const useWalletContext = () => {
+  const { user } = useAuthContext();
+
+  const {
+    data: wallet ,
+    isLoading,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ["wallet"], // Automatically re-fetches when token changes
+    queryFn: () => fetchWallet(user),
+    enabled: !!user?.token, // Fetch only when token exists
+    staleTime: 5 * 60 * 1000, // Cache for 5 minutes
+    retry: 2, // Retry twice if API fails
+  });
+
+  return { wallet, isLoading, error, refetch };
+};

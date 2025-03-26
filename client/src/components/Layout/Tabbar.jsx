@@ -2,8 +2,8 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { User, Menu } from "lucide-react";
-import { Input } from "./ui/input";
-import WalletCard from "./Cards/WalletCard";
+import { Input } from "../ui/input";
+import WalletCard from "../Cards/WalletCard";
 const Topbar = ({
   onWalletOpen,
   onProfileOpen,
@@ -19,7 +19,7 @@ const Topbar = ({
       "sell-items": "Sell Items",
       history: "History",
       profile: "Profile",
-      checkout : "Checkout"
+      checkout: "Checkout",
     };
 
     const pageName = location.pathname?.split("/").filter(Boolean).pop();
@@ -36,7 +36,7 @@ const Topbar = ({
             </div>
             <h1 className="text-lg font-medium text-foreground">{page}</h1>
           </div>
-          {page === "Home"  && (
+          {page === "Home" && (
             <div className="hidden md:flex items-center justify-center gap-3">
               <Input
                 type="search"

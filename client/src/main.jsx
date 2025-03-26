@@ -1,16 +1,18 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import "./index.css";
 import App from "./App.jsx";
 import AuthContextProvider from "./context/AuthContext.jsx";
-import { ItemProvider } from "./hooks/useItems";
-
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+const queryClient = new QueryClient();
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <AuthContextProvider>
-      <ItemProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthContextProvider>
         <App />
-      </ItemProvider>
-    </AuthContextProvider>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </AuthContextProvider>
+    </QueryClientProvider>
   </StrictMode>
 );

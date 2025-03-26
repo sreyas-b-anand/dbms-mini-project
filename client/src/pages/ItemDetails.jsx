@@ -158,6 +158,7 @@ export default function ItemDetails() {
           <div>
             <div className="rounded-lg overflow-hidden border border-border mb-4 h-64 md:h-80">
               <img
+              loading="lazy"
                 src={item.image_url || "/placeholder.svg?height=400&width=600"}
                 alt={item.title}
                 className="w-full h-full object-contain"

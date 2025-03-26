@@ -1,42 +1,25 @@
-import { useEffect, useState, useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
-const useProfile = (user) => {
-  const [profileData, setProfileData] = useState(null);
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+const fetchProfile = async (user) => {
+  if (!user?.token) throw new Error("No token provided");
 
-  useEffect(() => {
-    console.log("profile", user);
-    const fetchProfile = async () => {
-      try {
-        const response = await fetch("http://127.0.0.1:5000/profile", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: user.email }),
-        });
-        const json = await response.json();
-        console.log(json);
-        if (!response.ok || !json.success) {
-          setError(json.message || "Failed to load profile");
-          return;
-        }
+  const { data } = await axios.get("http://127.0.0.1:5000/profile/", {
+    headers: { Authorization: `Bearer ${user.token}` },
+  });
 
-        setProfileData(json.profile);
-      } catch (err) {
-        console.log(err);
-        setError("Failed to load profile");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchProfile();
-  }, [user]);
-
-  // Memoize the profile data to avoid unnecessary recalculations
-  const memoizedProfileData = useMemo(() => profileData, [profileData]);
-
-  return { profileData: memoizedProfileData, isLoading, error, setProfileData };
+  if (!data.success) throw new Error(data.message || "Failed to load profile");
+  return data.profile;
 };
 
-export default useProfile;
+export const useProfile = (user) => {
+  const { data: profileData, error, isLoading, refetch } = useQuery({
+    queryKey: ["profile", user?.token], // Automatically re-fetches when token changes
+    queryFn: () => fetchProfile(user),
+    enabled: !!user?.token, // Fetch only if token exists
+    staleTime: 5 * 60 * 1000, // Cache profile for 5 minutes
+    retry: 2, // Retry twice if API fails
+  });
+
+  return { profileData, isLoading, error, refetch };
+};

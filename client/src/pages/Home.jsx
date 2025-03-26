@@ -2,18 +2,16 @@ import { Link, useOutletContext } from "react-router-dom";
 import ItemCard from "../components/Cards/ItemCard";
 import { ArrowRight } from "lucide-react";
 import Loader from "../components/utils/Loader";
-import { useItemContext } from "../hooks/useItems";
+import { useItems } from "../hooks/useItems";
 import { Input } from "../components/ui/input";
 import { useEffect, useState } from "react";
 import { filterItems } from "../lib/filterItems";
 import { motion } from "framer-motion";
 const Home = () => {
-  const { items, isLoading, error, refetchItems } = useItemContext();
+  const { items, isLoading, error } = useItems();
   const { searchQuery } = useOutletContext();
   const [result, setResult] = useState([]);
-  useEffect(() => {
-    refetchItems();
-  }, []);
+
   useEffect(() => {
     setResult(() => filterItems(items, searchQuery));
   }, [items, searchQuery]);

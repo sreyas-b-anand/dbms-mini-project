@@ -6,21 +6,14 @@ import logging
 
 profile = Blueprint("profile", __name__)
 
-@profile.route("", methods=['POST'])
-def fetchUser():
+@profile.route("/", methods=['GET' , 'POST'])
+@token_required
+def fetchUser(user):
     try:
-        data = request.get_json()
-        print("Received JSON:", data)  # Debugging
-
-        email = data.get("email")
-
-        if not email:
-            return jsonify({"success": False, "message": "Email not provided"}), 400
-
-        user = User.query.filter_by(email=email).first()
-
         if not user:
-            return jsonify({"success": False, "message": "User not found"}), 404
+            return jsonify({"success": False, "message": "User not authorized"}), 401
+
+        user = User.query.filter_by(email = user.email).first()
 
         # Convert SQLAlchemy object to dictionary for JSON response
         user_data = {

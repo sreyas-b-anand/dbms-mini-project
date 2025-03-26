@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { Link } from "react-router-dom";
-import Logo from "../assets/logo.jpg";
+import Logo from "../../assets/logo.jpg";
 import { Gavel, History, Home, Tag, User, ArrowLeft } from "lucide-react";
 
 const Navbar = ({ onNavbarOpen }) => {
@@ -12,6 +12,7 @@ const Navbar = ({ onNavbarOpen }) => {
           {/* Logo & Title */}
           <header className="flex items-center justify-evenly py-3 min-w-full border-b w-full">
             <img
+            loading="lazy"
               className="w-[35px] h-[35px] rounded-full"
               src={Logo}
               alt="logo"

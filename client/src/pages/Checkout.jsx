@@ -2,15 +2,46 @@ import PaymentCard from "../components/Cards/PaymentCard";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { MapPin, ReceiptText } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Loader from "../components/utils/Loader";
 import AddressForm from "../components/Forms/AddressForm";
+import { useWalletContext } from "../hooks/useWallet";
+
 const Checkout = () => {
   const { id } = useParams();
   const [item, setItem] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useAuthContext();
+  const { dispatch } = useWalletContext();
+  const navigate = useNavigate();
+
+  const handleClick = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("http://127.0.0.1:5000/wallet/deduct", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({ amount: item.current_price }),
+      });
+
+      const json = await response.json();
+      console.log("wallet d", json.updated_wallet);
+      if (!response.ok || json.success === false) {
+        throw new Error(json.message || "Failed to deduct amount");
+      }
+
+      dispatch({ type: "FETCH_SUCCESS", payload: json.updated_wallet });
+
+      navigate("/delivery");
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
   useEffect(() => {
     const fetchItem = async () => {
       if (!user || !user.token) {
@@ -40,8 +71,7 @@ const Checkout = () => {
         }
 
         setItem(json.item);
-        console.log(item);
-        // Set initial bid amount to current price + 10 or 10% more, whichever is greater
+        console.log("item", json);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -51,6 +81,7 @@ const Checkout = () => {
 
     fetchItem();
   }, [id, user]);
+
   return (
     <div className="p-3 m-3 bg-background flex-1 rounded-lg overflow-hidden">
       <div className="overflow-y-auto h-full">
@@ -61,41 +92,36 @@ const Checkout = () => {
           </p>
         </div>
         {isLoading && (
-          <div className="flex-1 justify-center items-center">
+          <div className="flex-1 flex justify-center items-center">
             <Loader />
           </div>
         )}
         {error && (
-          <div className="flex-1 justify-center items-center">{error}</div>
+          <div className="flex-1 flex justify-center items-center text-red-500">
+            {error}
+          </div>
         )}
         {item && !isLoading && (
-          <>
-            <div className="flex justify-center gap-3 px-3 mx-3 flex-wrap">
-              <div className="flex-3/5 flex flex-col justify-center gap-4">
-                <header className="flex items-center  justify-start gap-2">
-                  <MapPin />{" "}
-                  <p className="text-xl text-foreground font-[600]">
-                    Shipping Information
-                  </p>
-                </header>
-                <div className="">
-                  <AddressForm />
-                </div>
-              </div>
-              <div className="flex-1/4 flex flex-col justify-center gap-4 ">
-                <header className="flex items-center justify-start gap-2">
-                  {" "}
-                  <ReceiptText />
-                  <p className="text-xl text-foreground font-[600]">
-                    Order Summary
-                  </p>
-                </header>
-                <div>
-                  <PaymentCard bidItem={item} />
-                </div>
-              </div>
+          <div className="flex justify-center gap-3 px-3 mx-3 flex-wrap">
+            <div className="flex-3/5 flex flex-col justify-center gap-4">
+              <header className="flex items-center justify-start gap-2">
+                <MapPin />
+                <p className="text-xl text-foreground font-semibold">
+                  Shipping Information
+                </p>
+              </header>
+              <AddressForm />
             </div>
-          </>
+            <div className="flex-1/4 flex flex-col justify-center gap-4">
+              <header className="flex items-center justify-start gap-2">
+                <ReceiptText />
+                <p className="text-xl text-foreground font-semibold">
+                  Order Summary
+                </p>
+              </header>
+              <PaymentCard bidItem={item} onClick={handleClick} />
+            </div>
+          </div>
         )}
       </div>
     </div>
