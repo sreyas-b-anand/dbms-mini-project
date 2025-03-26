@@ -9,14 +9,14 @@ const ItemCard = ({ item, onBid }) => {
   const timeRemaining = getTimeRemaining(item.auction_end);
   const isEnded = timeRemaining === "Ended";
   const navigate = useNavigate();
-  const isWon = item.id == 31 ? true : false;/////////////////////////////////////////////////////
+  const isWon = item.id == 31 ? true : false; /////////////////////////////////////////////////////
 
   return (
     <Card className="w-56 rounded-lg py-2 px-1 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-border bg-background">
       <div className="relative">
         <div className="h-40 overflow-hidden bg-muted">
           <img
-          loading="lazy"
+            loading="lazy"
             src={item.image_url || "/placeholder.svg?height=160&width=224"}
             alt={item.title}
             className={`w-full rounded-md h-full transition-all duration-300 px-2 ${
@@ -31,7 +31,7 @@ const ItemCard = ({ item, onBid }) => {
         <div className="absolute top-[120px] left-3 bg-background/90 backdrop-blur-sm rounded-md px-2.5 py-1 flex items-center justify-center gap-1 shadow-sm">
           <DollarSign className="h-3.5 w-3.5 text-foreground" />
           <span className="font-semibold text-foreground text-sm">
-            {item.current_price }
+            {item.current_price}
           </span>
         </div>
 
@@ -47,7 +47,6 @@ const ItemCard = ({ item, onBid }) => {
       </div>
 
       <CardContent className="py-1 px-2">
-        
         <h3 className="font-bold text-sm leading-tight mb-3 line-clamp-2 text-foreground">
           {item.title}
         </h3>

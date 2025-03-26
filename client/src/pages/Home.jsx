@@ -7,7 +7,38 @@ import { Input } from "../components/ui/input";
 import { useEffect, useState } from "react";
 import { filterItems } from "../lib/filterItems";
 import { motion } from "framer-motion";
+import { io } from "socket.io-client";
+import { useAuthContext } from "../hooks/useAuthContext";
 const Home = () => {
+  const { user } = useAuthContext();
+const socket = io("http://127.0.0.1:5000", {
+  extraHeaders: {
+    Authorization: `Bearer ${user?.token}`, 
+  },
+});
+
+  useEffect(() => {
+    const handleMessage = (msg) => {
+      console.log(msg);
+    };
+
+    socket.on("message", handleMessage);
+
+    return () => {
+      socket.off("message", handleMessage); 
+    };
+  }, []);
+
+  const onBid = async () => {
+    console.log("On bid");
+    socket.emit("bid received", {
+      user: user?.name, 
+      amount: 100,
+      product_id: "Product123",
+      timestamp: new Date().toISOString(),
+    });
+  };
+
   const { items, isLoading, error } = useItems();
   const { searchQuery } = useOutletContext();
   const [result, setResult] = useState([]);
@@ -64,13 +95,7 @@ const Home = () => {
                       }}
                       viewport={{ once: true }}
                     >
-                      <ItemCard
-                        key={item.id}
-                        item={item}
-                        onBid={() =>
-                          console.log(`Bid placed on item ${item.id}`)
-                        }
-                      />
+                      <ItemCard key={item.id} item={item} onBid={onBid} />
                     </motion.div>
                   ))}
                 </div>

@@ -41,11 +41,11 @@ export default function WalletForm({ onWalletOpen }) {
       if (!data.success) {
         throw new Error(data.message || "Failed to add funds");
       }
-      return data.new_balance; // Backend returns only the new balance
+      return data.new_balance; 
     },
     onSuccess: (newBalance) => {
-      queryClient.setQueryData(["wallet"], newBalance); // ✅ Immediate UI update
-      refetch(); // ✅ Only refetch the wallet data, not other API calls
+      queryClient.setQueryData(["wallet"], newBalance); 
+      refetch()
       toast.success("Funds added successfully!");
       onWalletOpen()
     },

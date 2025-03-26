@@ -6,6 +6,7 @@ import { useState } from "react";
 import Loader from "../utils/Loader";
 import { toast } from "sonner";
 import Logo from "../../assets/logo.jpg";
+
 const Form = () => {
   //usestate vars
   const [isSignUp, setIsSignUp] = useState(true);
@@ -55,13 +56,14 @@ const Form = () => {
       /* Signup */
     }
     return (
-      <form
+      <div className="flex items-center flex-wrap justify-center ">
+        <form
         onSubmit={handleSignUp}
         className="flex flex-col items-center justify-center gap-3 px-10 py-7 rounded-lg border m-2 min-w-[344px] sm:min-w-[362px]"
       >
         <div className="py-1">
           <img
-          loading="lazy"
+            loading="lazy"
             className="w-[80px] h-[80px] rounded-full"
             src={Logo}
             alt="logo"
@@ -126,6 +128,7 @@ const Form = () => {
           </span>
         </div>
       </form>
+      </div>
     );
   } else {
     {
@@ -138,7 +141,7 @@ const Form = () => {
       >
         <div className="py-2">
           <img
-          loading="lazy"
+            loading="lazy"
             className="w-[60px] h-[60px] rounded-full"
             src={Logo}
             alt="logo"

@@ -20,9 +20,10 @@ const Topbar = ({
       history: "History",
       profile: "Profile",
       checkout: "Checkout",
+      item: "Item Details",
     };
 
-    const pageName = location.pathname?.split("/").filter(Boolean).pop();
+    const pageName = location.pathname?.split("/")[1];
     setPage(pageMap[pageName] || "Home");
   }, [location.pathname]);
 
