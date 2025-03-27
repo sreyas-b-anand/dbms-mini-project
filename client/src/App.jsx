@@ -1,37 +1,111 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { Suspense, lazy } from "react";
 import Layout from "./components/Layout/Layout";
-import Home from "./pages/Home";
-import MyBids from "./pages/MyBids";
-import History from "./pages/Transactions";
-import Profile from "./pages/Profile";
-import Auth from "./pages/Auth";
-import NotFound from "./NotFound";
-import SellItems from "./pages/SellItems";
 import { Toaster } from "sonner";
-import ItemDetails from "./pages/itemDetails";
-import Checkout from "./pages/Checkout";
-import DeliveryPage from "./pages/DeliveryPage";
+
+// Lazy-loaded components
+const Home = lazy(() => import("./pages/Home"));
+const MyBids = lazy(() => import("./pages/MyBids"));
+const History = lazy(() => import("./pages/Transactions"));
+const Profile = lazy(() => import("./pages/Profile"));
+
+const NotFound = lazy(() => import("./NotFound"));
+const SellItems = lazy(() => import("./pages/SellItems"));
+const ItemDetails = lazy(() => import("./pages/itemDetails"));
+const Checkout = lazy(() => import("./pages/Checkout"));
+const DeliveryPage = lazy(() => import("./pages/DeliveryPage"));
+import Loader from "./components/utils/Loader";
+import Auth from "./pages/Auth";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Auth />,
+  },
+  {
+    element: <Layout />,
+    children: [
+      {
+        path: "dashboard",
+        element: (
+          <Suspense fallback={<Loader />}>
+            <Home />
+          </Suspense>
+        ),
+      },
+      {
+        path: "my-bids",
+        element: (
+          <Suspense fallback={<Loader />}>
+            <MyBids />
+          </Suspense>
+        ),
+      },
+      {
+        path: "history",
+        element: (
+          <Suspense fallback={<Loader />}>
+            <History />
+          </Suspense>
+        ),
+      },
+      {
+        path: "profile",
+        element: (
+          <Suspense fallback={<Loader />}>
+            <Profile />
+          </Suspense>
+        ),
+      },
+      {
+        path: "sell-items",
+        element: (
+          <Suspense fallback={<Loader />}>
+            <SellItems />
+          </Suspense>
+        ),
+      },
+      {
+        path: "item/:id",
+        element: (
+          <Suspense fallback={<Loader />}>
+            <ItemDetails />
+          </Suspense>
+        ),
+      },
+      {
+        path: "checkout/:id",
+        element: (
+          <Suspense fallback={<Loader />}>
+            <Checkout />
+          </Suspense>
+        ),
+      },
+      {
+        path: "delivery",
+        element: (
+          <Suspense fallback={<Loader />}>
+            <DeliveryPage />
+          </Suspense>
+        ),
+      },
+    ],
+  },
+  {
+    path: "*",
+    element: (
+      <Suspense fallback={<Loader />}>
+        <NotFound />
+      </Suspense>
+    ),
+  },
+]);
 
 function App() {
   return (
     <>
       <Toaster position="top-right" />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Auth />} />
-          <Route element={<Layout />}>
-            <Route path="/dashboard" element={<Home />} />
-            <Route path="/my-bids" element={<MyBids />} />
-            <Route path="/history" element={<History />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/sell-items" element={<SellItems />} />
-            <Route path="/item/:id" element={<ItemDetails />} />
-            <Route path="/checkout/:id" element={<Checkout />} />
-            <Route path="/delivery" element={<DeliveryPage/>} />
-          </Route>
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+      <RouterProvider router={router} />
     </>
   );
 }

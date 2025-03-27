@@ -1,10 +1,10 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "./Navbar";
-import Tabbar from "./Tabbar";
 import WalletForm from "../Forms/WalletForm";
 import { useState, useEffect } from "react";
 import ProfileCard from "../Cards/ProfileCard";
 import { motion } from "framer-motion";
+import Topbar from "./Tabbar";
 const Layout = () => {
   const [isWallet, setIsWallet] = useState(false);
   const [isProfile, setIsProfile] = useState(false);
@@ -66,13 +66,15 @@ const Layout = () => {
           isWallet ? "opacity-80 " : "opacity-100"
         }`}
       >
-        <Tabbar
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          onWalletOpen={onWalletOpen}
-          onProfileOpen={onProfileOpen}
-          onNavbarOpen={onNavbarOpen}
-        />
+        
+          <Topbar
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            onWalletOpen={onWalletOpen}
+            onProfileOpen={onProfileOpen}
+            onNavbarOpen={onNavbarOpen}
+          />
+      
 
         {/* Page Content (Outlet) */}
 

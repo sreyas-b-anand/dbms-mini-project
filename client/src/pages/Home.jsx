@@ -1,7 +1,6 @@
 import { Link, useOutletContext } from "react-router-dom";
 import ItemCard from "../components/Cards/ItemCard";
 import { ArrowRight } from "lucide-react";
-import Loader from "../components/utils/Loader";
 import { useItems } from "../hooks/useItems";
 import { Input } from "../components/ui/input";
 import { useEffect, useState } from "react";
@@ -9,13 +8,14 @@ import { filterItems } from "../lib/filterItems";
 import { motion } from "framer-motion";
 import { io } from "socket.io-client";
 import { useAuthContext } from "../hooks/useAuthContext";
+import { SkeletonCard } from "../components/utils/SkeletonCard";
 const Home = () => {
   const { user } = useAuthContext();
-const socket = io("http://127.0.0.1:5000", {
-  extraHeaders: {
-    Authorization: `Bearer ${user?.token}`, 
-  },
-});
+  const socket = io("http://127.0.0.1:5000", {
+    extraHeaders: {
+      Authorization: `Bearer ${user?.token}`,
+    },
+  });
 
   useEffect(() => {
     const handleMessage = (msg) => {
@@ -25,14 +25,14 @@ const socket = io("http://127.0.0.1:5000", {
     socket.on("message", handleMessage);
 
     return () => {
-      socket.off("message", handleMessage); 
+      socket.off("message", handleMessage);
     };
   }, []);
 
   const onBid = async () => {
     console.log("On bid");
     socket.emit("bid received", {
-      user: user?.name, 
+      user: user?.name,
       amount: 100,
       product_id: "Product123",
       timestamp: new Date().toISOString(),
@@ -74,8 +74,17 @@ const socket = io("http://127.0.0.1:5000", {
               </div>
             </div>
             {isLoading && (
-              <div className="w-full flex items-center justify-center">
-                <Loader />
+              <div className="outer h-[500px] px-3 py-3">
+                <div className="inner grid sm:grid-cols-2 lg:grid-cols-3  xl:grid-cols-4 gap-4 place-items-center py-6">
+                  <SkeletonCard />
+                  <SkeletonCard />
+                  <SkeletonCard />
+                  <SkeletonCard />
+                  <SkeletonCard />
+                  <SkeletonCard />
+                  <SkeletonCard />
+                  <SkeletonCard />
+                </div>
               </div>
             )}
 

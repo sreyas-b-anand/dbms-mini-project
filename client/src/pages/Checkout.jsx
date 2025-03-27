@@ -1,12 +1,11 @@
-import PaymentCard from "../components/Cards/PaymentCard";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { MapPin, ReceiptText } from "lucide-react";
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Loader from "../components/utils/Loader";
 import AddressForm from "../components/Forms/AddressForm";
 import { useWalletContext } from "../hooks/useWallet";
-
+const PaymentBill = lazy(() => import("../components/Cards/PaymentCard"));
 const Checkout = () => {
   const { id } = useParams();
   const [item, setItem] = useState(null);
@@ -119,7 +118,9 @@ const Checkout = () => {
                   Order Summary
                 </p>
               </header>
-              <PaymentCard bidItem={item} onClick={handleClick} />
+              <Suspense fallback={<Loader />}>
+                <PaymentBill bidItem={item} onClick={handleClick} />
+              </Suspense>
             </div>
           </div>
         )}

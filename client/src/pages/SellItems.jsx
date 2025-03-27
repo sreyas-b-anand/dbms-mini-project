@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import ListedItemCard from "../components/Cards/ListedItemCard";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useSellItems } from "../hooks/useSellItems";
-import Loader from "../components/utils/Loader";
+import { SkeletonCard } from "../components/utils/SkeletonCard";
 import DeleteConfirmationDialog from "../components/modals/DialogBox";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
@@ -41,14 +41,13 @@ const SellItems = () => {
     },
     onSuccess: () => {
       // ✅ Optimistically update cache to remove the deleted item
-      queryClient.invalidateQueries(["sellItems"]); 
+      queryClient.invalidateQueries(["sellItems"]);
       toast.success("Item deleted successfully!");
     },
     onError: () => {
       toast.error("Failed to delete item.");
     },
     // onSettled ensures that the query refetches if needed
-    
   });
 
   const handleDeleteItem = () => {
@@ -60,7 +59,8 @@ const SellItems = () => {
   const onModalAction = () => {
     setDeleteModalOpen(!isDeleteModalOpen);
   };
-  if (!items || items.length === 0) return <p className="w-full text-center">No items found.</p>;
+  if (!items || items.length === 0)
+    return <p className="w-full text-center">No items found.</p>;
   return (
     <>
       {isSellFormOpen && (
@@ -103,23 +103,44 @@ const SellItems = () => {
           </div>
           <div className="flex flex-1 gap-3 flex-wrap w-full overflow-hidden">
             {isLoading && (
-              <div className="w-full flex items-center justify-center p-6">
-                <Loader />
+              <div className="outer h-[500px] px-3 py-3">
+                <div className="inner grid sm:grid-cols-2 lg:grid-cols-3  xl:grid-cols-4 gap-4 place-items-center py-6">
+                  <SkeletonCard />
+                  <SkeletonCard />
+                  <SkeletonCard />
+                  <SkeletonCard />
+                  <SkeletonCard />
+                  <SkeletonCard />
+                  <SkeletonCard />
+                  <SkeletonCard />
+                </div>
               </div>
             )}
 
             <div className="max-h-[400px] overflow-y-auto w-full">
               {!isLoading && items.length > 0 ? (
                 <div className="flex flex-wrap justify-center place-items-center gap-8">
-                  {items.map((item) => (
-                    <ListedItemCard
+                  {items.map((item, index) => (
+                    <motion.div
                       key={item.id}
-                      item={item}
-                      onDelete={() => {
-                        setSelectedItem(item);
-                        setDeleteModalOpen(true);
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{
+                        delay: index * 0.1,
+                        duration: 0.4,
+                        ease: "easeOut",
                       }}
-                    />
+                      viewport={{ once: true }}
+                    >
+                      <ListedItemCard
+                        item={item}
+                        onDelete={() => {
+                          setSelectedItem(item);
+                          setDeleteModalOpen(true);
+                        }}
+                      />
+                    </motion.div>
                   ))}
                 </div>
               ) : (

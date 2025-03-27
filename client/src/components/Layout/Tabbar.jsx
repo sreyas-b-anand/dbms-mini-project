@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { User, Menu } from "lucide-react";
 import { Input } from "../ui/input";
+//import WalletCard from "../Cards/WalletCard";
 import WalletCard from "../Cards/WalletCard";
 const Topbar = ({
   onWalletOpen,
@@ -30,7 +31,7 @@ const Topbar = ({
   return (
     <div className="bg-background border border-border m-3 mb-0 rounded-lg px-3">
       <div className="flex items-center justify-between h-14">
-        <div className="flex items-center justify-center gap-20 px-3">
+        <div className="flex items-center justify-center gap-12 px-3">
           <div className="flex items-center justify-center gap-2 ">
             <div className="block md:hidden">
               <Menu onClick={onNavbarOpen} />
@@ -41,7 +42,7 @@ const Topbar = ({
             <div className="hidden md:flex items-center justify-center gap-3">
               <Input
                 type="search"
-                className="max-w-[280px] pr-20"
+                className="max-w-[280px] min-w-[240px]"
                 placeholder="Search for items..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}

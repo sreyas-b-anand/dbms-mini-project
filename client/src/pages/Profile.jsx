@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { Camera, Edit, Save, X } from "lucide-react";
 import { useAuthContext } from "../hooks/useAuthContext";
-import {useProfile} from "../hooks/useProfile";
+import { useProfile } from "../hooks/useProfile";
 import { motion } from "framer-motion";
+import Loader from "../components/utils/Loader";
 export default function Profile() {
   const [isEditing, setIsEditing] = useState(false);
   const [authUser, setAuthUser] = useState(null);
@@ -54,7 +55,7 @@ export default function Profile() {
   };
 
   if (isLoading)
-    return <div className="flex justify-center p-10">Loading...</div>;
+    return <div className="flex justify-center p-10"><Loader /></div>;
   if (error) return <div className="text-red-500 text-center">{error}</div>;
 
   return (
