@@ -5,7 +5,8 @@ import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
 import { getTimeRemaining } from "../../lib/getTimeRemaining";
 import { Link, useNavigate } from "react-router-dom";
-const ItemCard = ({ item, onBid }) => {
+const ItemCard = ({ item, onBid , price}) => {
+  console.log(price)
   const timeRemaining = getTimeRemaining(item.auction_end);
   const isEnded = timeRemaining === "Ended";
   const navigate = useNavigate();
@@ -31,7 +32,7 @@ const ItemCard = ({ item, onBid }) => {
         <div className="absolute top-[120px] left-3 bg-background/90 backdrop-blur-sm rounded-md px-2.5 py-1 flex items-center justify-center gap-1 shadow-sm">
           <DollarSign className="h-3.5 w-3.5 text-foreground" />
           <span className="font-semibold text-foreground text-sm">
-            {item.current_price}
+            {price}
           </span>
         </div>
 

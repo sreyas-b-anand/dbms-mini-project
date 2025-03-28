@@ -11,23 +11,28 @@ import { useAuthContext } from "../hooks/useAuthContext";
 import { SkeletonCard } from "../components/utils/SkeletonCard";
 const Home = () => {
   const { user } = useAuthContext();
+  const [itemPrices, setItemPrices] = useState({});
   const socket = io("http://127.0.0.1:5000", {
+    autoConnect: false,
     extraHeaders: {
-      Authorization: `Bearer ${user?.token}`,
+      Authorization: `Bearer ${user.token}`,
     },
   });
-
   useEffect(() => {
-    const handleMessage = (msg) => {
-      console.log(msg);
-    };
+    socket.connect();
 
-    socket.on("message", handleMessage);
+    socket.on("message", (data) => {
+      console.log(data.msg);
+      console.log(data.item_prices);
+      setItemPrices(data.item_prices);
+      console.log(itemPrices);
+    });
 
     return () => {
-      socket.off("message", handleMessage);
+      socket.off("message"); // Correct cleanup
+      socket.disconnect(); // Disconnect when component unmounts
     };
-  }, []);
+  }, [user?.token]);
 
   const onBid = async () => {
     console.log("On bid");
@@ -104,7 +109,12 @@ const Home = () => {
                       }}
                       viewport={{ once: true }}
                     >
-                      <ItemCard key={item.id} item={item} onBid={onBid} />
+                      <ItemCard
+                        key={item.id}
+                        item={item}
+                        onBid={onBid}
+                        price={itemPrices[item.id]}
+                      />
                     </motion.div>
                   ))}
                 </div>
