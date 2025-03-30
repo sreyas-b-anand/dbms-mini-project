@@ -82,7 +82,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "delivery",
+        path: "delivery/:id",
         element: (
           <Suspense fallback={<Loader />}>
             <DeliveryPage />

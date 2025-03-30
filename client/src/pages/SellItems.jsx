@@ -59,8 +59,7 @@ const SellItems = () => {
   const onModalAction = () => {
     setDeleteModalOpen(!isDeleteModalOpen);
   };
-  if (!items || items.length === 0)
-    return <p className="w-full text-center">No items found.</p>;
+ 
   return (
     <>
       {isSellFormOpen && (
@@ -118,7 +117,7 @@ const SellItems = () => {
             )}
 
             <div className="max-h-[400px] overflow-y-auto w-full">
-              {!isLoading && items.length > 0 ? (
+              {items && (
                 <div className="flex flex-wrap justify-center place-items-center gap-8">
                   {items.map((item, index) => (
                     <motion.div
@@ -143,10 +142,13 @@ const SellItems = () => {
                     </motion.div>
                   ))}
                 </div>
-              ) : (
-                <p className="text-center">{error}</p>
               )}
             </div>
+            {error && (
+              <main>
+                <p className="text-center">No items to show</p>
+              </main>
+            )}
           </div>
         </section>
       </main>

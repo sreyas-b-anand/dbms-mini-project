@@ -1,41 +1,46 @@
 import { useAuthContext } from "../hooks/useAuthContext";
 import { MapPin, ReceiptText } from "lucide-react";
-import { lazy, Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Loader from "../components/utils/Loader";
 import AddressForm from "../components/Forms/AddressForm";
 import { useWalletContext } from "../hooks/useWallet";
-const PaymentBill = lazy(() => import("../components/Cards/PaymentCard"));
+import axios from "axios";
+import { toast } from "sonner";
+import PaymentCard from "../components/Cards/PaymentCard";
 const Checkout = () => {
   const { id } = useParams();
   const [item, setItem] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useAuthContext();
-  const { dispatch } = useWalletContext();
   const navigate = useNavigate();
-
+  const { refetch } = useWalletContext();
   const handleClick = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://127.0.0.1:5000/wallet/deduct", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${user.token}`,
+      const response = await axios.post(
+        "http://127.0.0.1:5000/bids/complete-purchase",
+        {
+          item_id: item.id,
+          current_price: item.current_price,
         },
-        body: JSON.stringify({ amount: item.current_price }),
-      });
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-      const json = await response.json();
-      console.log("wallet d", json.updated_wallet);
-      if (!response.ok || json.success === false) {
-        throw new Error(json.message || "Failed to deduct amount");
+      if (!response.data.success) {
+        toast.error(response.data.message || "An error occured");
+        return;
       }
+      toast.success(response.data.message);
+      await refetch();
 
-      dispatch({ type: "FETCH_SUCCESS", payload: json.updated_wallet });
-
-      navigate("/delivery");
+      navigate(`/delivery/${item.id}`);
     } catch (err) {
       setError(err.message);
     }
@@ -101,7 +106,7 @@ const Checkout = () => {
           </div>
         )}
         {item && !isLoading && (
-          <div className="flex justify-center gap-3 px-3 mx-3 flex-wrap">
+          <div className="flex justify-center gap-3 px-3 mx-3 flex-wrap p-3 m-3">
             <div className="flex-3/5 flex flex-col justify-center gap-4">
               <header className="flex items-center justify-start gap-2">
                 <MapPin />
@@ -112,15 +117,14 @@ const Checkout = () => {
               <AddressForm />
             </div>
             <div className="flex-1/4 flex flex-col justify-center gap-4">
-              <header className="flex items-center justify-start gap-2">
+              <header className="flex items-center justify-start gap-2 mb-8">
                 <ReceiptText />
                 <p className="text-xl text-foreground font-semibold">
                   Order Summary
                 </p>
               </header>
-              <Suspense fallback={<Loader />}>
-                <PaymentBill bidItem={item} onClick={handleClick} />
-              </Suspense>
+
+              <PaymentCard bidItem={item} onClick={handleClick} />
             </div>
           </div>
         )}

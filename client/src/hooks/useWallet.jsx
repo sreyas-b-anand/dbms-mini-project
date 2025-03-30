@@ -20,12 +20,12 @@ export const useWalletContext = () => {
   const { user } = useAuthContext();
 
   const {
-    data: wallet ,
+    data: wallet,
     isLoading,
     error,
     refetch,
   } = useQuery({
-    queryKey: ["wallet"], // Automatically re-fetches when token changes
+    queryKey: ["wallet", user?.token], // Automatically re-fetches when token changes
     queryFn: () => fetchWallet(user),
     enabled: !!user?.token, // Fetch only when token exists
     staleTime: 5 * 60 * 1000, // Cache for 5 minutes

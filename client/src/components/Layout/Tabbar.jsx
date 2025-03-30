@@ -21,6 +21,7 @@ const Topbar = ({
       history: "History",
       profile: "Profile",
       checkout: "Checkout",
+      delivery: "Delivery",
       item: "Item Details",
     };
 

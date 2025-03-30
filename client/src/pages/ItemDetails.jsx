@@ -18,34 +18,19 @@ import { formatCurrency } from "../lib/formatCurrency";
 import { formatRelativeTime } from "../lib/formatRelativeTime";
 import { getTimeRemaining } from "../lib/getTimeRemaining";
 import Loader from "../components/utils/Loader";
+import axios from "axios";
+import { toast } from "sonner";
 export default function ItemDetails() {
   const { id } = useParams();
+  console.log("Received id from useParams:", id);
+
   const [item, setItem] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useAuthContext();
   const [bidAmount, setBidAmount] = useState(0);
 
-  const bids = [
-    {
-      id: 1,
-      username: "CollectiblesEnthusiast",
-      amount: 275.5,
-      bid_time: new Date(Date.now() - 2 * 60 * 60 * 1000),
-    },
-    {
-      id: 2,
-      username: "WatchLover22",
-      amount: 250.0,
-      bid_time: new Date(Date.now() - 5 * 60 * 60 * 1000),
-    },
-    {
-      id: 3,
-      username: "TimePieces",
-      amount: 225.0,
-      bid_time: new Date(Date.now() - 12 * 60 * 60 * 1000),
-    },
-  ];
+  const [bids, setBids] = useState([]);
 
   useEffect(() => {
     const fetchItem = async () => {
@@ -87,6 +72,28 @@ export default function ItemDetails() {
     };
 
     fetchItem();
+    const fetchBids = async () => {
+      try {
+        const response = await axios.get(
+          `http://127.0.0.1:5000/bids/get-bidders/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        );
+          console.log(response.data.bids);
+        if (response.data.success) {
+          setBids(response.data.bids);
+        } else {
+          toast.warning("No bids found for this item.");
+        }
+      } catch (error) {
+        toast.error("Failed to fetch bidders: " + error.message);
+      }
+    };
+
+    fetchBids();
   }, [id, user]);
 
   const handleBidSubmit = () => {
@@ -158,7 +165,7 @@ export default function ItemDetails() {
           <div>
             <div className="rounded-lg overflow-hidden border border-border mb-4 h-64 md:h-80">
               <img
-              loading="lazy"
+                loading="lazy"
                 src={item.image_url || "/placeholder.svg?height=400&width=600"}
                 alt={item.title}
                 className="w-full h-full object-contain"
@@ -248,7 +255,7 @@ export default function ItemDetails() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {bids.length > 0 ? (
+                  {bids &&
                     bids.map((bid) => (
                       <TableRow key={bid.id}>
                         <TableCell className="font-medium">
@@ -259,15 +266,10 @@ export default function ItemDetails() {
                           {formatRelativeTime(bid.bid_time)}
                         </TableCell>
                       </TableRow>
-                    ))
-                  ) : (
+                    ))}
+                  {bids.length ==0 && (
                     <TableRow>
-                      <TableCell
-                        colSpan={3}
-                        className="text-center py-4 text-foreground/70"
-                      >
-                        No bids yet. Be the first to bid!
-                      </TableCell>
+                      <TableCell className="text-center">No bids on this item</TableCell>
                     </TableRow>
                   )}
                 </TableBody>

@@ -4,7 +4,7 @@ import axios from "axios";
 const fetchProfile = async (user) => {
   if (!user?.token) throw new Error("No token provided");
 
-  const { data } = await axios.get("http://127.0.0.1:5000/profile/", {
+  const { data } = await axios.get("http://127.0.0.1:5000/profile", {
     headers: { Authorization: `Bearer ${user.token}` },
   });
 

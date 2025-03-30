@@ -10,7 +10,7 @@ const fetchItems = async (user) => {
   });
 
   if (!data.success) throw new Error(data.message || "Failed to fetch items");
-  return data.items;
+  return data.items || [];
 };
 
 export const useItems = () => {

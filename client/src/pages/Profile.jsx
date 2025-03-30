@@ -100,16 +100,15 @@ export default function Profile() {
         <div className="pt-20 p-6">
           {isEditing ? (
             <form onSubmit={handleSubmit} className="space-y-4">
-              {["img", "username", "address", "phone"].map((field) => (
+              {["username", "address", "phone"].map((field) => (
                 <div key={field}>
                   <label className="block text-sm font-medium text-foreground capitalize">
                     {field}
                   </label>
                   <input
                     type={
-                      field === "img"
-                        ? "url"
-                        : field === "phone"
+                      
+                        field === "phone"
                         ? "tel"
                         : "text"
                     }

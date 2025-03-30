@@ -6,44 +6,8 @@ import { Input } from "../components/ui/input";
 import { useEffect, useState } from "react";
 import { filterItems } from "../lib/filterItems";
 import { motion } from "framer-motion";
-import { io } from "socket.io-client";
-import { useAuthContext } from "../hooks/useAuthContext";
 import { SkeletonCard } from "../components/utils/SkeletonCard";
 const Home = () => {
-  const { user } = useAuthContext();
-  const [itemPrices, setItemPrices] = useState({});
-  const socket = io("http://127.0.0.1:5000", {
-    autoConnect: false,
-    extraHeaders: {
-      Authorization: `Bearer ${user.token}`,
-    },
-  });
-  useEffect(() => {
-    socket.connect();
-
-    socket.on("message", (data) => {
-      console.log(data.msg);
-      console.log(data.item_prices);
-      setItemPrices(data.item_prices);
-      console.log(itemPrices);
-    });
-
-    return () => {
-      socket.off("message"); // Correct cleanup
-      socket.disconnect(); // Disconnect when component unmounts
-    };
-  }, [user?.token]);
-
-  const onBid = async () => {
-    console.log("On bid");
-    socket.emit("bid received", {
-      user: user?.name,
-      amount: 100,
-      product_id: "Product123",
-      timestamp: new Date().toISOString(),
-    });
-  };
-
   const { items, isLoading, error } = useItems();
   const { searchQuery } = useOutletContext();
   const [result, setResult] = useState([]);
@@ -93,7 +57,7 @@ const Home = () => {
               </div>
             )}
 
-            {result ? (
+            {result && (
               <div className="outer h-[500px] px-3 py-3 overflow-y-auto scroll-smooth scroll-p-1 scroll-m-1">
                 <div className="inner grid sm:grid-cols-2 lg:grid-cols-3  xl:grid-cols-4 gap-4 place-items-center py-6">
                   {result?.map((item, index) => (
@@ -109,18 +73,16 @@ const Home = () => {
                       }}
                       viewport={{ once: true }}
                     >
-                      <ItemCard
-                        key={item.id}
-                        item={item}
-                        onBid={onBid}
-                        price={itemPrices[item.id]}
-                      />
+                      <ItemCard key={item.id} item={item} />
                     </motion.div>
                   ))}
                 </div>
               </div>
-            ) : (
-              <p className="text-center text-failure">{error}</p>
+            )}
+            {error && (
+              <div>
+                <p className="text-center">No items found</p>
+              </div>
             )}
           </div>
         </section>
