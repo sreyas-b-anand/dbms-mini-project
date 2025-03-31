@@ -13,9 +13,9 @@ def register_user(username, email, password, role="user"):
     try:
         
         existing_user = User.query.filter_by(email=email).first()
-        if existing_user.email == email or existing_user.username == username:
-            return {"success": False, "message": "Email or username already in use"}
-
+        if existing_user:
+            if existing_user.email == email or existing_user.username == username:
+                return {"success": False, "message": "Email or username already in use"}
        
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 

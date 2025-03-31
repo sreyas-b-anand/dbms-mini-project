@@ -44,9 +44,9 @@ def register():
         result = register_user(username, email, password)
         
         if not result.get("success", False):
-            return jsonify(result), 403  # Forbidden (email already in use)
+            return jsonify(result), 403 
         
-        return jsonify(result), 201  # Created
+        return jsonify(result), 201  
 
     except Exception as e:
         print(f"Register Error: {e}")  # Debugging logs

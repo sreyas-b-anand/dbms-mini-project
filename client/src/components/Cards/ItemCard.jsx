@@ -69,22 +69,27 @@ const ItemCard = ({ item }) => {
         },
         {
           headers: {
-            Authorization: `Bearer ${user.token}`, // Fixed: Headers inside `headers` object
+            Authorization: `Bearer ${user.token}`,
             "Content-Type": "application/json",
           },
         }
       );
 
-      setCurrentItem((prev) => ({
-        ...prev,
-        current_price: response.data.current_price,
-      }));
       if (response.data.success) {
-        setIsDialogOpen(false);
-        setBidAmount("");
+        setCurrentItem((prev) => ({
+          ...prev,
+          current_price: response.data.current_price,
+        }));
+
         toast.success("Bid placed successfully!");
+
+        // Close the dialog with a slight delay
+        setTimeout(() => {
+          setIsDialogOpen(false);
+        }, 100);
+
+        setBidAmount("");
         refetch();
-        return;
       } else {
         toast.error(response.data.message);
       }
@@ -97,124 +102,125 @@ const ItemCard = ({ item }) => {
   const isEnded = timeRemaining === "Ended";
 
   return (
-    <Card className="w-56 rounded-lg py-2 px-1 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-border bg-background">
-      <div className="relative">
-        <div className="h-40 overflow-hidden bg-muted">
-          <img
-            loading="lazy"
-            src={currentItem.image_url || "/placeholder.svg"}
-            alt={currentItem.title}
-            className={`w-full rounded-md h-full px-2 ${
-              isEnded ? "grayscale opacity-90" : "hover:brightness-105"
-            }`}
-          />
-          <div className="absolute w-full inset-0 bg-gradient-to-t from-foreground/80 via-foreground/40 to-transparent " />
-        </div>
+    <>
+      <Card className="w-56 rounded-lg py-2 px-1 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-border bg-background">
+        <div className="relative">
+          <div className="h-40 overflow-hidden bg-muted">
+            <img
+              loading="lazy"
+              src={currentItem.image_url || "/placeholder.svg"}
+              alt={currentItem.title}
+              className={`w-full rounded-md h-full px-2 ${
+                isEnded ? "grayscale opacity-90" : "hover:brightness-105"
+              }`}
+            />
+            <div className="absolute w-full inset-0 bg-gradient-to-t from-foreground/80 via-foreground/40 to-transparent " />
+          </div>
 
-        <div className="absolute top-[120px] left-3 bg-background/90 backdrop-blur-sm rounded-md px-2.5 py-1 flex items-center gap-1 shadow-sm">
-          <DollarSign className="h-3.5 w-3.5 text-foreground" />
-          <span className="font-semibold text-foreground text-sm">
-            {currentItem.current_price}
-          </span>
-        </div>
+          <div className="absolute top-[120px] left-3 bg-background/90 backdrop-blur-sm rounded-md px-2.5 py-1 flex items-center gap-1 shadow-sm">
+            <DollarSign className="h-3.5 w-3.5 text-foreground" />
+            <span className="font-semibold text-foreground text-sm">
+              {currentItem.current_price}
+            </span>
+          </div>
 
-        <div
-          className={`absolute top-[120px] right-3 ${
-            isEnded ? "bg-muted text-foreground" : "bg-primary"
-          } text-background rounded-md px-2.5 py-1 text-sm flex items-center gap-1 shadow-sm`}
-        >
-          <Clock className="h-3.5 w-3.5" />
-          <span>{timeRemaining}</span>
-        </div>
+          <div
+            className={`absolute top-[120px] right-3 ${
+              isEnded ? "bg-muted text-foreground" : "bg-primary"
+            } text-background rounded-md px-2.5 py-1 text-sm flex items-center gap-1 shadow-sm`}
+          >
+            <Clock className="h-3.5 w-3.5" />
+            <span>{timeRemaining}</span>
+          </div>
 
-        {}
+          {}
 
-        {isEnded && currentItem.winner && (
-          <>
-            {item.status !== "Order Placed" ? (
-              <>
-                <div className="absolute top-2 w-full">
-                  <Suspense fallback={<Loader />}>
-                    <LazyCheckout item={item} />
-                  </Suspense>
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="absolute  top-1 px-3 py-2 bg-secondary p-3 w-full text-white rounded-md text-sm flex items-center justify-center gap-2 shadow-md">
-                  <Link to={`/delivery/${item.id}`}>Order placed</Link>
-                  <CircleCheckBig className="h-4 w-4" />
-                </div>
-              </>
-            )}
-          </>
-        )}
-      </div>
-
-      <CardContent className="py-1 px-2">
-        <h3 className="font-bold text-sm leading-tight mb-3 line-clamp-2 text-foreground">
-          {currentItem.title}
-        </h3>
-
-        <div className="flex flex-col gap-2">
-          {isDialogOpen && (
-            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Place a Bid</DialogTitle>
-                </DialogHeader>
-
-                <div className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="bidAmount">Bid Amount</Label>
-                    <br />
-                    <Label>Current Price : ${currentItem.current_price}</Label>
-                    <Input
-                      id="bidAmount"
-                      type="number"
-                      min={currentItem.current_price + 1}
-                      step="1"
-                      value={bidAmount}
-                      onChange={(e) => setBidAmount(e.target.value)}
-                    />
-                    {errorMessage && (
-                      <p className="text-sm text-red-500">{errorMessage}</p>
-                    )}
+          {isEnded && currentItem.winner && (
+            <>
+              {item.status !== "Order Placed" ? (
+                <>
+                  <div className="absolute top-2 w-full">
+                    <Suspense fallback={<Loader />}>
+                      <LazyCheckout item={item} />
+                    </Suspense>
                   </div>
-
-                  <Button
-                    className="w-full text-background"
-                    onClick={handleBidSubmit}
-                  >
-                    Submit Bid
-                  </Button>
-                </div>
-              </DialogContent>
-            </Dialog>
+                </>
+              ) : (
+                <>
+                  <div className="absolute  top-1 px-3 py-2 bg-secondary p-3 w-full text-white rounded-md text-sm flex items-center justify-center gap-2 shadow-md">
+                    <Link to={`/delivery/${item.id}`}>Order placed</Link>
+                    <CircleCheckBig className="h-4 w-4" />
+                  </div>
+                </>
+              )}
+            </>
           )}
-          <Button
-            variant="outlined"
-            className={`w-full text-sm py-1 h-9 ${
-              isEnded
-                ? "bg-muted opacity-100 cursor-not-allowed"
-                : "bg-accent text-background opacity-100"
-            }`}
-            disabled={isEnded}
-            onClick={() => setIsDialogOpen(!isDialogOpen)}
-          >
-            {isEnded ? "Auction Ended" : "Bid Now"}
-          </Button>
-          <Button
-            variant="outline"
-            className="w-full h-9 border-border text-foreground hover:bg-gray-200 flex items-center gap-1"
-            onClick={() => navigate(`/item/${currentItem.id}`)}
-          >
-            <span>More Details</span>
-            <ArrowRight className="h-3.5 w-3.5" />
-          </Button>
         </div>
-      </CardContent>
-    </Card>
+
+        <CardContent className="py-1 px-2">
+          <h3 className="font-bold text-sm leading-tight mb-3 line-clamp-2 text-foreground">
+            {currentItem.title}
+          </h3>
+
+          <div className="flex flex-col gap-2">
+            <Button
+              variant="outlined"
+              className={`w-full text-sm py-1 h-9 ${
+                isEnded
+                  ? "bg-muted opacity-100 cursor-not-allowed"
+                  : "bg-accent text-background opacity-100"
+              }`}
+              disabled={isEnded}
+              onClick={() => setIsDialogOpen(!isDialogOpen)}
+            >
+              {isEnded ? "Auction Ended" : "Bid Now"}
+            </Button>
+            <Button
+              variant="outline"
+              className="w-full h-9 border-border text-foreground hover:bg-gray-200 flex items-center gap-1"
+              onClick={() => navigate(`/item/${currentItem.id}`)}
+            >
+              <span>More Details</span>
+              <ArrowRight className="h-3.5 w-3.5" />
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Place a Bid</DialogTitle>
+          </DialogHeader>
+
+          <div className="space-y-4 flex items-start flex-col gap-3">
+            <div className="space-y-2">
+              <Label>Current Price: ${currentItem.current_price}</Label>
+              <br />
+              <Label htmlFor="bidAmount">Bid Amount</Label>
+              <Input
+                id="bidAmount"
+                type="number"
+                min={currentItem.current_price + 1}
+                step="1"
+                value={bidAmount}
+                onChange={(e) => setBidAmount(e.target.value)}
+              />
+              {errorMessage && (
+                <p className="text-sm text-red-500">{errorMessage}</p>
+              )}
+            </div>
+
+            <Button
+              className="w-full text-background"
+              onClick={handleBidSubmit}
+            >
+              Submit Bid
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
 

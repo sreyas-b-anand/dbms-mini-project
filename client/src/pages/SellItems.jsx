@@ -148,7 +148,7 @@ const SellItems = () => {
               <div className="flex flex-col items-center justify-center p-10 bg-muted/30 rounded-lg flex-1">
                 <Package className="h-12 w-12 text-muted-foreground mb-4" />
                 <p className="text-muted-foreground text-center mb-4">
-                  You haven&apos;t purchased any items yet.
+                  You haven&apos;t sold any items yet.
                 </p>
                 <button
                   className="px-3 py-2 bg-accent rounded-lg text-background hover:opacity-90 hover:cursor-pointer"

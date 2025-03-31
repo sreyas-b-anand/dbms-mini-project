@@ -98,7 +98,7 @@ def get_bidders(user, item_id):
             return jsonify({"message": "User is not authorized"}), 401
         
 
-        bid_list = Bids.query.filter_by(item_id=item_id).order_by(Bids.current_price.desc()).all()
+        bid_list = Bids.query.filter_by(item_id=item_id).order_by(Bids.created_at.desc()).all()
         
         if not bid_list:
             return jsonify({"success" : False,"message": "No bids found for this item", "bids": []}), 200
