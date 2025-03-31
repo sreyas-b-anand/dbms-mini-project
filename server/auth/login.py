@@ -10,13 +10,13 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 def login_user(email, password):
     """Authenticates a user and returns a JWT token with role"""
     try:
-        # Query user by email
+        
         user = User.query.filter_by(email=email).first()
 
         if user:
-            # Check if the provided password matches the stored hashed password
+            
             if bcrypt.checkpw(password.encode('utf-8'), user.password_hash.encode('utf-8')): 
-                # Generate JWT Token
+                
                 token_payload = {
                     "user_id": user.id,
                     "email": user.email,

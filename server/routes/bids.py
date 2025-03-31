@@ -16,7 +16,7 @@ def place_bid(user):
     item_id = data.get("item_id")
     bid_amount = data.get("bid_amount")
 
-    # Validate item existence and auction status
+    
     item = Item.query.get(item_id)
     if not item or item.auction_end < datetime.utcnow():
         return jsonify({"message": "Auction ended or item not found", "success": False}), 400
@@ -24,7 +24,7 @@ def place_bid(user):
     if bid_amount <= item.current_price:
         return jsonify({"message": "Bid must be higher than the current price", "success": False}), 400
 
-    # Fetch user details
+   
     user = User.query.get(user.id)
     if not user:
         return jsonify({"message": "User not found", "success": False}), 400
@@ -35,17 +35,17 @@ def place_bid(user):
     if user.id == item.seller_id:
         return jsonify({"message": "Can't bid on item you have listed", "success": False}), 200
 
-    # Find the previous highest bid
+    
     prev_bid = Bids.query.filter_by(item_id=item.id).order_by(Bids.current_price.desc()).first()
     if prev_bid:
-        prev_bid.winner_id = None  # Correctly setting winner_id to NULL
+        prev_bid.winner_id = None  
 
-    # Delete existing bid of the current user (if any)
+    
     existing_bid = Bids.query.filter_by(item_id=item_id, user_id=user.id).first()
     if existing_bid:
         db.session.delete(existing_bid)
 
-    # Insert the new bid
+   
     new_bid = Bids(
         item_id=item_id,
         user_id=user.id,
@@ -53,11 +53,11 @@ def place_bid(user):
         user_email=user.email,
         current_price=bid_amount,
         created_at=datetime.utcnow(),
-        winner_id=user.id  # New bidder is now the winner
+        winner_id=user.id 
     )
     db.session.add(new_bid)
 
-    # Update item price
+    
     item.current_price = bid_amount
     db.session.commit()
 
@@ -88,25 +88,25 @@ def get_item(user ,item_id):
         "winner": winner
     })
 
-@bids.route("/get-bidders/<id>", methods=["GET"])
+@bids.route("/get-bidders/<int:item_id>", methods=["GET"])
 @token_required
-def get_bidders(user, id):
+def get_bidders(user, item_id):
     """Fetch all bidders for a given item."""
     try:
-        # Ensure user is authenticated
+        
         if not user:
             return jsonify({"message": "User is not authorized"}), 401
         
-        # Fetch bids for the given item_id
-        bid_list = Bids.query.filter_by(item_id=id).order_by(Bids.current_price.desc()).all()
+
+        bid_list = Bids.query.filter_by(item_id=item_id).order_by(Bids.current_price.desc()).all()
         
         if not bid_list:
-            return jsonify({"message": "No bids found for this item", "bids": []}), 200
+            return jsonify({"success" : False,"message": "No bids found for this item", "bids": []}), 200
 
-        # Format the response
+      
         bid_data = [
             {
-                "id": bid.id,
+                "id": bid.bid_id,
                 "username": bid.username,
                 "amount": bid.current_price,
                 "bid_time": bid.created_at
@@ -115,10 +115,10 @@ def get_bidders(user, id):
         ]
         logging.info(bid_data)
 
-        return jsonify({"success": True, "bids": bid_data}), 200
+        return jsonify({"success": True, "bids": bid_data , "message":"Fetch successfull"}), 200
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return jsonify({"message": str(e)}), 500
 
 
 @bids.route("/complete-purchase" , methods=["POST"])
@@ -164,10 +164,7 @@ def complete_item_purchase(user):
         )
         db.session.add(new_history)
         db.session.commit()
-        #change item status to sold done
-        # deduct wallet done
-        #add to seller 's wallet done
-        #add to history
+       
         return jsonify({"message":"Order placed" , "success":True}),200
             
     except Exception as e:
@@ -175,7 +172,6 @@ def complete_item_purchase(user):
         logging.info(e)
         return jsonify({f"message":"Error occured {e}" , "success":False}),500
     
-
 
 @bids.route("/get-bids", methods=["GET"])
 @token_required
@@ -191,12 +187,12 @@ def get_bids(user):
 
         bid_data = [
             {
-                "id": bid.Bids.bid_id,
-                "item_name": bid.title,  # Extracted title from the Items table
-                "amount": bid.Bids.current_price,
-                "bid_time": bid.Bids.created_at
+                "id": bid.bid_id,
+                "item_name": item_title, 
+                "amount": bid.current_price,
+                "bid_time": bid.created_at,
             }
-            for bid in bids
+            for bid, item_title in bids  
         ]
 
         return jsonify({"message": "Fetch successful", "success": True, "bids": bid_data}), 200

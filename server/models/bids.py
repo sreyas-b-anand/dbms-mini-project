@@ -10,8 +10,8 @@ class Bids(db.Model):
     item_id = Column(Integer, nullable=False)
     user_id = Column(Integer, nullable=False)
     current_price = Column(Integer , nullable=False)
-    user_email = Column(String(100), nullable=False)  # Increased length
-    username = Column(String(50), nullable=False)  # Increased length
+    user_email = Column(String(100), nullable=False)  
+    username = Column(String(50), nullable=False)  
     created_at = Column(DateTime, default=datetime.utcnow)
     winner_id = Column(Integer)
 

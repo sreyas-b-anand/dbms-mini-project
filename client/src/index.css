@@ -4,9 +4,9 @@
 :root {
   font-family: Poppins;
   /* Primary Colors */
-  --primary: #052558; /* Vibrant Blue - main brand color */
+  --primary: #020508; /* Vibrant Blue - main brand color */
   --secondary: #10b981; /* Emerald Green - for success states and CTAs */
-  --accent: rgb(22, 21, 21); /* Purple - for highlights and accents */
+  --accent: #020508; /* Purple - for highlights and accents */
 
   /* Neutrals */
   --background: #ffffff; /* Pure White - main background */

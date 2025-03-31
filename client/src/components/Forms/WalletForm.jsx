@@ -24,7 +24,7 @@ export default function WalletForm({ onWalletOpen }) {
   const [amount, setAmount] = useState("");
   const [error, setError] = useState(null);
   const queryClient = useQueryClient();
-  const { wallet , refetch} = useWalletContext(); // Assuming wallet is fetched in a query
+  const { wallet, refetch } = useWalletContext(); // Assuming wallet is fetched in a query
 
   const addMutation = useMutation({
     mutationFn: async (amount) => {
@@ -41,13 +41,13 @@ export default function WalletForm({ onWalletOpen }) {
       if (!data.success) {
         throw new Error(data.message || "Failed to add funds");
       }
-      return data.new_balance; 
+      return data.new_balance;
     },
     onSuccess: (newBalance) => {
-      queryClient.setQueryData(["wallet"], newBalance); 
-      refetch()
+      queryClient.setQueryData(["wallet"], newBalance);
+      refetch();
       toast.success("Funds added successfully!");
-      onWalletOpen()
+      onWalletOpen();
     },
     onError: (error) => {
       toast.error(error.response?.data?.message || "Something went wrong.");
@@ -79,11 +79,9 @@ export default function WalletForm({ onWalletOpen }) {
           {error && <p className="text-red-500">{error}</p>}
 
           {/* Current Balance */}
-          <div className="bg-gray-800 p-4 rounded-lg mb-4">
-            <p className="text-sm text-background py-2">Current Balance</p>
-            <p className="text-3xl font-bold text-background">
-              ${wallet || 0}
-            </p>
+          <div className="bg-background/80 border-2 p-4 rounded-lg mb-4">
+            <p className="text-sm text-foreground py-2">Current Balance</p>
+            <p className="text-3xl font-bold text-foreground">${wallet || 0}</p>
           </div>
 
           {/* UPI ID Input */}
@@ -94,7 +92,7 @@ export default function WalletForm({ onWalletOpen }) {
               type="text"
               placeholder="Enter UPI ID"
               required
-              className="bg-gray-900 border-gray-700 text-white focus:ring-primary"
+              className="bg-background/80 border-gray-700 text-foreground focus:ring-primary"
             />
           </div>
 
@@ -108,7 +106,7 @@ export default function WalletForm({ onWalletOpen }) {
               value={amount}
               onChange={(e) => setAmount(Number(e.target.value))}
               required
-              className="bg-gray-900 border-gray-700 text-white focus:ring-primary"
+              className="bg-background/80 border-gray-700 text-foreground focus:ring-primary"
             />
           </div>
         </CardContent>
@@ -117,7 +115,7 @@ export default function WalletForm({ onWalletOpen }) {
         <CardFooter className="flex items-center justify-center gap-2 py-4">
           <Button
             type="submit"
-            className="w-full bg-primary hover:bg-primary/80 hover:cursor-pointer"
+            className="w-full bg-primary hover:bg-primary/90 hover:cursor-pointer"
             disabled={addMutation.isLoading}
           >
             <span className="flex items-center gap-2 text-background">
@@ -128,7 +126,7 @@ export default function WalletForm({ onWalletOpen }) {
 
           <Button
             onClick={onWalletOpen}
-            className="w-full bg-gray-700 border-gray-600 text-white hover:bg-gray-600 hover:cursor-pointer"
+            className="w-full bg-background/80  border border-gray-600 text-foreground hover:opacity-[80%] hover:bg-background/80 hover:cursor-pointer"
           >
             <span className="flex items-center gap-2">
               <CircleX size={30} />

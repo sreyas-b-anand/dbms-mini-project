@@ -3,9 +3,9 @@ from models.history import History
 
 def get_purchase_history(user):
     try:
-        user_id = user.id  # Get logged-in user ID
+        user_id = user.id  
         
-        # Fetch history where the user is the buyer
+        
         history_records = History.query.filter_by(buyer_id=user_id).all()
 
         if not history_records:

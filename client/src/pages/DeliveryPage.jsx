@@ -59,8 +59,8 @@ export default function DeliveryPage() {
         setItem(response.data.item);
 
         // Generate delivery dates
-        
-        const orderedDate = new Date()
+
+        const orderedDate = new Date();
         const dispatchedDate = addDays(
           orderedDate,
           Math.floor(Math.random() * 2 + 1)
@@ -96,145 +96,154 @@ export default function DeliveryPage() {
   }
   return (
     <div className="flex-1  bg-background p-3 m-3 rounded-lg overflow-hidden">
-     <div className="overflow-y-auto scroll-auto h-full">
-     <div className="container max-w-4xl mx-auto px-4 py-8">
-        <Link to={'/dashboard'}  className="mb-6 flex items-center gap-2 py-3">
-          <ArrowLeft size={16} />
-          Back to Home
-        </Link>
+      <div className="overflow-y-auto scroll-auto h-full">
+        <div className="container  mx-auto px-4 py-8 w-full">
+          <div>
+          <Link to={"/dashboard"} className="mb-6 px-6 flex items-center gap-2 py-3  rounded-lg text-foreground underline">
+            <ArrowLeft size={16} />
+            Back to Home
+          </Link>
 
-        <div className="flex flex-col gap-8">
-          {/* Delivery Status Header */}
-          <div className="text-center">
-            <Badge
-              className={`px-4 py-1 text-sm text-background ${
-                isDelivered ? "bg-secondary" : "bg-primary"
-              }`}
-            >
-              {isDelivered ? "Delivered" : "In Transit"}
-            </Badge>
-            <h1 className="text-3xl font-bold mt-2 text-text">
-              Order #{item.id}
-            </h1>
-            <p className="text-muted-foreground">
-              {isDelivered
-                ? `Delivered on ${formatDate(deliveryDates.delivered)}`
-                : `Estimated delivery by ${formatDate(
-                    deliveryDates.delivered
-                  )}`}
-            </p>
           </div>
+          <div className="flex flex-col gap-8">
+            {/* Delivery Status Header */}
+            <div className="text-center ">
+              <Badge
+                className={`px-4 py-1 text-sm text-background ${
+                  isDelivered ? "bg-secondary" : "bg-primary"
+                }`}
+              >
+                {isDelivered ? "Delivered" : "In Transit"}
+              </Badge>
+              <h1 className="text-3xl font-bold mt-2 text-text">
+                Order #{item.id}
+              </h1>
+              <p className="text-muted-foreground">
+                {isDelivered
+                  ? `Delivered on ${formatDate(deliveryDates.delivered)}`
+                  : `Estimated delivery by ${formatDate(
+                      deliveryDates.delivered
+                    )}`}
+              </p>
+            </div>
 
-          {/* Item Details */}
-          {item && (
-            <Card className="border-none shadow-md">
+            {/* Item Details */}
+            {item && (
+              <Card className=" shadow-sm border rounded-lg">
+                <CardHeader>
+                  <CardTitle className="text-lg">Item Details</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex flex-col md:flex-row gap-6">
+                    <div className="flex-shrink-0">
+                      <img
+                        src={item.image_url || "/placeholder.svg"}
+                        alt={item.title}
+                        className="w-full md:w-[200px] h-auto rounded-md object-cover"
+                      />
+                    </div>
+                    <div className="flex flex-col justify-between">
+                      <div>
+                        <h3 className="text-xl font-semibold">{item.title}</h3>
+                        <p className="text-muted-foreground mt-1">
+                          {item.description}
+                        </p>
+                      </div>
+                      <div className="mt-4 md:mt-0">
+                        <div className="flex items-center gap-2">
+                          <DollarSign size={18} className="text-primary" />
+                          <span className="text-xl font-bold">
+                            {item.current_price}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2 mt-2">
+                          <ShoppingBag
+                            size={16}
+                            className="text-muted-foreground"
+                          />
+                          <span className="text-sm text-muted-foreground">
+                            Order ID: {item.id}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+            {/* Delivery Timeline */}
+            <Card className="border rounded-lg shadow-sm">
               <CardHeader>
-                <CardTitle className="text-lg">Item Details</CardTitle>
+                <CardTitle className="text-lg">Delivery Timeline</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="flex flex-col md:flex-row gap-6">
-                  <div className="flex-shrink-0">
-                    <img
-                      src={item.image_url || "/placeholder.svg"}
-                      alt={item.title}
-                      className="w-full md:w-[200px] h-auto rounded-md object-cover"
-                    />
-                  </div>
-                  <div className="flex flex-col justify-between">
-                    <div>
-                      <h3 className="text-xl font-semibold">{item.title}</h3>
-                      <p className="text-muted-foreground mt-1">
-                        {item.description}
+                <div className="space-y-6">
+                  <TimelineItem
+                    icon={<ShoppingBag size={20} />}
+                    title="Order Placed"
+                    date={formatDate(deliveryDates.ordered)} // Fix: Format the date
+                    isCompleted={true}
+                  />
+                  <TimelineItem
+                    icon={<Package size={20} />}
+                    title="Order Dispatched"
+                    date={formatDate(deliveryDates.dispatched)} // Fix: Format the date
+                    isCompleted={new Date() > deliveryDates.dispatched}
+                  />
+                  <TimelineItem
+                    icon={<Truck size={20} />}
+                    title="Out for Delivery"
+                    date={formatDate(deliveryDates.outForDelivery)} // Fix: Format the date
+                    isCompleted={new Date() > deliveryDates.outForDelivery}
+                  />
+                  <TimelineItem
+                    icon={<CheckCircle size={20} />}
+                    title="Delivered"
+                    date={formatDate(deliveryDates.delivered)} // Fix: Format the date
+                    isCompleted={isDelivered}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Delivery Address */}
+            <Card className="border rounded-lg shadow-sm">
+              <CardHeader>
+                <CardTitle className="text-lg">Delivery Address</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-start gap-4">
+                  <MapPin
+                    size={24}
+                    className="text-primary mt-1 flex-shrink-0"
+                  />
+                  <div>
+                    <h3 className="font-semibold">{profileData.full_name}</h3>
+                    <p className="text-muted-foreground">
+                      {profileData.address}
+                    </p>
+                    <p className="text-muted-foreground">
+                      {profileData.city}, {profileData.state}{" "}
+                      {profileData.zipCode}
+                    </p>
+                    <Separator className="my-3" />
+                    <div className="flex flex-col gap-1">
+                      <p className="text-sm">
+                        <span className="font-medium">Email:</span>{" "}
+                        {profileData.email}
                       </p>
-                    </div>
-                    <div className="mt-4 md:mt-0">
-                      <div className="flex items-center gap-2">
-                        <DollarSign size={18} className="text-primary" />
-                        <span className="text-xl font-bold">{item.current_price}</span>
-                      </div>
-                      <div className="flex items-center gap-2 mt-2">
-                        <ShoppingBag
-                          size={16}
-                          className="text-muted-foreground"
-                        />
-                        <span className="text-sm text-muted-foreground">
-                          Order ID: {item.id}
-                        </span>
-                      </div>
+                      <p className="text-sm">
+                        <span className="font-medium">Phone:</span>{" "}
+                        {profileData.phone}
+                      </p>
                     </div>
                   </div>
                 </div>
               </CardContent>
             </Card>
-          )}
-          {/* Delivery Timeline */}
-          <Card className="border-none shadow-md">
-            <CardHeader>
-              <CardTitle className="text-lg">Delivery Timeline</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-6">
-                <TimelineItem
-                  icon={<ShoppingBag size={20} />}
-                  title="Order Placed"
-                  date={formatDate(deliveryDates.ordered)} // Fix: Format the date
-                  isCompleted={true}
-                />
-                <TimelineItem
-                  icon={<Package size={20} />}
-                  title="Order Dispatched"
-                  date={formatDate(deliveryDates.dispatched)} // Fix: Format the date
-                  isCompleted={new Date() > deliveryDates.dispatched}
-                />
-                <TimelineItem
-                  icon={<Truck size={20} />}
-                  title="Out for Delivery"
-                  date={formatDate(deliveryDates.outForDelivery)} // Fix: Format the date
-                  isCompleted={new Date() > deliveryDates.outForDelivery}
-                />
-                <TimelineItem
-                  icon={<CheckCircle size={20} />}
-                  title="Delivered"
-                  date={formatDate(deliveryDates.delivered)} // Fix: Format the date
-                  isCompleted={isDelivered}
-                />
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Delivery Address */}
-          <Card className="border-none shadow-md">
-            <CardHeader>
-              <CardTitle className="text-lg">Delivery Address</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-start gap-4">
-                <MapPin size={24} className="text-primary mt-1 flex-shrink-0" />
-                <div>
-                  <h3 className="font-semibold">{profileData.full_name}</h3>
-                  <p className="text-muted-foreground">{profileData.address}</p>
-                  <p className="text-muted-foreground">
-                    {profileData.city}, {profileData.state}{" "}
-                    {profileData.zipCode}
-                  </p>
-                  <Separator className="my-3" />
-                  <div className="flex flex-col gap-1">
-                    <p className="text-sm">
-                      <span className="font-medium">Email:</span>{" "}
-                      {profileData.email}
-                    </p>
-                    <p className="text-sm">
-                      <span className="font-medium">Phone:</span>{" "}
-                      {profileData.phone}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          </div>
         </div>
       </div>
-     </div>
     </div>
   );
 }

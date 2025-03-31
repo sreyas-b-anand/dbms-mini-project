@@ -1,11 +1,18 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../components/ui/table";
+import {
+  Table,
+  TableHeader,
+  TableRow,
+  TableHead,
+  TableBody,
+  TableCell,
+} from "../components/ui/table";
 import { Card } from "../components/ui/card";
 import { Skeleton } from "../components/ui/skeleton";
 import { useAuthContext } from "../hooks/useAuthContext";
-import { User, DollarSign, Calendar , ShoppingBag } from "lucide-react";
-
+import { ShoppingBag , Package} from "lucide-react";
+import { Link } from "react-router-dom";
 const History = () => {
   const { user } = useAuthContext();
   const [history, setHistory] = useState([]);
@@ -15,12 +22,15 @@ const History = () => {
   useEffect(() => {
     const fetchHistory = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:5000/history/get-history", {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        });
-        setError(null)
+        const response = await axios.get(
+          "http://127.0.0.1:5000/history/get-history",
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        );
+        setError(null);
         setHistory(response.data.history);
       } catch (error) {
         console.error("Error fetching history:", error);
@@ -33,21 +43,21 @@ const History = () => {
   }, []);
 
   return (
-    <Card className="p-4 m-3 bg-background rounded-lg overflow-hidden">
-      <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-        <ShoppingBag className="text-primary" /> Purchase History
+    <Card className="p-4 m-3 bg-background rounded-lg overflow-hidden flex-1">
+      <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 py-6 p-3 border-b border-border">
+        <ShoppingBag className="text-primary " /> Purchase History
       </h2>
       {loading ? (
         <Skeleton className="h-20 w-full bg-gray-300" />
       ) : history ? (
         <div className="overflow-x-auto">
           <Table>
-            <TableHeader>
+            <TableHeader className="bg-muted">
               <TableRow>
-                <TableHead><ShoppingBag /> Item</TableHead>
-                <TableHead><DollarSign /> Price</TableHead>
-                <TableHead><User /> Seller ID</TableHead>
-                <TableHead><Calendar /> Purchase Date</TableHead>
+                <TableHead>Item</TableHead>
+                <TableHead>Price</TableHead>
+                <TableHead> Seller ID</TableHead>
+                <TableHead> Purchase Date</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -63,7 +73,13 @@ const History = () => {
           </Table>
         </div>
       ) : (
-        <p className="text-gray-500">No purchase history available.</p>
+        <div className="flex flex-col items-center justify-center p-10 bg-muted/30 rounded-lg flex-1">
+              <Package className="h-12 w-12 text-muted-foreground mb-4" />
+              <p className="text-muted-foreground text-center mb-4">You haven&apos;t purchased any items yet.</p>
+              <Link to={'/dashboard'} className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors">
+                Browse Auctions
+              </Link>
+            </div>
       )}
       {error && <p className="text-red-500">{error}</p>}
     </Card>

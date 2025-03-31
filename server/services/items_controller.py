@@ -13,7 +13,7 @@ def get_items():
     except Exception as e:
         return {"success": False, "message": f"An error occurred: {str(e)}"}
 
-#fetch an item
+
 def get_an_item(id):
     try:
         item = Item.query.filter_by(id=id).first()
@@ -51,7 +51,7 @@ def add_an_item(data , user_id):
             )
         
 
-        # Add item to database
+        
         db.session.add(new_item)
         db.session.commit()
 
@@ -93,15 +93,3 @@ def delete_item(item_id, user):
         return {"success": False, "message": str(e)}
 
 
-#    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-#     title = db.Column(db.String(255), nullable=False)
-#     description = db.Column(db.Text, nullable=True)
-#     image_url = db.Column(db.String(500), nullable=True)
-#     starting_price = db.Column(db.Float, nullable=False)
-#     current_price = db.Column(db.Float, nullable=False)
-#     category = db.Column(db.String(100), nullable=True)
-#     condition = db.Column(db.String(50), nullable=True)  # Example: 'new', 'used'
-#     seller_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-#     auction_end = db.Column(db.DateTime, nullable=False)
-#     status = db.Column(db.String(50), default="active", nullable=False)
-#     created_at = db.Column(db.DateTime, default=func.now(), nullable=False)

@@ -34,4 +34,4 @@ def create_app(config=None):
 app = create_app()
 
 if __name__ == '__main__':
-    app.run(debug=True)  # Start with socketio
+    app.run(debug=True) 

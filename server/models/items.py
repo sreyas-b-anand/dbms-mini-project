@@ -11,13 +11,13 @@ class Item(db.Model):
     starting_price = db.Column(db.Float, nullable=False)
     current_price = db.Column(db.Float, nullable=False)
     category = db.Column(db.String(100), nullable=True)
-    condition = db.Column(db.String(50), nullable=True)  # Example: 'new', 'used'
+    condition = db.Column(db.String(50), nullable=True)  
     seller_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     auction_end = db.Column(db.DateTime, nullable=False)
     status = db.Column(db.String(50), default="active", nullable=False)
     created_at = db.Column(db.DateTime, default=func.now(), nullable=False)
     winner_id = db.Column(db.Integer, nullable=True)  
-    # Relationship with User model (assuming 'User' model exists)
+   
     seller = db.relationship("User", backref="items")
 
     def to_dict(self):

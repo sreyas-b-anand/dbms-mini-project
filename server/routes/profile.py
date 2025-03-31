@@ -15,7 +15,7 @@ def fetchUser(user):
 
         user = User.query.filter_by(email = user.email).first()
 
-        # Convert SQLAlchemy object to dictionary for JSON response
+       
         user_data = {
             "id": user.id,
             "full_name":user.full_name if user.full_name else "",
@@ -46,30 +46,30 @@ def updateProfile(user):
     try:
         print("Update request received:", request.get_json())
         
-        # If token_required worked, we should have a current_user
+        
         if not user:
             return jsonify({"success": False, "message": "Unauthorized access"}), 401
             
         data = request.get_json()
         
-        # Extract fields that we want to update
+       
         address = data.get('address')
         phone = data.get('phone')
         
-        # Find the user in the database
+       
         user_info = User.query.filter_by(id = user.id).first()
         
         if not user_info:
             return jsonify({"success": False, "message": "User not found"}), 404
         
-        # Update fields if they are provided
+       
         if address is not None:
             user_info.address = address
             
         if phone is not None:
             user_info.phone = phone
         
-        # Commit changes to database
+       
         db.session.commit()
         
         return jsonify({
@@ -88,7 +88,7 @@ def update_profile(user):
     try:
         data = request.get_json()
         
-        # Extract fields from request
+       
         full_name = data.get('full_name')
         address = data.get('address')
         phone = data.get('phone')
@@ -97,12 +97,12 @@ def update_profile(user):
         zip_code = data.get('zip_code')
         country = data.get('country')
         
-        # Fetch user from DB
+        
         user_info = User.query.filter_by(id=user.id).first()
         if not user_info:
             return jsonify({"success": False, "message": "User not found"}), 404
         
-        # Update user fields
+        
         if full_name is not None:
             user_info.full_name = full_name
         if address is not None:
@@ -118,7 +118,7 @@ def update_profile(user):
         if country is not None:
             user_info.country = country
         
-        # Commit changes
+       
         db.session.commit()
         
         return jsonify({"success": True, "message": "Profile updated successfully"}), 200

@@ -4,7 +4,7 @@ from services import add_wallet ,get_wallet , deduct_wallet
 
 wallet = Blueprint("wallet", __name__)
 
-@wallet.route("/add-wallet", methods=['POST'])  # Ensure POST is allowed
+@wallet.route("/add-wallet", methods=['POST'])  
 @token_required
 def add_to_wallet(user):  
     try:
@@ -17,7 +17,7 @@ def add_to_wallet(user):
         if amount is None:
             return jsonify({"message": "Amount is required", "success": False}), 400
 
-        result = add_wallet(user.id, amount)  # ✅ Use user.id
+        result = add_wallet(user.id, amount) 
 
         return jsonify(result), 200 if result["success"] else 400
 

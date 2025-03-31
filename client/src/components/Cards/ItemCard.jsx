@@ -1,26 +1,22 @@
 /* eslint-disable react/prop-types */
 import PropTypes from "prop-types";
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import axios from "axios";
-import { DollarSign, Clock, ArrowRight, Trophy } from "lucide-react";
+import { DollarSign, Clock, ArrowRight, CircleCheckBig } from "lucide-react";
 import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
 import { getTimeRemaining } from "../../lib/getTimeRemaining";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "../ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { toast } from "sonner";
 import { useItems } from "../../hooks/useItems";
+import Loader from "../utils/Loader";
 
 const API_URL = "http://127.0.0.1:5000/bids";
-
+const LazyCheckout = lazy(() => import("../../components/Cards/CheckoutCard"));
 const ItemCard = ({ item }) => {
   const [currentItem, setCurrentItem] = useState(item);
   const { refetch } = useItems();
@@ -131,31 +127,26 @@ const ItemCard = ({ item }) => {
           <span>{timeRemaining}</span>
         </div>
 
+        {}
+
         {isEnded && currentItem.winner && (
           <>
-            {item.status !== 'Order Placed' ?(
-            <>
-            <div className="absolute w-full top-1 px-3 py-2 bg-green-600 text-white rounded-md text-sm flex items-center gap-2 shadow-md">
-              <Trophy className="h-4 w-4" />
-              <span>You Won</span>
-              <div className="bg-white rounded-lg  p-1">
-                <Link
-                  to={`/checkout/${item.id}`}
-                  className="flex text-foreground items-center justify-center gap-2 text-sm"
-                >
-                  Checkout <ArrowRight className="h-3 w-3" />
-                </Link>
-              </div>
-            </div>
-            </>):(
+            {item.status !== "Order Placed" ? (
               <>
-              <div className="absolute  top-1 px-3 py-2 bg-green-600 p-3 w-full text-white rounded-md text-sm flex items-center justify-center gap-2 shadow-md">
-                <Link to={`/delivery/${item.id}`}>Order placed</Link>
-                <ArrowRight className="h-4 w-4"/>
-              </div>
+                <div className="absolute top-2 w-full">
+                  <Suspense fallback={<Loader />}>
+                    <LazyCheckout item={item} />
+                  </Suspense>
+                </div>
               </>
-            )
-          }
+            ) : (
+              <>
+                <div className="absolute  top-1 px-3 py-2 bg-secondary p-3 w-full text-white rounded-md text-sm flex items-center justify-center gap-2 shadow-md">
+                  <Link to={`/delivery/${item.id}`}>Order placed</Link>
+                  <CircleCheckBig className="h-4 w-4" />
+                </div>
+              </>
+            )}
           </>
         )}
       </div>
@@ -191,7 +182,10 @@ const ItemCard = ({ item }) => {
                     )}
                   </div>
 
-                  <Button className="w-full" onClick={handleBidSubmit}>
+                  <Button
+                    className="w-full text-background"
+                    onClick={handleBidSubmit}
+                  >
                     Submit Bid
                   </Button>
                 </div>
@@ -206,7 +200,7 @@ const ItemCard = ({ item }) => {
                 : "bg-accent text-background opacity-100"
             }`}
             disabled={isEnded}
-            onClick={()=>setIsDialogOpen(!isDialogOpen)}
+            onClick={() => setIsDialogOpen(!isDialogOpen)}
           >
             {isEnded ? "Auction Ended" : "Bid Now"}
           </Button>

@@ -59,7 +59,7 @@ const SellItems = () => {
   const onModalAction = () => {
     setDeleteModalOpen(!isDeleteModalOpen);
   };
- 
+
   return (
     <>
       {isSellFormOpen && (
@@ -102,8 +102,8 @@ const SellItems = () => {
           </div>
           <div className="flex flex-1 gap-3 flex-wrap w-full overflow-hidden">
             {isLoading && (
-              <div className="outer h-[500px] px-3 py-3">
-                <div className="inner grid sm:grid-cols-2 lg:grid-cols-3  xl:grid-cols-4 gap-4 place-items-center py-6">
+              <div className="outer h-[500px] px-3 py-3 w-full">
+                <div className="inner grid sm:grid-cols-2 lg:grid-cols-3   xl:grid-cols-4 gap-4 place-items-center py-6">
                   <SkeletonCard />
                   <SkeletonCard />
                   <SkeletonCard />
