@@ -16,7 +16,7 @@ class Item(db.Model):
     auction_end = db.Column(db.DateTime, nullable=False)
     status = db.Column(db.String(50), default="active", nullable=False)
     created_at = db.Column(db.DateTime, default=func.now(), nullable=False)
-   
+    winner_id = db.Column(db.Integer, nullable=True)  
     # Relationship with User model (assuming 'User' model exists)
     seller = db.relationship("User", backref="items")
 
@@ -33,6 +33,7 @@ class Item(db.Model):
             "category": self.category,
             "condition": self.condition,
             "seller_id": self.seller_id,
+            "winner_id":self.winner_id if self.winner_id else None,
             "auction_end": self.auction_end.isoformat(),
             "status": self.status,
             "created_at": self.created_at.isoformat()

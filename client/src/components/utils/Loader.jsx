@@ -1,21 +1,14 @@
-import { motion } from "framer-motion";
-import '../../styles/Loader.css'
-const Loader = () => {
-  return (
-    <div className="flex-1 flex items-center justify-center">
-      <motion.div
-      className="loader"
-      animate={{
-        rotate: 360,
-      }}
-      transition={{
-        repeat: Infinity,
-        duration: 0.8,
-        ease: "linear",
-      }}
-    />
-    </div>
-  );
-};
+import { Bouncy } from 'ldrs/react'
+import 'ldrs/react/Bouncy.css'
 
-export default Loader;
+// Default values shown
+const Loader = ()=>{
+  return (
+<div className='flex-1 items-center justify-center flex'>
+
+  <Bouncy color='black' size={20}/>
+</div>
+  )
+}
+
+export default Loader
