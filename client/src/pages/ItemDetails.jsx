@@ -15,7 +15,6 @@ import {
 import { useAuthContext } from "../hooks/useAuthContext";
 import { Alert, AlertDescription } from "../components/ui/alert";
 import { formatCurrency } from "../lib/formatCurrency";
-import { formatRelativeTime } from "../lib/formatRelativeTime";
 import Loader from "../components/utils/Loader";
 import axios from "axios";
 import { toast } from "sonner";
@@ -27,7 +26,7 @@ export default function ItemDetails() {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useAuthContext();
- 
+
   const [bids, setBids] = useState([]);
 
   useEffect(() => {
@@ -60,7 +59,6 @@ export default function ItemDetails() {
 
         setItem(json.item);
         // Set initial bid amount to current price + 10 or 10% more, whichever is greater
-
       } catch (err) {
         setError(err.message);
       } finally {
@@ -92,8 +90,6 @@ export default function ItemDetails() {
 
     fetchBids();
   }, [id, user]);
-
-  
 
   if (isLoading) {
     return (
@@ -230,7 +226,7 @@ export default function ItemDetails() {
                           </TableCell>
                           <TableCell>{formatCurrency(bid.amount)}</TableCell>
                           <TableCell className="text-foreground/70">
-                            {Number(formatRelativeTime(bid.bid_time))}
+                            {bid.bid_time.split(' ')[0] + bid.bid_time.split(' ')[1] + ' ' + bid.bid_time.split(' ')[2] + ' ' +bid.bid_time.split(' ')[3] }
                           </TableCell>
                         </TableRow>
                       ))}

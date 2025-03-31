@@ -55,7 +55,11 @@ export default function Profile() {
   };
 
   if (isLoading)
-    return <div className="flex justify-center p-10"><Loader /></div>;
+    return (
+      <div className="flex justify-center p-10">
+        <Loader />
+      </div>
+    );
   if (error) return <div className="text-red-500 text-center">{error}</div>;
 
   return (
@@ -100,18 +104,13 @@ export default function Profile() {
         <div className="pt-20 p-6">
           {isEditing ? (
             <form onSubmit={handleSubmit} className="space-y-4">
-              {["username", "address", "phone"].map((field) => (
+              {["address", "phone"].map((field) => (
                 <div key={field}>
                   <label className="block text-sm font-medium text-foreground capitalize">
                     {field}
                   </label>
                   <input
-                    type={
-                      
-                        field === "phone"
-                        ? "tel"
-                        : "text"
-                    }
+                    type={field === "phone" ? "tel" : "text"}
                     name={field}
                     value={profileData?.[field] || ""}
                     onChange={handleInputChange}
