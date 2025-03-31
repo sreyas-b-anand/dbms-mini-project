@@ -1,6 +1,6 @@
 import { useState } from "react";
 import SellItemForm from "../components/Forms/SellItemForm";
-import { ShoppingBag } from "lucide-react";
+import { ShoppingBag, Package } from "lucide-react";
 import { motion } from "framer-motion";
 import ListedItemCard from "../components/Cards/ListedItemCard";
 import { useAuthContext } from "../hooks/useAuthContext";
@@ -145,9 +145,21 @@ const SellItems = () => {
               )}
             </div>
             {error && (
-              <main>
-                <p className="text-center">No items to show</p>
-              </main>
+              <div className="flex flex-col items-center justify-center p-10 bg-muted/30 rounded-lg flex-1">
+                <Package className="h-12 w-12 text-muted-foreground mb-4" />
+                <p className="text-muted-foreground text-center mb-4">
+                  You haven&apos;t purchased any items yet.
+                </p>
+                <button
+                  className="px-3 py-2 bg-accent rounded-lg text-background hover:opacity-90 hover:cursor-pointer"
+                  onClick={onSellFormOpen}
+                >
+                  <span className="flex items-center justify-center gap-3">
+                    <ShoppingBag size={18} />
+                    Sell an item
+                  </span>
+                </button>
+              </div>
             )}
           </div>
         </section>
