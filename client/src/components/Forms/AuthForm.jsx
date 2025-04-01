@@ -168,7 +168,7 @@ const Form = () => {
         <div className="flex items-center mb-6 ">
           <img
             loading="lazy"
-            className="w-12 h-12 rounded-full mr-3"
+            className="w-12 h-12 object-contain rounded-full mr-3"
             src={Logo}
             alt="logo"
           />

@@ -8,7 +8,7 @@ history = Blueprint("history" , __name__)
 def get_history(user):
     try:
         if not user:
-            return jsonify({"message" : "User not authorized" , "success" : False}),400
+            return jsonify({"message" : "User not authorized" , "success" : False}),401
         
         result = get_purchase_history(user)
         if not result:

@@ -28,6 +28,7 @@ def create_app(config=None):
     app.register_blueprint(wallet, url_prefix="/wallet")
     app.register_blueprint(bids, url_prefix="/bids")
     app.register_blueprint(history, url_prefix="/history")
+   
 
     return app
 

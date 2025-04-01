@@ -17,8 +17,7 @@ def get_items():
 def get_an_item(id):
     try:
         item = Item.query.filter_by(id=id).first()
-        #print(item)
-
+        
         if not item:
              return {"success": False, "message": "No items available"}
         return {"success": True,"message": "Items fetched successfully", "item": item.to_dict()}

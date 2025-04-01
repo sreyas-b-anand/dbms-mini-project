@@ -193,12 +193,13 @@ const ItemCard = ({ item }) => {
             <DialogTitle>Place a Bid</DialogTitle>
           </DialogHeader>
 
-          <div className="space-y-4 flex items-start flex-col gap-3">
-            <div className="space-y-2">
+          <div className="space-y-4 flex items-start flex-col gap-3 ">
+            <div className="space-y-2 w-full">
               <Label>Current Price: ${currentItem.current_price}</Label>
               <br />
               <Label htmlFor="bidAmount">Bid Amount</Label>
               <Input
+              className="w-full"
                 id="bidAmount"
                 type="number"
                 min={currentItem.current_price + 1}
