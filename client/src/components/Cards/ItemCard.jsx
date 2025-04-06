@@ -139,7 +139,7 @@ const ItemCard = ({ item }) => {
             <>
               {item.status !== "Order Placed" ? (
                 <>
-                  <div className="absolute top-2 w-full">
+                  <div className="absolute top-1 w-full">
                     <Suspense fallback={<Loader />}>
                       <LazyCheckout item={item} />
                     </Suspense>
@@ -199,7 +199,7 @@ const ItemCard = ({ item }) => {
               <br />
               <Label htmlFor="bidAmount">Bid Amount</Label>
               <Input
-              className="w-full"
+                className="w-full"
                 id="bidAmount"
                 type="number"
                 min={currentItem.current_price + 1}

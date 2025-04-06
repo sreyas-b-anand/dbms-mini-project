@@ -8,5 +8,4 @@ class Admin(db.Model):
     admin_id= Column(Integer, primary_key=True, autoincrement=True)
     user_email = Column(String(100), nullable=False)  
     username = Column(String(50), nullable=False) 
-
     

@@ -37,10 +37,10 @@ const SellItems = () => {
       if (!data.success) {
         throw new Error(data.message || "Failed to delete item");
       }
+
       return itemId; // Return the deleted item ID
     },
     onSuccess: () => {
-      // ✅ Optimistically update cache to remove the deleted item
       queryClient.invalidateQueries(["sellItems"]);
       toast.success("Item deleted successfully!");
     },

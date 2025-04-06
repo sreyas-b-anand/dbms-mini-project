@@ -3,7 +3,7 @@ import { Trophy, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 const CheckoutCard = ({ item }) => {
   return (
-    <div className="absolute w-full top-1 px-3 py-2 bg-green-600 text-white rounded-md text-sm flex items-center gap-2 shadow-md">
+    <div className="absolute w-full px-3 py-2 bg-secondary text-white rounded-md text-sm flex items-center gap-2 shadow-md">
       <Trophy className="h-4 w-4" />
       <span>You Won</span>
       <div className="bg-white rounded-lg  p-1">

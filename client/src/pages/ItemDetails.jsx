@@ -70,7 +70,7 @@ export default function ItemDetails() {
     const fetchBids = async () => {
       try {
         const response = await axios.get(
-          `http://127.0.0.1:5000/bids/get-bidders/${id}`,
+          `http://127.0.0.1:5000/bids/get-bidders/${Number(id)}`,
           {
             headers: {
               Authorization: `Bearer ${user.token}`,
@@ -209,36 +209,34 @@ export default function ItemDetails() {
                   {"Bid History"}
                 </h2>
 
-                <Table>
-                  <TableHeader className="sticky top-10 bg-muted">
-                    <TableRow>
-                      <TableHead>Bidder</TableHead>
-                      <TableHead>Amount</TableHead>
-                      <TableHead>Time</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {bids &&
-                      bids.map((bid) => (
-                        <TableRow key={bid.id}>
-                          <TableCell className="font-medium">
-                            {bid.username}
-                          </TableCell>
-                          <TableCell>{formatCurrency(bid.amount)}</TableCell>
-                          <TableCell className="text-foreground/70">
-                            {bid.bid_time.split(' ')[0] + bid.bid_time.split(' ')[1] + ' ' + bid.bid_time.split(' ')[2] + ' ' +bid.bid_time.split(' ')[3] }
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    {bids.length == 0 && (
-                      <TableRow>
-                        <TableCell className="text-center">
-                          No bids on this item
-                        </TableCell>
-                      </TableRow>
-                    )}
-                  </TableBody>
-                </Table>
+                {bids.length > 0 ? (
+  <div className="grid gap-4">
+    {bids.map((bid, index) => (
+      <div
+        key={index}
+        className="rounded-xl border bg-muted p-4 shadow-sm flex justify-between items-center"
+      >
+        <div>
+          <p className="text-sm text-gray-500">Bidder</p>
+          <p className="font-medium text-base">{bid.username}</p>
+        </div>
+        <div>
+          <p className="text-sm text-gray-500">Amount</p>
+          <p className="font-semibold text-base text-green-600">
+            {formatCurrency(bid.amount)}
+          </p>
+        </div>
+        <div>
+          <p className="text-sm text-gray-500">Time</p>
+          <p className="text-base">{new Date(bid.bid_time).toLocaleString()}</p>
+        </div>
+      </div>
+    ))}
+  </div>
+) : (
+  <div className="text-center text-gray-500 py-6">No bids yet</div>
+)}
+
               </div>
             </div>
           </div>
