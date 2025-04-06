@@ -41,7 +41,7 @@ const ItemCard = ({ item }) => {
   useEffect(() => {
     // Poll every 5 seconds for real-time updates
 
-    const interval = setInterval(fetchItemDetails, 5000);
+    const interval = setInterval(fetchItemDetails, 2000);
     return () => clearInterval(interval);
   }, [currentItem.id]);
 
