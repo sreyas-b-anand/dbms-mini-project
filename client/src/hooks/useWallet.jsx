@@ -7,7 +7,7 @@ import { useAuthContext } from "./useAuthContext";
 const fetchWallet = async (user) => {
   if (!user?.token) throw new Error("No token provided");
 
-  const { data } = await axios.get("http://127.0.0.1:5000/wallet/get-wallet", {
+  const { data } = await axios.get(import.meta.env.VITE_REACT_BACKEND_URL+"/wallet/get-wallet", {
     headers: { Authorization: `Bearer ${user.token}` },
   });
 

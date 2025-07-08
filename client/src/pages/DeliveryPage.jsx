@@ -45,7 +45,7 @@ export default function DeliveryPage() {
     const fetchItem = async () => {
       try {
         const response = await axios.get(
-          `http://127.0.0.1:5000/items/get-item/${id}`,
+          import.meta.env.VITE_REACT_BACKEND_URL+`/items/get-item/${id}`,
           {
             headers: {
               Authorization: `Bearer ${user.token}`,

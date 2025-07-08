@@ -26,7 +26,7 @@ const SellItemForm = ({ onSellFormOpen }) => {
   const addItemMutation = useMutation({
     mutationFn: async (newItem) => {
       const { data } = await axios.post(
-        "http://127.0.0.1:5000/items/add-item",
+        import.meta.env.VITE_REACT_BACKEND_URL+"/items/add-item",
         newItem,
         {
           headers: {

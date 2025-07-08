@@ -55,7 +55,7 @@ const AddressForm = () => {
 
     try {
       const res = await axios.post(
-        "http://127.0.0.1:5000/profile/update-at-checkout",
+        import.meta.env.VITE_REACT_BACKEND_URL+"/profile/update-at-checkout",
         formData,
         {
           headers: {

@@ -23,7 +23,7 @@ const History = () => {
     const fetchHistory = async () => {
       try {
         const response = await axios.get(
-          "http://127.0.0.1:5000/history/get-history",
+          import.meta.env.VITE_REACT_BACKEND_URL+"/history/get-history",
           {
             headers: {
               Authorization: `Bearer ${user.token}`,

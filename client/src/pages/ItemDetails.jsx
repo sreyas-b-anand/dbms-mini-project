@@ -33,7 +33,7 @@ export default function ItemDetails() {
 
       try {
         const response = await fetch(
-          `http://127.0.0.1:5000/items/get-item/${id}`,
+          import.meta.env.VITE_REACT_BACKEND_URL+`/items/get-item/${id}`,
           {
             method: "GET",
             headers: {
@@ -61,7 +61,7 @@ export default function ItemDetails() {
     const fetchBids = async () => {
       try {
         const response = await axios.get(
-          `http://127.0.0.1:5000/bids/get-bidders/${Number(id)}`,
+          import.meta.env.VITE_REACT_BACKEND_URL+`/bids/get-bidders/${Number(id)}`,
           {
             headers: {
               Authorization: `Bearer ${user.token}`,

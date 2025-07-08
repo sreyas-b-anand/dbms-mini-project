@@ -29,7 +29,7 @@ export default function WalletForm({ onWalletOpen }) {
   const addMutation = useMutation({
     mutationFn: async (amount) => {
       const { data } = await axios.post(
-        "http://127.0.0.1:5000/wallet/add-wallet",
+        import.meta.env.VITE_REACT_BACKEND_URL+"/wallet/add-wallet",
         { amount: Number(amount) }, // Ensure amount is sent as a number
         {
           headers: {

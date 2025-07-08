@@ -15,7 +15,7 @@ import { toast } from "sonner";
 import { useItems } from "../../hooks/useItems";
 import Loader from "../utils/Loader";
 
-const API_URL = "http://127.0.0.1:5000/bids";
+const API_URL = import.meta.env.VITE_REACT_BACKEND_URL+"/bids";
 const LazyCheckout = lazy(() => import("../../components/Cards/CheckoutCard"));
 const ItemCard = ({ item }) => {
   const [currentItem, setCurrentItem] = useState(item);

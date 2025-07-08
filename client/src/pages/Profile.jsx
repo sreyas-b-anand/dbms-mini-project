@@ -23,7 +23,7 @@ export default function Profile() {
     e.preventDefault();
     try {
       const response = await fetch(
-        "http://127.0.0.1:5000/profile/update-profile",
+        import.meta.env.VITE_REACT_BACKEND_URL+"/profile/update-profile",
         {
           method: "POST",
           headers: {

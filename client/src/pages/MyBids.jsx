@@ -31,7 +31,7 @@ const MyBids = () => {
     const fetchBids = async () => {
       try {
         const response = await axios.get(
-          "http://127.0.0.1:5000/bids/get-bids",
+          import.meta.env.VITE_REACT_BACKEND_URL+"/bids/get-bids",
           {
             headers: {
               Authorization: `Bearer ${user.token}`,

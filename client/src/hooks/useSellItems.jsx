@@ -5,7 +5,7 @@ import { useAuthContext } from "../hooks/useAuthContext";
 const fetchSellItems = async (user) => {
   if (!user?.token) throw new Error("No token provided");
 
-  const { data } = await axios.get("http://127.0.0.1:5000/items/get-listed-items", {
+  const { data } = await axios.get(import.meta.env.VITE_REACT_BACKEND_URL+"/items/get-listed-items", {
     headers: { Authorization: `Bearer ${user.token}` },
   });
 

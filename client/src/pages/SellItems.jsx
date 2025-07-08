@@ -29,7 +29,7 @@ const SellItems = () => {
   const deleteMutation = useMutation({
     mutationFn: async (itemId) => {
       const { data } = await axios.delete(
-        `http://127.0.0.1:5000/items/delete-item/${itemId}`,
+        import.meta.env.VITE_REACT_BACKEND_URL+`/items/delete-item/${itemId}`,
         {
           headers: { Authorization: `Bearer ${user.token}` },
         }

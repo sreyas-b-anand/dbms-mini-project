@@ -20,7 +20,7 @@ const Checkout = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://127.0.0.1:5000/bids/complete-purchase",
+        import.meta.env.VITE_REACT_BACKEND_URL+"/bids/complete-purchase",
         {
           item_id: item.id,
           current_price: item.current_price,
@@ -59,7 +59,7 @@ const Checkout = () => {
 
       try {
         const response = await fetch(
-          `http://127.0.0.1:5000/items/get-item/${id}`,
+          import.meta.env.VITE_REACT_BACKEND_URL+`/items/get-item/${id}`,
           {
             method: "GET",
             headers: {
