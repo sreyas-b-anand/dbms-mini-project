@@ -11,7 +11,7 @@ const Profile = lazy(() => import("./pages/Profile"));
 
 const NotFound = lazy(() => import("./NotFound"));
 const SellItems = lazy(() => import("./pages/SellItems"));
-const ItemDetails = lazy(() => import("./pages/itemDetails"));
+const ItemDetails = lazy(() => import("./pages/ItemDetails"));
 const Checkout = lazy(() => import("./pages/Checkout"));
 const DeliveryPage = lazy(() => import("./pages/DeliveryPage"));
 import Loader from "./components/utils/Loader";
