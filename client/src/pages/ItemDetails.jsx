@@ -3,15 +3,6 @@ import { useParams, Link } from "react-router-dom";
 import { ArrowLeft, AlertCircle } from "lucide-react";
 
 import { Badge } from "../components/ui/badge";
-
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../components/ui/table";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { Alert, AlertDescription } from "../components/ui/alert";
 import { formatCurrency } from "../lib/formatCurrency";
