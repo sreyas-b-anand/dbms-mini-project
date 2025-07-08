@@ -9,13 +9,17 @@ db = SQLAlchemy()
 migrate = Migrate()
 
 def init_db(app):
-    # Get full DB URI (Render gives this as DATABASE_URL)
-    database_url = os.getenv('DATABASE_URL')
+    DB_USER = os.getenv('DB_USER')
+    DB_PASSWORD = os.getenv('DB_PASSWORD')
+    DB_HOST = os.getenv('DB_HOST', 'localhost')
+    DB_NAME = os.getenv('DB_NAME')
 
-    if not database_url:
-        raise ValueError("DATABASE_URL not set in environment variables")
+    if not all([DB_USER, DB_PASSWORD, DB_HOST, DB_NAME]):
+        raise ValueError("One or more DB environment variables are missing")
 
-    app.config['SQLALCHEMY_DATABASE_URI'] = database_url
+    db_url = f"mysql+mysqlconnector://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
+
+    app.config['SQLALCHEMY_DATABASE_URI'] = db_url
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     db.init_app(app)
